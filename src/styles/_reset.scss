@@ -32,17 +32,30 @@ body {
 }
 
 // Headings
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: $font-heading;
   font-weight: $fw-semibold;
   line-height: $lh-tight;
   color: $text-primary;
 }
 
-h1 { font-size: $fs-h1; }
-h2 { font-size: $fs-h2; }
-h3 { font-size: $fs-h3; }
-h4 { font-size: $fs-h4; }
+h1 {
+  font-size: $fs-h1;
+}
+h2 {
+  font-size: $fs-h2;
+}
+h3 {
+  font-size: $fs-h3;
+}
+h4 {
+  font-size: $fs-h4;
+}
 
 // Body text
 p {
@@ -63,19 +76,24 @@ a {
 }
 
 // Lists
-ul, ol {
+ul,
+ol {
   list-style: none;
 }
 
 // Images
-img, svg {
+img,
+svg {
   display: block;
   max-width: 100%;
   height: auto;
 }
 
 // Buttons & Inputs
-button, input, textarea, select {
+button,
+input,
+textarea,
+select {
   font-family: inherit;
   font-size: inherit;
   color: inherit;

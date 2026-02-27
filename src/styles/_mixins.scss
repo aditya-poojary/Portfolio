@@ -7,21 +7,28 @@
 // ── Responsive Breakpoints ───────────────────────────────────
 
 @mixin mobile {
-  @media screen and (max-width: #{$bp-mobile}) { @content; }
+  @media screen and (max-width: #{$bp-mobile}) {
+    @content;
+  }
 }
 
 @mixin tablet {
-  @media screen and (max-width: #{$bp-tablet}) { @content; }
+  @media screen and (max-width: #{$bp-tablet}) {
+    @content;
+  }
 }
 
 @mixin desktop {
-  @media screen and (min-width: #{$bp-desktop}) { @content; }
+  @media screen and (min-width: #{$bp-desktop}) {
+    @content;
+  }
 }
 
 @mixin wide {
-  @media screen and (min-width: #{$bp-wide}) { @content; }
+  @media screen and (min-width: #{$bp-wide}) {
+    @content;
+  }
 }
-
 
 // ── Typography ───────────────────────────────────────────────
 
@@ -104,7 +111,6 @@
   color: $text-muted;
 }
 
-
 // ── Layout ───────────────────────────────────────────────────
 
 @mixin container {
@@ -142,7 +148,6 @@
   flex-direction: column;
 }
 
-
 // ── UI Elements ──────────────────────────────────────────────
 
 @mixin card {
@@ -150,7 +155,9 @@
   border: 1px solid $border-default;
   border-radius: $border-radius-md;
   padding: $space-lg;
-  transition: border-color $transition-base, background $transition-base;
+  transition:
+    border-color $transition-base,
+    background $transition-base;
 
   &:hover {
     border-color: $border-light;
@@ -208,7 +215,9 @@
   border: 1px solid $border-light;
   border-radius: $border-radius-sm;
   cursor: pointer;
-  transition: border-color $transition-fast, color $transition-fast;
+  transition:
+    border-color $transition-fast,
+    color $transition-fast;
 
   &:hover {
     border-color: $metallic-silver;
@@ -223,7 +232,6 @@
   border: none;
 }
 
-
 // ── Animations ───────────────────────────────────────────────
 
 @mixin fade-in($duration: $transition-slow) {
@@ -231,6 +239,12 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

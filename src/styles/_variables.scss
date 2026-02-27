@@ -5,137 +5,131 @@
 // ── Color Palette ────────────────────────────────────────────
 
 // Backgrounds
-$bg-primary:        #1A1A1A;   // Rich black — main background
-$bg-secondary:      #222222;   // Slightly lighter — cards, sections
-$bg-elevated:       #2A2A2A;   // Elevated surfaces — modals, dropdowns
-$bg-subtle:         #333333;   // Subtle contrast — hover states
+$bg-primary: #1a1a1a; // Rich black — main background
+$bg-secondary: #222222; // Slightly lighter — cards, sections
+$bg-elevated: #2a2a2a; // Elevated surfaces — modals, dropdowns
+$bg-subtle: #333333; // Subtle contrast — hover states
 
 // Text
-$text-primary:      #F0F0F0;   // Off-white — body text
-$text-secondary:    #C0C0C0;   // Metallic silver — secondary text
-$text-muted:        #888888;   // Muted — captions, labels
-$text-inverse:      #1A1A1A;   // Dark text on light backgrounds
+$text-primary: #f0f0f0; // Off-white — body text
+$text-secondary: #c0c0c0; // Metallic silver — secondary text
+$text-muted: #888888; // Muted — captions, labels
+$text-inverse: #1a1a1a; // Dark text on light backgrounds
 
 // Accent — Jewel Tones
-$accent-teal:       #004D61;   // Deep teal — primary accent
-$accent-teal-light: #006E8A;   // Lighter teal — hover state
-$accent-ruby:       #822659;   // Ruby red — secondary accent
-$accent-ruby-light: #A33070;   // Lighter ruby — hover state
+$accent-teal: #004d61; // Deep teal — primary accent
+$accent-teal-light: #006e8a; // Lighter teal — hover state
+$accent-ruby: #822659; // Ruby red — secondary accent
+$accent-ruby-light: #a33070; // Lighter ruby — hover state
 
 // Metallic
-$metallic-silver:   #C0C0C0;   // Silver — borders, icons, subtle elements
-$metallic-gold:     #B8860B;   // Gold — premium highlights (optional)
+$metallic-silver: #c0c0c0; // Silver — borders, icons, subtle elements
+$metallic-gold: #b8860b; // Gold — premium highlights (optional)
 
 // Borders & Dividers
-$border-default:    #2E2E2E;   // Subtle dividers
-$border-light:      #3A3A3A;   // Slightly visible borders
-$border-accent:     $accent-teal;
+$border-default: #2e2e2e; // Subtle dividers
+$border-light: #3a3a3a; // Slightly visible borders
+$border-accent: $accent-teal;
 
 // States
-$state-success:     #2D6A4F;
-$state-error:       #9B2C2C;
-$state-warning:     #B8860B;
-
+$state-success: #2d6a4f;
+$state-error: #9b2c2c;
+$state-warning: #b8860b;
 
 // ── Typography ───────────────────────────────────────────────
 
 // Font Families
-$font-heading:      'Clash Display', sans-serif;   // Headings
-$font-body:         'General Sans', sans-serif;    // Body text
-$font-label:        'Inter', sans-serif;           // Small labels, UI elements
+$font-heading: 'Clash Display', sans-serif; // Headings
+$font-body: 'General Sans', sans-serif; // Body text
+$font-label: 'Inter', sans-serif; // Small labels, UI elements
 
 // Font Sizes (fluid scale)
-$fs-display:        clamp(3rem, 5vw, 5rem);        // Hero headings
-$fs-h1:             clamp(2rem, 3.5vw, 3rem);      // Page titles
-$fs-h2:             clamp(1.5rem, 2.5vw, 2.25rem); // Section headings
-$fs-h3:             clamp(1.25rem, 2vw, 1.75rem);  // Sub-section headings
-$fs-h4:             clamp(1rem, 1.5vw, 1.25rem);   // Card titles
-$fs-body:           1rem;                          // 16px body
-$fs-body-sm:        0.875rem;                      // 14px secondary body
-$fs-label:          0.75rem;                       // 12px labels
-$fs-label-xs:       0.6875rem;                     // 11px micro labels
+$fs-display: clamp(3rem, 5vw, 5rem); // Hero headings
+$fs-h1: clamp(2rem, 3.5vw, 3rem); // Page titles
+$fs-h2: clamp(1.5rem, 2.5vw, 2.25rem); // Section headings
+$fs-h3: clamp(1.25rem, 2vw, 1.75rem); // Sub-section headings
+$fs-h4: clamp(1rem, 1.5vw, 1.25rem); // Card titles
+$fs-body: 1rem; // 16px body
+$fs-body-sm: 0.875rem; // 14px secondary body
+$fs-label: 0.75rem; // 12px labels
+$fs-label-xs: 0.6875rem; // 11px micro labels
 
 // Font Weights
-$fw-light:          300;
-$fw-regular:        400;
-$fw-medium:         500;
-$fw-semibold:       600;
-$fw-bold:           700;
+$fw-light: 300;
+$fw-regular: 400;
+$fw-medium: 500;
+$fw-semibold: 600;
+$fw-bold: 700;
 
 // Line Heights
-$lh-tight:          1.1;    // Headings
-$lh-snug:           1.3;    // Sub-headings
-$lh-normal:         1.6;    // Body text
-$lh-relaxed:        1.8;    // Long-form text
-
+$lh-tight: 1.1; // Headings
+$lh-snug: 1.3; // Sub-headings
+$lh-normal: 1.6; // Body text
+$lh-relaxed: 1.8; // Long-form text
 
 // ── Spacing ──────────────────────────────────────────────────
 
-$space-xs:          0.25rem;   // 4px
-$space-sm:          0.5rem;    // 8px
-$space-md:          1rem;      // 16px
-$space-lg:          1.5rem;    // 24px
-$space-xl:          2rem;      // 32px
-$space-2xl:         3rem;      // 48px
-$space-3xl:         4rem;      // 64px
-$space-4xl:         6rem;      // 96px
-
+$space-xs: 0.25rem; // 4px
+$space-sm: 0.5rem; // 8px
+$space-md: 1rem; // 16px
+$space-lg: 1.5rem; // 24px
+$space-xl: 2rem; // 32px
+$space-2xl: 3rem; // 48px
+$space-3xl: 4rem; // 64px
+$space-4xl: 6rem; // 96px
 
 // ── Layout ───────────────────────────────────────────────────
 
-$max-width:         1200px;
-$max-width-narrow:  800px;
-$border-radius-sm:  4px;
-$border-radius-md:  8px;
-$border-radius-lg:  16px;
+$max-width: 1200px;
+$max-width-narrow: 800px;
+$border-radius-sm: 4px;
+$border-radius-md: 8px;
+$border-radius-lg: 16px;
 $border-radius-full: 9999px;
-
 
 // ── Transitions ──────────────────────────────────────────────
 
-$transition-fast:   150ms ease;
-$transition-base:   250ms ease;
-$transition-slow:   400ms ease;
-
+$transition-fast: 150ms ease;
+$transition-base: 250ms ease;
+$transition-slow: 400ms ease;
 
 // ── Breakpoints ──────────────────────────────────────────────
 
-$bp-mobile:         480px;
-$bp-tablet:         768px;
-$bp-desktop:        1024px;
-$bp-wide:           1440px;
-
+$bp-mobile: 480px;
+$bp-tablet: 768px;
+$bp-desktop: 1024px;
+$bp-wide: 1440px;
 
 // ── CSS Custom Properties (available in templates) ───────────
 // Use these in components via var(--color-bg), var(--font-heading), etc.
 
 :root {
   // Colors
-  --color-bg:              #{$bg-primary};
-  --color-bg-secondary:    #{$bg-secondary};
-  --color-bg-elevated:     #{$bg-elevated};
-  --color-bg-subtle:       #{$bg-subtle};
+  --color-bg: #{$bg-primary};
+  --color-bg-secondary: #{$bg-secondary};
+  --color-bg-elevated: #{$bg-elevated};
+  --color-bg-subtle: #{$bg-subtle};
 
-  --color-text:            #{$text-primary};
-  --color-text-secondary:  #{$text-secondary};
-  --color-text-muted:      #{$text-muted};
+  --color-text: #{$text-primary};
+  --color-text-secondary: #{$text-secondary};
+  --color-text-muted: #{$text-muted};
 
-  --color-accent:          #{$accent-teal};
-  --color-accent-hover:    #{$accent-teal-light};
-  --color-accent-alt:      #{$accent-ruby};
+  --color-accent: #{$accent-teal};
+  --color-accent-hover: #{$accent-teal-light};
+  --color-accent-alt: #{$accent-ruby};
   --color-accent-alt-hover: #{$accent-ruby-light};
 
-  --color-silver:          #{$metallic-silver};
-  --color-border:          #{$border-default};
-  --color-border-light:    #{$border-light};
+  --color-silver: #{$metallic-silver};
+  --color-border: #{$border-default};
+  --color-border-light: #{$border-light};
 
   // Fonts
-  --font-heading:          #{$font-heading};
-  --font-body:             #{$font-body};
-  --font-label:            #{$font-label};
+  --font-heading: #{$font-heading};
+  --font-body: #{$font-body};
+  --font-label: #{$font-label};
 
   // Transitions
-  --transition-fast:       #{$transition-fast};
-  --transition-base:       #{$transition-base};
-  --transition-slow:       #{$transition-slow};
+  --transition-fast: #{$transition-fast};
+  --transition-base: #{$transition-base};
+  --transition-slow: #{$transition-slow};
 }
