@@ -20,8 +20,8 @@ export interface DockItem {
   host: { class: 'block' },
   template: `
     <div
-      class="inline-flex items-end gap-1 px-3 py-2 rounded-[18px] border border-white/8"
-      style="background: rgba(34, 34, 34, 0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.04) inset;"
+      class="inline-flex items-end gap-1 px-3 rounded-[18px] border border-white/8"
+      style="background: rgba(34, 34, 34, 0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.04) inset; height: 56px;"
       (mouseleave)="onMouseLeave()"
     >
       @for (item of items(); track item.title) {

@@ -17,7 +17,7 @@
           "
         >
           <img
-            src="assets/images/profile.jpg"
+            src="assets/images/profile.webp"
             alt="Aditya Poojary"
             width="800"
             height="800"
@@ -97,49 +97,50 @@
         Clean code. Functional apps. Less pain points. That's the whole vibe.
       </p>
 
-      <!-- Resume Button -->
-      <a
-        [href]="resumeUrl"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="inline-flex items-center gap-2.5 mt-8 px-7 py-3 font-label text-sm font-semibold tracking-wider uppercase text-text-primary rounded-xl no-underline cursor-pointer w-fit transition-all duration-250 border border-white/6 hover:-translate-y-0.5 active:translate-y-0 max-md:self-center"
-        style="
-          background: linear-gradient(135deg, var(--color-accent-teal), rgba(0, 110, 138, 0.85));
-          box-shadow:
-            0 4px 16px rgba(0, 77, 97, 0.25),
-            0 0 0 1px rgba(255, 255, 255, 0.04) inset;
-        "
-        onmouseenter="
-          this.style.background =
-            'linear-gradient(135deg, var(--color-accent-teal-light), var(--color-accent-teal))';
-          this.style.boxShadow =
-            '0 8px 28px rgba(0, 77, 97, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.08) inset';
-        "
-        onmouseleave="
-          this.style.background =
-            'linear-gradient(135deg, var(--color-accent-teal), rgba(0, 110, 138, 0.85))';
-          this.style.boxShadow =
-            '0 4px 16px rgba(0, 77, 97, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.04) inset';
-        "
-      >
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="w-[18px] h-[18px]"
+      <!-- Resume + Contact Dock (same row) -->
+      <div class="flex items-center gap-6 mt-8 max-md:flex-col max-md:items-center max-md:gap-4">
+        <!-- Resume Button -->
+        <a
+          [href]="resumeUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2.5 px-7 py-3 font-label text-sm font-semibold tracking-wider uppercase text-text-primary rounded-xl no-underline cursor-pointer w-fit transition-all duration-250 border border-white/6 hover:-translate-y-0.5 active:translate-y-0 shrink-0"
+          style="
+            background: linear-gradient(135deg, var(--color-accent-teal), rgba(0, 110, 138, 0.85));
+            box-shadow:
+              0 4px 16px rgba(0, 77, 97, 0.25),
+              0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+          "
+          onmouseenter="
+            this.style.background =
+              'linear-gradient(135deg, var(--color-accent-teal-light), var(--color-accent-teal))';
+            this.style.boxShadow =
+              '0 8px 28px rgba(0, 77, 97, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.08) inset';
+          "
+          onmouseleave="
+            this.style.background =
+              'linear-gradient(135deg, var(--color-accent-teal), rgba(0, 110, 138, 0.85))';
+            this.style.boxShadow =
+              '0 4px 16px rgba(0, 77, 97, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.04) inset';
+          "
         >
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-          <polyline points="7 10 12 15 17 10" />
-          <line x1="12" y1="15" x2="12" y2="3" />
-        </svg>
-        Resume
-      </a>
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="w-[18px] h-[18px]"
+          >
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
+          Resume
+        </a>
 
-      <!-- Floating Dock -->
-      <div class="mt-8 max-md:flex max-md:justify-center">
+        <!-- Floating Dock -->
         <app-floating-dock [items]="socialLinks()" />
       </div>
     </div>
