@@ -1,13 +1,20 @@
 <section class="min-h-dvh flex items-center justify-center px-6 py-16 max-md:px-4 max-md:py-8">
-  <div class="container-custom flex items-center gap-16 max-md:flex-col max-md:gap-12 max-md:text-center max-md:items-center">
-
+  <div
+    class="container-custom flex items-center gap-16 max-md:flex-col max-md:gap-12 max-md:text-center max-md:items-center"
+  >
     <!-- ── Left: Image with floating code snippets ── -->
     <div class="shrink-0 max-md:w-full max-md:flex max-md:justify-center">
       <div class="group relative">
         <!-- Image Frame -->
         <div
           class="relative overflow-hidden rounded-2xl p-3 border border-white/10 transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:scale-[1.03]"
-          style="background: linear-gradient(135deg, rgba(0, 77, 97, 0.12), rgba(130, 38, 89, 0.08)); backdrop-filter: blur(8px); box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.03) inset;"
+          style="
+            background: linear-gradient(135deg, rgba(0, 77, 97, 0.12), rgba(130, 38, 89, 0.08));
+            backdrop-filter: blur(8px);
+            box-shadow:
+              0 24px 64px rgba(0, 0, 0, 0.4),
+              0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+          "
         >
           <img
             src="assets/images/profile.jpg"
@@ -16,41 +23,56 @@
             height="800"
             loading="eager"
             class="block rounded-xl object-cover shadow-[0_8px_32px_rgba(0,0,0,0.3)]"
-            style="width: clamp(256px, 28vw, 384px); height: clamp(256px, 28vw, 384px);"
-          >
+            style="width: clamp(256px, 28vw, 384px); height: clamp(256px, 28vw, 384px)"
+          />
           <!-- Hover overlay -->
           <div
             class="absolute inset-3 rounded-xl opacity-0 transition-opacity duration-300 pointer-events-none group-hover:opacity-100"
-            style="background: linear-gradient(to top, rgba(0, 77, 97, 0.15), transparent);"
+            style="background: linear-gradient(to top, rgba(0, 77, 97, 0.15), transparent)"
           ></div>
         </div>
 
         <!-- Floating code snippets -->
         <div
           class="absolute -top-3 -right-5 flex items-center px-3.5 py-1.5 rounded-[10px] border border-white/8 opacity-0 -translate-y-2 transition-all duration-400 ease-[cubic-bezier(0.32,0.72,0,1)] delay-100 group-hover:opacity-100 group-hover:translate-y-0 z-[2] max-md:-right-2 max-md:-top-2.5"
-          style="background: rgba(26, 26, 26, 0.92); backdrop-filter: blur(12px); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);"
+          style="
+            background: rgba(26, 26, 26, 0.92);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+          "
         >
-          <span class="font-mono text-xs font-medium text-accent-teal-light tracking-wide before:content-['>'] before:mr-1.5 before:text-text-muted">npm run dev</span>
+          <span
+            class="font-mono text-xs font-medium text-accent-teal-light tracking-wide before:content-['>'] before:mr-1.5 before:text-text-muted"
+            >npm run dev</span
+          >
         </div>
         <div
           class="absolute -bottom-3 -left-5 flex items-center px-3.5 py-1.5 rounded-[10px] border border-white/8 opacity-0 translate-y-2 transition-all duration-400 ease-[cubic-bezier(0.32,0.72,0,1)] delay-200 group-hover:opacity-100 group-hover:translate-y-0 z-[2] max-md:-left-2 max-md:-bottom-2.5"
-          style="background: rgba(26, 26, 26, 0.92); backdrop-filter: blur(12px); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);"
+          style="
+            background: rgba(26, 26, 26, 0.92);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+          "
         >
-          <span class="font-mono text-xs font-medium text-accent-teal-light tracking-wide before:content-['>'] before:mr-1.5 before:text-text-muted">const dev = true</span>
+          <span
+            class="font-mono text-xs font-medium text-accent-teal-light tracking-wide before:content-['>'] before:mr-1.5 before:text-text-muted"
+            >const dev = true</span
+          >
         </div>
       </div>
     </div>
 
     <!-- ── Right: Content ── -->
     <div class="flex flex-col min-w-0">
-
       <!-- Greeting -->
       <span class="font-label text-sm font-medium text-accent-teal-light tracking-wider mb-2">
         {{ greeting() }} —
       </span>
 
       <!-- Name -->
-      <h1 class="font-heading text-display font-bold leading-[1.1] -tracking-[0.03em] text-text-primary mb-1">
+      <h1
+        class="font-heading text-display font-bold leading-[1.1] -tracking-[0.03em] text-text-primary mb-1"
+      >
         Aditya Poojary
       </h1>
 
@@ -60,14 +82,18 @@
       </h2>
 
       <!-- Bio -->
-      <p class="font-body text-base font-normal leading-relaxed text-text-secondary max-w-[520px] max-md:max-w-full">
-        I love building stuff that actually works. Problem solving is my thing —
-        give me a pain point and I'll ship a clean, functional solution for it.
-        Not here to write code that just "runs." I build things that reduce friction,
-        cut the noise, and make life easier for the people using them.
+      <p
+        class="font-body text-base font-normal leading-relaxed text-text-secondary max-w-[520px] max-md:max-w-full"
+      >
+        I love building stuff that actually works. Problem solving is my thing — give me a pain
+        point and I'll ship a clean, functional solution for it. Not here to write code that just
+        "runs." I build things that reduce friction, cut the noise, and make life easier for the
+        people using them.
       </p>
 
-      <p class="font-body text-sm font-normal text-text-muted italic mt-4 max-w-[520px] max-md:max-w-full">
+      <p
+        class="font-body text-sm font-normal text-text-muted italic mt-4 max-w-[520px] max-md:max-w-full"
+      >
         Clean code. Functional apps. Less pain points. That's the whole vibe.
       </p>
 
@@ -77,9 +103,24 @@
         target="_blank"
         rel="noopener noreferrer"
         class="inline-flex items-center gap-2.5 mt-8 px-7 py-3 font-label text-sm font-semibold tracking-wider uppercase text-text-primary rounded-xl no-underline cursor-pointer w-fit transition-all duration-250 border border-white/6 hover:-translate-y-0.5 active:translate-y-0 max-md:self-center"
-        style="background: linear-gradient(135deg, var(--color-accent-teal), rgba(0, 110, 138, 0.85)); box-shadow: 0 4px 16px rgba(0, 77, 97, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.04) inset;"
-        onmouseenter="this.style.background='linear-gradient(135deg, var(--color-accent-teal-light), var(--color-accent-teal))'; this.style.boxShadow='0 8px 28px rgba(0, 77, 97, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.08) inset';"
-        onmouseleave="this.style.background='linear-gradient(135deg, var(--color-accent-teal), rgba(0, 110, 138, 0.85))'; this.style.boxShadow='0 4px 16px rgba(0, 77, 97, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.04) inset';"
+        style="
+          background: linear-gradient(135deg, var(--color-accent-teal), rgba(0, 110, 138, 0.85));
+          box-shadow:
+            0 4px 16px rgba(0, 77, 97, 0.25),
+            0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+        "
+        onmouseenter="
+          this.style.background =
+            'linear-gradient(135deg, var(--color-accent-teal-light), var(--color-accent-teal))';
+          this.style.boxShadow =
+            '0 8px 28px rgba(0, 77, 97, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.08) inset';
+        "
+        onmouseleave="
+          this.style.background =
+            'linear-gradient(135deg, var(--color-accent-teal), rgba(0, 110, 138, 0.85))';
+          this.style.boxShadow =
+            '0 4px 16px rgba(0, 77, 97, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.04) inset';
+        "
       >
         <svg
           viewBox="0 0 24 24"
@@ -101,7 +142,6 @@
       <div class="mt-8 max-md:flex max-md:justify-center">
         <app-floating-dock [items]="socialLinks()" />
       </div>
-
     </div>
   </div>
 </section>
