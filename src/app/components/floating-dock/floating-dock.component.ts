@@ -20,8 +20,8 @@ export interface DockItem {
   host: { class: 'block' },
   template: `
     <div
-      class="inline-flex items-end gap-1 px-3 rounded-[18px] border border-white/8"
-      style="background: rgba(34, 34, 34, 0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.04) inset; height: 56px;"
+      class="inline-flex items-center gap-1.5 px-3 py-2 rounded-[16px] border border-white/8"
+      style="background: rgba(34, 34, 34, 0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.04) inset;"
       (mouseleave)="onMouseLeave()"
     >
       @for (item of items(); track item.title) {
@@ -37,11 +37,7 @@ export interface DockItem {
           class="dock-item"
           #dockItems
         >
-          <svg
-            [attr.viewBox]="item.viewBox ?? '0 0 24 24'"
-            fill="currentColor"
-            class="w-[55%] h-[55%] transition-[inherit]"
-          >
+          <svg [attr.viewBox]="item.viewBox ?? '0 0 24 24'" fill="currentColor" class="dock-icon">
             <path [attr.d]="item.icon" />
           </svg>
           <span class="dock-tooltip">
@@ -64,12 +60,11 @@ export interface DockItem {
       background: transparent;
       text-decoration: none;
       transition:
-        transform 200ms cubic-bezier(0.32, 0.72, 0, 1),
-        width 200ms cubic-bezier(0.32, 0.72, 0, 1),
-        height 200ms cubic-bezier(0.32, 0.72, 0, 1),
+        width 300ms cubic-bezier(0.25, 1, 0.5, 1),
+        height 300ms cubic-bezier(0.25, 1, 0.5, 1),
         color 200ms ease,
         background 200ms ease;
-      will-change: transform, width, height;
+      will-change: width, height;
     }
 
     .dock-item:hover {
@@ -77,12 +72,25 @@ export interface DockItem {
       background: rgba(255, 255, 255, 0.06);
     }
 
+    .dock-icon {
+      width: 20px;
+      height: 20px;
+      transition:
+        width 300ms cubic-bezier(0.25, 1, 0.5, 1),
+        height 300ms cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .dock-item:hover .dock-icon {
+      width: 24px;
+      height: 24px;
+    }
+
     .dock-tooltip {
       position: absolute;
-      bottom: calc(100% + 8px);
+      bottom: calc(100% + 10px);
       left: 50%;
-      transform: translateX(-50%) scale(0.8);
-      padding: 4px 10px;
+      transform: translateX(-50%) scale(0.85) translateY(4px);
+      padding: 5px 12px;
       font-family: var(--font-label);
       font-size: 0.6875rem;
       font-weight: 500;
@@ -95,13 +103,13 @@ export interface DockItem {
       pointer-events: none;
       opacity: 0;
       transition:
-        opacity 150ms ease,
-        transform 150ms ease;
+        opacity 200ms ease,
+        transform 200ms cubic-bezier(0.25, 1, 0.5, 1);
     }
 
     .dock-item:hover .dock-tooltip {
       opacity: 1;
-      transform: translateX(-50%) scale(1);
+      transform: translateX(-50%) scale(1) translateY(0);
     }
   `,
 })
@@ -110,8 +118,8 @@ export class FloatingDockComponent {
 
   private readonly hoveredIndex = signal(-1);
   private readonly BASE_SIZE = 40;
-  private readonly HOVER_SIZE = 56;
-  private readonly NEIGHBOR_SIZE = 48;
+  private readonly HOVER_SIZE = 52;
+  private readonly NEIGHBOR_SIZE = 46;
 
   readonly dockItemRefs = viewChildren<ElementRef>('dockItems');
 
