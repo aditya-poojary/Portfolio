@@ -8,7 +8,7 @@ import {
   inject,
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { FloatingDockComponent, DockItem } from '../floating-dock/floating-dock.component';
+import { FloatingDockComponent, DockItem } from '../utilities/floating-dock.component';
 
 @Component({
   selector: 'app-about-me',
