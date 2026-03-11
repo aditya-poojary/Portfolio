@@ -140,8 +140,10 @@
           Resume
         </a>
 
-        <!-- Floating Dock -->
-        <app-floating-dock [items]="socialLinks()" />
+        <!-- Floating Dock (fixed-height wrapper prevents layout shift on hover) -->
+        <div class="h-[70px] flex items-center">
+          <app-floating-dock [items]="socialLinks()" />
+        </div>
       </div>
     </div>
   </div>
