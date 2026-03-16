@@ -2,9 +2,7 @@
      ACHIEVEMENTS TIMELINE
      ══════════════════════════════════════════════════════════ -->
 <div class="mb-20 max-md:mb-16">
-  <h3
-    class="font-heading text-h3 font-semibold text-text-primary mb-10 flex items-center gap-3"
-  >
+  <h3 class="font-heading text-h3 font-semibold text-text-primary mb-10 flex items-center gap-3">
     <span
       class="inline-flex items-center justify-center w-8 h-8 rounded-lg border border-accent-ruby/30"
       style="background: rgba(130, 38, 89, 0.15)"
@@ -26,22 +24,28 @@
   </h3>
 
   <!-- Timeline container -->
-  <div class="relative ml-4 max-md:ml-2">
+  <div #timelineContainer class="relative ml-4 max-md:ml-2">
     <!-- Vertical line -->
-    <div
-      class="absolute left-0 top-2 bottom-2 w-px"
-      style="
-        background: linear-gradient(
-          to bottom,
-          var(--color-accent-ruby),
-          var(--color-accent-teal),
-          transparent
-        );
-      "
-    ></div>
+    <div class="timeline-line absolute left-0 top-2 bottom-2 w-px overflow-hidden">
+      <div
+        #timelineLineFill
+        class="timeline-line-fill absolute inset-x-0 top-0"
+        style="
+          background: linear-gradient(
+            to bottom,
+            var(--color-accent-ruby),
+            var(--color-accent-teal),
+            transparent
+          );
+        "
+      ></div>
+    </div>
 
     @for (entry of achievements(); track entry.title) {
-      <div class="relative flex gap-8 pb-14 last:pb-0 max-md:gap-5">
+      <div
+        #timelineItem
+        class="timeline-item relative flex gap-8 pb-14 last:pb-0 max-md:gap-5"
+      >
         <!-- Dot -->
         <div
           class="relative z-10 mt-1.5 shrink-0 w-3 h-3 rounded-full border-2 -ml-[6px]"
@@ -121,9 +125,7 @@
      DSA / PROBLEM SOLVING STATS
      ══════════════════════════════════════════════════════════ -->
 <div>
-  <h3
-    class="font-heading text-h3 font-semibold text-text-primary mb-10 flex items-center gap-3"
-  >
+  <h3 class="font-heading text-h3 font-semibold text-text-primary mb-10 flex items-center gap-3">
     <span
       class="inline-flex items-center justify-center w-8 h-8 rounded-lg border border-white/10"
       style="background: rgba(184, 134, 11, 0.15)"
@@ -154,12 +156,7 @@
       <div
         class="absolute top-0 left-0 w-full h-px"
         style="
-          background: linear-gradient(
-            90deg,
-            transparent,
-            var(--color-accent-teal),
-            transparent
-          );
+          background: linear-gradient(90deg, transparent, var(--color-accent-teal), transparent);
         "
       ></div>
       <div class="flex items-center gap-3 mb-3">
@@ -195,9 +192,7 @@
       >
         {{ dsaStats().streak }}
       </span>
-      <span class="block font-body text-sm text-text-muted mt-2"
-        >days of consistent coding</span
-      >
+      <span class="block font-body text-sm text-text-muted mt-2">days of consistent coding</span>
     </div>
 
     <!-- Problems Solved -->
@@ -208,12 +203,7 @@
       <div
         class="absolute top-0 left-0 w-full h-px"
         style="
-          background: linear-gradient(
-            90deg,
-            transparent,
-            var(--color-accent-ruby),
-            transparent
-          );
+          background: linear-gradient(90deg, transparent, var(--color-accent-ruby), transparent);
         "
       ></div>
       <div class="flex items-center gap-3 mb-3">
@@ -258,12 +248,7 @@
       <div
         class="absolute top-0 left-0 w-full h-px"
         style="
-          background: linear-gradient(
-            90deg,
-            transparent,
-            var(--color-metallic-gold),
-            transparent
-          );
+          background: linear-gradient(90deg, transparent, var(--color-metallic-gold), transparent);
         "
       ></div>
       <div class="flex items-center gap-3 mb-3">
