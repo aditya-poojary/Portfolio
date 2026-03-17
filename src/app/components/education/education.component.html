@@ -1,3 +1,6 @@
+<!-- ══════════════════════════════════════════════════════════
+     EDUCATION — Stacked Glass Cards
+     ══════════════════════════════════════════════════════════ -->
 <div class="mb-20 max-md:mb-16">
   <h3 class="font-heading text-h3 font-semibold text-text-primary mb-10 flex items-center gap-3">
     <span
@@ -20,82 +23,85 @@
     Education
   </h3>
 
-  <!-- Timeline container -->
-  <div class="relative ml-4 max-md:ml-2">
-    <!-- Vertical line -->
-    <div
-      class="absolute left-0 top-2 bottom-2 w-px"
-      style="
-        background: linear-gradient(
-          to bottom,
-          var(--color-accent-teal),
-          var(--color-accent-ruby),
-          transparent
-        );
-      "
-    ></div>
-
-    <!-- Timeline entries -->
-    @for (entry of education(); track entry.title) {
-      <div class="relative flex gap-8 pb-14 last:pb-0 max-md:gap-5">
-        <!-- Dot -->
+  <!-- Cards stack -->
+  <div class="flex flex-col gap-5">
+    @for (entry of education(); track entry.title; let i = $index) {
+      <div
+        #eduCard
+        class="edu-card group relative rounded-xl border border-white/[0.04] transition-all duration-300 hover:border-white/[0.08] hover:-translate-y-0.5 overflow-hidden"
+        style="
+          background: linear-gradient(135deg, rgba(34, 34, 34, 0.6), rgba(42, 42, 42, 0.3));
+          backdrop-filter: blur(8px);
+        "
+      >
+        <!-- Top accent line -->
         <div
-          class="relative z-10 mt-1.5 shrink-0 w-3 h-3 rounded-full border-2 -ml-[6px]"
+          class="absolute top-0 left-0 right-0 h-px"
           style="
-            border-color: var(--color-accent-teal-light);
-            background: var(--color-bg-primary);
-            box-shadow: 0 0 12px rgba(0, 77, 97, 0.4);
+            background: linear-gradient(
+              90deg,
+              transparent,
+              var(--color-accent-teal),
+              var(--color-accent-ruby),
+              transparent
+            );
           "
         ></div>
 
-        <!-- Content card -->
-        <div class="flex-1 -mt-1">
-          <!-- Period label -->
-          <span
-            class="font-label text-xs font-medium tracking-wider text-accent-teal-light uppercase mb-2 block"
+        <div class="p-6 max-md:p-5 flex gap-5">
+          <!-- Step indicator -->
+          <div
+            class="shrink-0 w-10 h-10 rounded-lg flex items-center justify-center font-mono text-sm font-semibold tracking-wider border border-accent-teal/20"
+            style="
+              color: var(--color-accent-teal-light);
+              background: rgba(0, 77, 97, 0.1);
+            "
           >
-            {{ entry.period }}
-          </span>
+            {{ '0' + (i + 1) }}
+          </div>
 
-          <!-- Title & Subtitle -->
-          <h4 class="font-heading text-h4 font-semibold text-text-primary mb-1">
-            {{ entry.title }}
-          </h4>
-          <span class="font-label text-sm text-text-muted block mb-3">
-            {{ entry.subtitle }}
-          </span>
-
-          <!-- Description -->
-          <p class="font-body text-sm text-text-secondary leading-relaxed max-w-xl mb-3">
-            {{ entry.description }}
-          </p>
-
-          <!-- Highlight badge -->
-          @if (entry.highlight) {
-            <div
-              class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg font-label text-sm font-semibold tracking-wide"
-              style="
-                background: linear-gradient(135deg, rgba(0, 77, 97, 0.2), rgba(130, 38, 89, 0.12));
-                border: 1px solid rgba(0, 110, 138, 0.25);
-                color: var(--color-accent-teal-light);
-              "
+          <!-- Content -->
+          <div class="flex-1 min-w-0">
+            <!-- Period -->
+            <span
+              class="font-label text-xs font-medium tracking-wider text-accent-teal-light uppercase mb-1.5 block"
             >
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="w-3.5 h-3.5"
-              >
-                <polygon
-                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                />
-              </svg>
-              {{ entry.highlight }}
-            </div>
-          }
+              {{ entry.period }}
+            </span>
+
+            <!-- Institution name -->
+            <h4 class="font-heading text-h4 font-semibold text-text-primary mb-1">
+              {{ entry.title }}
+            </h4>
+
+            <!-- Subtitle (degree/program) -->
+            <span class="font-label text-sm text-text-muted block">
+              {{ entry.subtitle }}
+            </span>
+
+            <!-- Description (if present) -->
+            @if (entry.description) {
+              <p class="font-body text-sm text-text-secondary leading-relaxed mt-2">
+                {{ entry.description }}
+              </p>
+            }
+          </div>
+
+          <!-- Academic cap icon (right side) -->
+          <div class="shrink-0 hidden md:flex items-start pt-1">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="w-8 h-8 text-white/[0.04] group-hover:text-accent-teal/20 transition-colors duration-500"
+            >
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+              <path d="M6 12v5c3 3 9 3 12 0v-5" />
+            </svg>
+          </div>
         </div>
       </div>
     }
