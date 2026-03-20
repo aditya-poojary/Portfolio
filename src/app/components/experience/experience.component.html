@@ -1,0 +1,267 @@
+<section class="py-24 px-6 max-md:px-4 max-md:py-16">
+  <div class="container-custom">
+    @if (experiences().length >= 2) {
+      <div #horizontalStage class="experience-stage relative">
+        <!-- Heading — inside the pinned stage so it stays visible -->
+        <h2
+          class="font-heading text-h2 font-semibold text-text-primary mb-10 flex items-center gap-3"
+        >
+          <span
+            class="inline-flex items-center justify-center w-9 h-9 rounded-lg border border-accent-ruby/30"
+            style="background: rgba(130, 38, 89, 0.14)"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="w-4.5 h-4.5 text-accent-ruby-light"
+            >
+              <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+              <path d="M16 3v8" />
+              <path d="M8 3v4" />
+            </svg>
+          </span>
+          Experience
+        </h2>
+
+        <!-- Horizontal scroll track -->
+        <div #horizontalTrack class="experience-track pb-2">
+          <!-- ── Stripes row (company headers) ──────────────── -->
+          <div class="experience-stripes-row">
+            <!-- Cortex Dynamics — spans 2 columns -->
+            <div
+              #companyStripe
+              class="company-stripe company-stripe-primary rounded-xl border border-white/8 px-7 py-5"
+              style="
+                background: linear-gradient(135deg, rgba(0, 77, 97, 0.22), rgba(130, 38, 89, 0.14));
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+              "
+            >
+              <div class="flex items-center justify-between gap-4">
+                <h3 class="font-heading text-h3 font-semibold text-text-primary">
+                  {{ experiences()[0].company }}
+                </h3>
+                <span
+                  class="font-label text-xs font-medium tracking-wider uppercase text-accent-teal-light shrink-0"
+                >
+                  {{ experiences()[0].startDate }} — {{ experiences()[0].endDate }}
+                </span>
+              </div>
+            </div>
+
+            <!-- Gogo Energy — 1 column -->
+            <div
+              #companyStripe
+              class="company-stripe rounded-xl border border-white/8 px-7 py-5"
+              style="
+                background: linear-gradient(135deg, rgba(130, 38, 89, 0.2), rgba(0, 77, 97, 0.13));
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+              "
+            >
+              <div class="flex flex-col items-start gap-1">
+                <h3 class="font-heading text-h4 font-semibold text-text-primary">
+                  {{ experiences()[1].company }}
+                </h3>
+                <span
+                  class="font-label text-xs font-medium tracking-wider uppercase text-accent-teal-light"
+                >
+                  {{ experiences()[1].startDate }} — {{ experiences()[1].endDate }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── Cards row (projects) ───────────────────────── -->
+          <div class="experience-cards-row mt-6">
+            <!-- Cortex Dynamics projects (2 cards under the wide stripe) -->
+            @for (project of experiences()[0].projects; track project.title) {
+              <article
+                #projectCard
+                class="project-card group relative rounded-xl border border-white/4 overflow-hidden flex flex-col"
+                style="
+                  background: linear-gradient(
+                    135deg,
+                    rgba(34, 34, 34, 0.72),
+                    rgba(42, 42, 42, 0.38)
+                  );
+                  backdrop-filter: blur(10px);
+                "
+              >
+                <!-- Image section -->
+                <div
+                  class="relative border-b border-white/4 overflow-hidden"
+                  style="border-color: rgba(255, 255, 255, 0.05)"
+                >
+                  <img
+                    [ngSrc]="project.imageUrl"
+                    [alt]="project.imageAlt"
+                    width="1200"
+                    height="800"
+                    class="project-card-image w-full object-cover"
+                    loading="lazy"
+                  />
+                  <!-- Gradient overlay -->
+                  <div
+                    class="absolute inset-0 pointer-events-none"
+                    style="
+                      background: linear-gradient(
+                        to bottom,
+                        transparent 50%,
+                        rgba(34, 34, 34, 0.8)
+                      );
+                    "
+                  ></div>
+                </div>
+
+                <!-- Content section -->
+                <div class="p-6 flex flex-col flex-1">
+                  <h4 class="font-heading text-h4 font-semibold text-text-primary mb-2">
+                    {{ project.title }}
+                  </h4>
+
+                  <p
+                    class="font-body text-sm text-text-secondary leading-relaxed mb-5 flex-1"
+                  >
+                    {{ project.description }}
+                  </p>
+
+                  <div class="flex flex-wrap gap-2 mb-5">
+                    @for (tech of project.techStack; track tech) {
+                      <span
+                        class="font-label text-[11px] font-medium tracking-wide px-2.5 py-1 rounded-md border"
+                        style="
+                          color: var(--color-accent-teal-light);
+                          border-color: rgba(0, 110, 138, 0.2);
+                          background: linear-gradient(
+                            135deg,
+                            rgba(0, 77, 97, 0.15),
+                            rgba(130, 38, 89, 0.1)
+                          );
+                        "
+                      >
+                        {{ tech }}
+                      </span>
+                    }
+                  </div>
+
+                  <a
+                    [href]="project.githubUrl"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center gap-2 font-label text-xs font-semibold tracking-wider uppercase text-accent-teal-light hover:text-text-primary transition-colors duration-300 mt-auto"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      class="w-4 h-4"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M12 .5A12 12 0 0 0 8.2 23.9c.6.1.8-.3.8-.6v-2.1c-3.3.7-4-1.4-4-1.4-.6-1.3-1.3-1.6-1.3-1.6-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-5.8 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.2 11.2 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.5-5.5 5.8.4.3.8 1 .8 2.1v3.2c0 .4.2.7.8.6A12 12 0 0 0 12 .5Z"
+                      />
+                    </svg>
+                    View on GitHub
+                  </a>
+                </div>
+              </article>
+            }
+
+            <!-- Gogo Energy project (1 card under the single stripe) -->
+            <article
+              #projectCard
+              class="project-card group relative rounded-xl border border-white/4 overflow-hidden flex flex-col"
+              style="
+                background: linear-gradient(
+                  135deg,
+                  rgba(34, 34, 34, 0.72),
+                  rgba(42, 42, 42, 0.38)
+                );
+                backdrop-filter: blur(10px);
+              "
+            >
+              <!-- Image section -->
+              <div
+                class="relative border-b border-white/4 overflow-hidden"
+                style="border-color: rgba(255, 255, 255, 0.05)"
+              >
+                <img
+                  [ngSrc]="experiences()[1].projects[0].imageUrl"
+                  [alt]="experiences()[1].projects[0].imageAlt"
+                  width="1200"
+                  height="800"
+                  class="project-card-image w-full object-cover"
+                  loading="lazy"
+                />
+                <!-- Gradient overlay -->
+                <div
+                  class="absolute inset-0 pointer-events-none"
+                  style="
+                    background: linear-gradient(
+                      to bottom,
+                      transparent 50%,
+                      rgba(34, 34, 34, 0.8)
+                    );
+                  "
+                ></div>
+              </div>
+
+              <!-- Content section -->
+              <div class="p-6 flex flex-col flex-1">
+                <h4 class="font-heading text-h4 font-semibold text-text-primary mb-2">
+                  {{ experiences()[1].projects[0].title }}
+                </h4>
+
+                <p
+                  class="font-body text-sm text-text-secondary leading-relaxed mb-5 flex-1"
+                >
+                  {{ experiences()[1].projects[0].description }}
+                </p>
+
+                <div class="flex flex-wrap gap-2 mb-5">
+                  @for (tech of experiences()[1].projects[0].techStack; track tech) {
+                    <span
+                      class="font-label text-[11px] font-medium tracking-wide px-2.5 py-1 rounded-md border"
+                      style="
+                        color: var(--color-accent-teal-light);
+                        border-color: rgba(0, 110, 138, 0.2);
+                        background: linear-gradient(
+                          135deg,
+                          rgba(0, 77, 97, 0.15),
+                          rgba(130, 38, 89, 0.1)
+                        );
+                      "
+                    >
+                      {{ tech }}
+                    </span>
+                  }
+                </div>
+
+                <a
+                  [href]="experiences()[1].projects[0].githubUrl"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center gap-2 font-label text-xs font-semibold tracking-wider uppercase text-accent-teal-light hover:text-text-primary transition-colors duration-300 mt-auto"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    class="w-4 h-4"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M12 .5A12 12 0 0 0 8.2 23.9c.6.1.8-.3.8-.6v-2.1c-3.3.7-4-1.4-4-1.4-.6-1.3-1.3-1.6-1.3-1.6-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-5.8 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.2 11.2 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.5-5.5 5.8.4.3.8 1 .8 2.1v3.2c0 .4.2.7.8.6A12 12 0 0 0 12 .5Z"
+                    />
+                  </svg>
+                  View on GitHub
+                </a>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</section>
