@@ -94,7 +94,7 @@ export class EducationComponent implements AfterViewInit {
       period: '2022 — Present',
       title: 'Thakur College of Engineering & Technology',
       subtitle: 'B.E. — Information Technology',
-      description: 'Mumbai University | Expected Graduation: 2026',
+      description: 'Mumbai University | Graduation year: 2026',
     },
   ]);
 
