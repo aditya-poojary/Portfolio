@@ -56,7 +56,8 @@ interface AchievementEntry {
       /* ─── Timeline dot (node marker) ───────────────────────── */
 
       .timeline-dot {
-        transition: box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+        transition:
+          box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1),
           border-color 0.5s cubic-bezier(0.22, 1, 0.36, 1),
           background 0.5s cubic-bezier(0.22, 1, 0.36, 1);
       }
@@ -64,7 +65,8 @@ interface AchievementEntry {
       .timeline-dot.dot-active {
         border-color: var(--color-accent-teal-light) !important;
         background: var(--color-accent-teal) !important;
-        box-shadow: 0 0 8px rgba(0, 110, 138, 0.5),
+        box-shadow:
+          0 0 8px rgba(0, 110, 138, 0.5),
           0 0 20px rgba(0, 110, 138, 0.2) !important;
       }
 

@@ -39,15 +39,14 @@
           var(--color-accent-teal),
           var(--color-accent-ruby)
         );
-        box-shadow: 0 0 8px rgba(163, 48, 112, 0.5), 0 0 20px rgba(0, 110, 138, 0.25);
+        box-shadow:
+          0 0 8px rgba(163, 48, 112, 0.5),
+          0 0 20px rgba(0, 110, 138, 0.25);
       "
     ></div>
 
     @for (entry of achievements(); track entry.title) {
-      <div
-        #timelineItem
-        class="timeline-item relative flex gap-8 pb-14 last:pb-0 max-md:gap-5"
-      >
+      <div #timelineItem class="timeline-item relative flex gap-8 pb-14 last:pb-0 max-md:gap-5">
         <!-- Dot (node) -->
         <div
           #timelineDot
