@@ -7,3 +7,12 @@
   background: var(--color-bg-primary);
   color: var(--color-text-primary);
 }
+
+#smooth-wrapper {
+  min-height: 100dvh;
+}
+
+#smooth-content {
+  min-height: 100dvh;
+  will-change: transform;
+}
