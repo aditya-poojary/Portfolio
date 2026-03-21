@@ -20,6 +20,7 @@ interface ExperienceProject {
   description: string;
   techStack: string[];
   githubUrl: string;
+  liveUrl?: string;
   imageUrl: string;
   imageAlt: string;
 }
@@ -135,6 +136,29 @@ interface ExperienceEntry {
           0 0 40px rgba(0, 110, 138, 0.1);
       }
 
+      .live-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.35rem 0.72rem;
+        border-radius: 0.5rem;
+        border: 1px solid rgba(0, 110, 138, 0.28);
+        color: var(--color-accent-teal-light);
+        background: linear-gradient(135deg, rgba(0, 77, 97, 0.16), rgba(130, 38, 89, 0.1));
+        transition:
+          color 220ms ease,
+          border-color 220ms ease,
+          transform 220ms ease,
+          box-shadow 220ms ease;
+      }
+
+      .live-link:hover {
+        color: var(--color-text-primary);
+        border-color: rgba(163, 48, 112, 0.36);
+        transform: translateY(-1px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.28);
+      }
+
       @media (max-width: 1100px) {
         .experience-track {
           width: 100%;
@@ -170,6 +194,9 @@ export class ExperienceComponent implements AfterViewInit {
 
   private readonly scrollTriggers: ScrollTrigger[] = [];
   private readonly animations: gsap.core.Animation[] = [];
+  private readonly descriptionSeedText = new WeakMap<HTMLElement, string>();
+  private readonly typedDescriptions = new WeakSet<HTMLElement>();
+  private readonly activeTypingIntervals = new Set<number>();
 
   @ViewChild('horizontalStage') private horizontalStageRef?: ElementRef<HTMLElement>;
   @ViewChild('horizontalTrack') private horizontalTrackRef?: ElementRef<HTMLElement>;
@@ -194,7 +221,8 @@ export class ExperienceComponent implements AfterViewInit {
           description:
             'Enterprise SaaS platform delivering AI-powered business solutions with real-time data management, intuitive dashboard, and modern responsive design across devices.',
           techStack: ['React', 'Firebase', 'Tailwind CSS', 'Vite'],
-          githubUrl: 'https://github.com/aditya-poojary',
+          githubUrl: 'https://github.com/kavin-cmd/Updated_CortexDynamics',
+          liveUrl: 'https://www.cortexdynamics.in/',
           imageUrl: 'assets/images/cortexdynamics.webp',
           imageAlt: 'Cortex Dynamics portfolio page — enterprise SaaS dashboard',
         },
@@ -202,8 +230,8 @@ export class ExperienceComponent implements AfterViewInit {
           title: 'Spotify Web Player — Custom SDK',
           description:
             'Custom Spotify Web Player with real-time playback, drag-to-seek progress, and seamless track navigation. Integrated Spotify Web Playback SDK with OAuth 2.0 auth, device management, and dynamic UI updates for smooth multi-device playback.',
-          techStack: ['React', 'TypeScript', 'Next.js', 'Spotify SDK'],
-          githubUrl: 'https://github.com/aditya-poojary',
+          techStack: ['Next.js', 'TypeScript', 'Shadcn', 'Spotify SDK'],
+          githubUrl: 'https://github.com/kavin-cmd/MeloDash',
           imageUrl: 'assets/images/melodash.webp',
           imageAlt: 'Spotify Web Player — custom SDK integration with real-time playback',
         },
@@ -218,8 +246,9 @@ export class ExperienceComponent implements AfterViewInit {
           title: 'GoGo Energy — Company Portfolio',
           description:
             'Modern portfolio website built with Next.js 15 and TypeScript, featuring advanced SEO with Open Graph, Twitter Cards, and JSON-LD structured data. Animated UI powered by Framer Motion with Material-UI and Tailwind CSS.',
-          techStack: ['Next.js 15', 'TypeScript', 'Framer Motion', 'MUI'],
-          githubUrl: 'https://github.com/aditya-poojary',
+          techStack: ['Next.js', 'TypeScript', 'Framer Motion', 'MUI'],
+          githubUrl: 'https://github.com/aditya-poojary/Gogo',
+          liveUrl: 'https://gogoenergy.in/',
           imageUrl: 'assets/images/gogoenergy.webp',
           imageAlt: 'GoGo Energy company portfolio website',
         },
@@ -240,6 +269,8 @@ export class ExperienceComponent implements AfterViewInit {
     }, 100);
 
     this.destroyRef.onDestroy(() => {
+      this.activeTypingIntervals.forEach((intervalId) => window.clearInterval(intervalId));
+      this.activeTypingIntervals.clear();
       this.animations.forEach((animation) => animation.kill());
       this.scrollTriggers.forEach((trigger) => trigger.kill());
     });
@@ -263,6 +294,9 @@ export class ExperienceComponent implements AfterViewInit {
     const stripeElements = stripes.map((ref) => ref.nativeElement);
     const cardElements = cards.map((ref) => ref.nativeElement);
     const dateLabelElements = dateLabels.map((ref) => ref.nativeElement);
+    const descriptionElements = cardElements
+      .map((card) => card.querySelector('.project-description'))
+      .filter((description): description is HTMLElement => description instanceof HTMLElement);
 
     const getShift = () => Math.max(0, track.scrollWidth - stage.clientWidth);
 
@@ -274,6 +308,13 @@ export class ExperienceComponent implements AfterViewInit {
     gsap.set(stripeElements, { autoAlpha: 0, y: 20 });
     gsap.set(cardElements, { autoAlpha: 0, y: 40 });
     gsap.set(dateLabelElements, { autoAlpha: 0, x: 20, scale: 0.9 });
+
+    descriptionElements.forEach((descriptionElement) => {
+      const originalText = descriptionElement.textContent?.trim() ?? '';
+      this.descriptionSeedText.set(descriptionElement, originalText);
+      descriptionElement.textContent = '';
+      gsap.set(descriptionElement, { autoAlpha: 0.9 });
+    });
 
     // Stripes
     entranceTl.to(
@@ -294,6 +335,18 @@ export class ExperienceComponent implements AfterViewInit {
         stagger: 0.12,
         onComplete: () => {
           dateLabelElements.forEach((el) => el.classList.add('date-revealed'));
+          gsap.fromTo(
+            dateLabelElements,
+            { boxShadow: '0 0 0 rgba(0, 110, 138, 0)' },
+            {
+              boxShadow: '0 0 18px rgba(0, 110, 138, 0.28)',
+              duration: 0.45,
+              ease: 'sine.out',
+              yoyo: true,
+              repeat: 1,
+              stagger: 0.1,
+            },
+          );
         },
       },
       0.2,
@@ -339,27 +392,6 @@ export class ExperienceComponent implements AfterViewInit {
         );
       }
     });
-
-    // Typing effect on the first card's description
-    const firstCardDesc = cardElements[0]?.querySelector('.project-description');
-    if (firstCardDesc) {
-      const fullText = firstCardDesc.textContent?.trim() ?? '';
-      firstCardDesc.textContent = '';
-      firstCardDesc.classList.add('typing-cursor');
-
-      entranceTl.add(() => {
-        let charIndex = 0;
-        const typeInterval = setInterval(() => {
-          if (charIndex < fullText.length) {
-            firstCardDesc.textContent = fullText.slice(0, charIndex + 1);
-            charIndex++;
-          } else {
-            clearInterval(typeInterval);
-            firstCardDesc.classList.remove('typing-cursor');
-          }
-        }, 18);
-      }, 0.5);
-    }
 
     this.animations.push(entranceTl);
 
@@ -414,5 +446,60 @@ export class ExperienceComponent implements AfterViewInit {
     if (trigger) {
       this.scrollTriggers.push(trigger);
     }
+
+    this.setupPerCardTypingTriggers(cardElements, scrollTl);
+  }
+
+  private setupPerCardTypingTriggers(
+    cardElements: HTMLElement[],
+    scrollTimeline: gsap.core.Timeline,
+  ): void {
+    cardElements.forEach((cardElement) => {
+      const descriptionElement = cardElement.querySelector('.project-description');
+      if (!(descriptionElement instanceof HTMLElement)) {
+        return;
+      }
+
+      const cardTrigger = ScrollTrigger.create({
+        trigger: cardElement,
+        containerAnimation: scrollTimeline,
+        start: 'left 72%',
+        end: 'right 28%',
+        onEnter: () => this.playTyping(descriptionElement),
+        onEnterBack: () => this.playTyping(descriptionElement),
+      });
+
+      this.scrollTriggers.push(cardTrigger);
+    });
+  }
+
+  private playTyping(descriptionElement: HTMLElement): void {
+    if (this.typedDescriptions.has(descriptionElement)) {
+      return;
+    }
+
+    const seedText = this.descriptionSeedText.get(descriptionElement) ?? '';
+    if (seedText.length === 0) {
+      return;
+    }
+
+    this.typedDescriptions.add(descriptionElement);
+    descriptionElement.classList.add('typing-cursor');
+    descriptionElement.textContent = '';
+
+    let charIndex = 0;
+    const intervalId = window.setInterval(() => {
+      if (charIndex < seedText.length) {
+        descriptionElement.textContent = seedText.slice(0, charIndex + 1);
+        charIndex += 1;
+        return;
+      }
+
+      window.clearInterval(intervalId);
+      this.activeTypingIntervals.delete(intervalId);
+      descriptionElement.classList.remove('typing-cursor');
+    }, 16);
+
+    this.activeTypingIntervals.add(intervalId);
   }
 }
