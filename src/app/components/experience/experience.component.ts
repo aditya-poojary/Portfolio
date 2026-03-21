@@ -56,9 +56,7 @@ interface ExperienceEntry {
 
       /*
         Layout: 3 columns of 58rem (928px) each.
-        - First stripe spans columns 1-2 (1876px + gap)
-        - Two Cortex cards fill cols 1-2, one Gogo card fills col 3
-        - Total track ≈ 2824px → healthy horizontal scroll
+        First stripe spans columns 1-2 (≈1876px).
       */
       .experience-stripes-row,
       .experience-cards-row {
@@ -67,15 +65,56 @@ interface ExperienceEntry {
         gap: 1.25rem;
       }
 
-      /* First company stripe spans 2 card columns */
       .company-stripe-primary {
         grid-column: 1 / span 2;
       }
 
-      /* Showcase cards — tall, image-dominant */
       .project-card {
         height: 34rem;
         position: relative;
+      }
+
+      /* Date label animation styles */
+      .date-label {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .date-label::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          var(--color-accent-teal),
+          var(--color-accent-ruby),
+          transparent
+        );
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      .date-label.date-revealed::after {
+        transform: scaleX(1);
+      }
+
+      /* Project card text typing cursor */
+      .typing-cursor::after {
+        content: '▊';
+        animation: blink 0.8s step-end infinite;
+        color: var(--color-accent-teal-light);
+        margin-left: 2px;
+        font-size: 0.8em;
+      }
+
+      @keyframes blink {
+        50% {
+          opacity: 0;
+        }
       }
 
       @media (max-width: 1100px) {
@@ -124,6 +163,9 @@ export class ExperienceComponent implements AfterViewInit {
   @ViewChildren('projectCard', { read: ElementRef })
   private cardRefs?: QueryList<ElementRef<HTMLElement>>;
 
+  @ViewChildren('dateLabel', { read: ElementRef })
+  private dateLabelRefs?: QueryList<ElementRef<HTMLElement>>;
+
   protected readonly experiences = signal<ExperienceEntry[]>([
     {
       company: 'Cortex Dynamics',
@@ -131,18 +173,18 @@ export class ExperienceComponent implements AfterViewInit {
       endDate: 'Mar 2025',
       projects: [
         {
-          title: 'Project 01 — Details to be added',
+          title: 'Cortex Dynamics — Portfolio Platform',
           description:
-            'Core contribution delivered during tenure at Cortex Dynamics. Final project description will be added in your next prompt.',
-          techStack: ['Angular', 'TypeScript', 'Node.js'],
+            'Enterprise SaaS platform delivering AI-powered business solutions with real-time data management, intuitive dashboard, and modern responsive design across devices.',
+          techStack: ['React', 'Firebase', 'Tailwind CSS', 'Vite'],
           githubUrl: 'https://github.com/aditya-poojary',
-          imageUrl: 'assets/images/profile.webp',
-          imageAlt: 'Project visual placeholder for Cortex Dynamics project one',
+          imageUrl: 'assets/images/245.webp',
+          imageAlt: 'Cortex Dynamics portfolio page — enterprise SaaS dashboard',
         },
         {
           title: 'Project 02 — Details to be added',
           description:
-            'Secondary product track executed for Cortex Dynamics. Final project description and stack details will be updated next.',
+            'Secondary product track executed for Cortex Dynamics. Project description and stack details will be updated.',
           techStack: ['GSAP', 'Tailwind CSS', 'Express'],
           githubUrl: 'https://github.com/aditya-poojary',
           imageUrl: 'assets/images/profile.webp',
@@ -158,7 +200,7 @@ export class ExperienceComponent implements AfterViewInit {
         {
           title: 'Project 01 — Details to be added',
           description:
-            'Primary solution built at Gogo Energy. Final project narrative, stack, and repository link will be updated in your next message.',
+            'Primary solution built at Gogo Energy. Final project narrative, stack, and repository link will be updated.',
           techStack: ['Angular', 'PostgreSQL', 'REST APIs'],
           githubUrl: 'https://github.com/aditya-poojary',
           imageUrl: 'assets/images/profile.webp',
@@ -191,6 +233,7 @@ export class ExperienceComponent implements AfterViewInit {
     const track = this.horizontalTrackRef?.nativeElement;
     const stripes = this.stripeRefs?.toArray() ?? [];
     const cards = this.cardRefs?.toArray() ?? [];
+    const dateLabels = this.dateLabelRefs?.toArray() ?? [];
 
     if (!stage || !track || stripes.length === 0 || cards.length === 0) {
       return;
@@ -203,6 +246,7 @@ export class ExperienceComponent implements AfterViewInit {
 
     const stripeElements = stripes.map((ref) => ref.nativeElement);
     const cardElements = cards.map((ref) => ref.nativeElement);
+    const dateLabelElements = dateLabels.map((ref) => ref.nativeElement);
 
     // How far the track overflows the stage
     const getShift = () => Math.max(0, track.scrollWidth - stage.clientWidth);
@@ -212,7 +256,9 @@ export class ExperienceComponent implements AfterViewInit {
 
     gsap.set(stripeElements, { autoAlpha: 0, y: 20 });
     gsap.set(cardElements, { autoAlpha: 0, y: 40 });
+    gsap.set(dateLabelElements, { autoAlpha: 0, x: 20, scale: 0.9 });
 
+    // 1. Stripes slide in
     entranceTl.to(stripeElements, {
       autoAlpha: 1,
       y: 0,
@@ -221,6 +267,20 @@ export class ExperienceComponent implements AfterViewInit {
       stagger: 0.1,
     }, 0);
 
+    // 2. Date labels animate in with a pop + glow underline
+    entranceTl.to(dateLabelElements, {
+      autoAlpha: 1,
+      x: 0,
+      scale: 1,
+      duration: 0.6,
+      ease: 'back.out(1.5)',
+      stagger: 0.12,
+      onComplete: () => {
+        dateLabelElements.forEach((el) => el.classList.add('date-revealed'));
+      },
+    }, 0.2);
+
+    // 3. Cards fade in
     entranceTl.to(cardElements, {
       autoAlpha: 1,
       y: 0,
@@ -228,6 +288,27 @@ export class ExperienceComponent implements AfterViewInit {
       ease: 'power3.out',
       stagger: 0.12,
     }, 0.15);
+
+    // 4. First card — typing effect on description
+    const firstCardDesc = cardElements[0]?.querySelector('.project-description');
+    if (firstCardDesc) {
+      const fullText = firstCardDesc.textContent?.trim() ?? '';
+      firstCardDesc.textContent = '';
+      firstCardDesc.classList.add('typing-cursor');
+
+      entranceTl.add(() => {
+        let charIndex = 0;
+        const typeInterval = setInterval(() => {
+          if (charIndex < fullText.length) {
+            firstCardDesc.textContent = fullText.slice(0, charIndex + 1);
+            charIndex++;
+          } else {
+            clearInterval(typeInterval);
+            firstCardDesc.classList.remove('typing-cursor');
+          }
+        }, 18);
+      }, 0.5);
+    }
 
     this.animations.push(entranceTl);
 
@@ -241,10 +322,11 @@ export class ExperienceComponent implements AfterViewInit {
     this.scrollTriggers.push(entranceSt);
 
     // ── Horizontal scroll (scrub-based, only handles translateX) ──
+    // start: 'top 15%' → pinning starts with breathing room above the heading
     const scrollTl = gsap.timeline({
       scrollTrigger: {
         trigger: stage,
-        start: 'top top',
+        start: 'top 15%',
         end: () => {
           const shift = getShift();
           return `+=${Math.max(shift * 1.5 + window.innerHeight, window.innerHeight * 2.5)}`;

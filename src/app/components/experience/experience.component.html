@@ -45,7 +45,13 @@
                   {{ experiences()[0].company }}
                 </h3>
                 <span
-                  class="font-label text-xs font-medium tracking-wider uppercase text-accent-teal-light shrink-0"
+                  #dateLabel
+                  class="date-label font-label text-sm font-semibold tracking-wider uppercase shrink-0 px-3 py-1 rounded-md border"
+                  style="
+                    color: var(--color-accent-teal-light);
+                    border-color: rgba(0, 110, 138, 0.25);
+                    background: linear-gradient(135deg, rgba(0, 77, 97, 0.2), rgba(130, 38, 89, 0.12));
+                  "
                 >
                   {{ experiences()[0].startDate }} — {{ experiences()[0].endDate }}
                 </span>
@@ -66,7 +72,13 @@
                   {{ experiences()[1].company }}
                 </h3>
                 <span
-                  class="font-label text-xs font-medium tracking-wider uppercase text-accent-teal-light shrink-0"
+                  #dateLabel
+                  class="date-label font-label text-sm font-semibold tracking-wider uppercase shrink-0 px-3 py-1 rounded-md border"
+                  style="
+                    color: var(--color-accent-teal-light);
+                    border-color: rgba(0, 110, 138, 0.25);
+                    background: linear-gradient(135deg, rgba(130, 38, 89, 0.2), rgba(0, 77, 97, 0.12));
+                  "
                 >
                   {{ experiences()[1].startDate }} — {{ experiences()[1].endDate }}
                 </span>
@@ -139,7 +151,7 @@
                     {{ project.title }}
                   </h4>
                   <p
-                    class="font-body text-sm text-white/50 leading-relaxed line-clamp-2 max-w-[80%]"
+                    class="project-description font-body text-sm text-white/50 leading-relaxed line-clamp-2 max-w-[80%]"
                   >
                     {{ project.description }}
                   </p>
