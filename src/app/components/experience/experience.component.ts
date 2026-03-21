@@ -43,7 +43,7 @@ interface ExperienceEntry {
       }
 
       .project-card {
-        will-change: transform, opacity, filter;
+        will-change: transform, opacity;
       }
 
       .experience-stage {
@@ -54,10 +54,6 @@ interface ExperienceEntry {
         width: max-content;
       }
 
-      /*
-        Layout: 3 columns of 58rem (928px) each.
-        First stripe spans columns 1-2 (≈1876px).
-      */
       .experience-stripes-row,
       .experience-cards-row {
         display: grid;
@@ -74,7 +70,17 @@ interface ExperienceEntry {
         position: relative;
       }
 
-      /* Date label animation styles */
+      /* Image reveal clip */
+      .project-card-image-wrap {
+        clip-path: inset(8% 8% 8% 8%);
+        transition: clip-path 0s;
+      }
+
+      .project-card-image-wrap.image-revealed {
+        clip-path: inset(0% 0% 0% 0%);
+      }
+
+      /* Date label animation */
       .date-label {
         position: relative;
         overflow: hidden;
@@ -102,7 +108,7 @@ interface ExperienceEntry {
         transform: scaleX(1);
       }
 
-      /* Project card text typing cursor */
+      /* Typing cursor blink */
       .typing-cursor::after {
         content: '▊';
         animation: blink 0.8s step-end infinite;
@@ -115,6 +121,18 @@ interface ExperienceEntry {
         50% {
           opacity: 0;
         }
+      }
+
+      /* Project title glow */
+      .project-title {
+        text-shadow: 0 0 0 transparent;
+        transition: text-shadow 0.6s ease;
+      }
+
+      .project-title.title-glowing {
+        text-shadow:
+          0 0 20px rgba(0, 110, 138, 0.3),
+          0 0 40px rgba(0, 110, 138, 0.1);
       }
 
       @media (max-width: 1100px) {
@@ -141,7 +159,6 @@ interface ExperienceEntry {
         .project-card {
           opacity: 1 !important;
           transform: none !important;
-          filter: none !important;
         }
       }
     `,
@@ -178,17 +195,17 @@ export class ExperienceComponent implements AfterViewInit {
             'Enterprise SaaS platform delivering AI-powered business solutions with real-time data management, intuitive dashboard, and modern responsive design across devices.',
           techStack: ['React', 'Firebase', 'Tailwind CSS', 'Vite'],
           githubUrl: 'https://github.com/aditya-poojary',
-          imageUrl: 'assets/images/245.webp',
+          imageUrl: 'assets/images/cortexdynamics.webp',
           imageAlt: 'Cortex Dynamics portfolio page — enterprise SaaS dashboard',
         },
         {
-          title: 'Project 02 — Details to be added',
+          title: 'Spotify Web Player — Custom SDK',
           description:
-            'Secondary product track executed for Cortex Dynamics. Project description and stack details will be updated.',
-          techStack: ['GSAP', 'Tailwind CSS', 'Express'],
+            'Custom Spotify Web Player with real-time playback, drag-to-seek progress, and seamless track navigation. Integrated Spotify Web Playback SDK with OAuth 2.0 auth, device management, and dynamic UI updates for smooth multi-device playback.',
+          techStack: ['React', 'TypeScript', 'Next.js', 'Spotify SDK'],
           githubUrl: 'https://github.com/aditya-poojary',
-          imageUrl: 'assets/images/profile.webp',
-          imageAlt: 'Project visual placeholder for Cortex Dynamics project two',
+          imageUrl: 'assets/images/melodash.webp',
+          imageAlt: 'Spotify Web Player — custom SDK integration with real-time playback',
         },
       ],
     },
@@ -198,13 +215,13 @@ export class ExperienceComponent implements AfterViewInit {
       endDate: 'Jun 2025',
       projects: [
         {
-          title: 'Project 01 — Details to be added',
+          title: 'GoGo Energy — Company Portfolio',
           description:
-            'Primary solution built at Gogo Energy. Final project narrative, stack, and repository link will be updated.',
-          techStack: ['Angular', 'PostgreSQL', 'REST APIs'],
+            'Modern portfolio website built with Next.js 15 and TypeScript, featuring advanced SEO with Open Graph, Twitter Cards, and JSON-LD structured data. Animated UI powered by Framer Motion with Material-UI and Tailwind CSS.',
+          techStack: ['Next.js 15', 'TypeScript', 'Framer Motion', 'MUI'],
           githubUrl: 'https://github.com/aditya-poojary',
-          imageUrl: 'assets/images/profile.webp',
-          imageAlt: 'Project visual placeholder for Gogo Energy project',
+          imageUrl: 'assets/images/gogoenergy.webp',
+          imageAlt: 'GoGo Energy company portfolio website',
         },
       ],
     },
@@ -239,7 +256,6 @@ export class ExperienceComponent implements AfterViewInit {
       return;
     }
 
-    // Skip horizontal scroll on narrow viewports
     if (window.innerWidth < 1100) {
       return;
     }
@@ -248,48 +264,83 @@ export class ExperienceComponent implements AfterViewInit {
     const cardElements = cards.map((ref) => ref.nativeElement);
     const dateLabelElements = dateLabels.map((ref) => ref.nativeElement);
 
-    // How far the track overflows the stage
     const getShift = () => Math.max(0, track.scrollWidth - stage.clientWidth);
 
-    // ── Entrance animation (plays once when section enters viewport) ──
+    // ═══════════════════════════════════════════════════════
+    //  ENTRANCE ANIMATION (plays once when section enters)
+    // ═══════════════════════════════════════════════════════
     const entranceTl = gsap.timeline({ paused: true });
 
     gsap.set(stripeElements, { autoAlpha: 0, y: 20 });
     gsap.set(cardElements, { autoAlpha: 0, y: 40 });
     gsap.set(dateLabelElements, { autoAlpha: 0, x: 20, scale: 0.9 });
 
-    // 1. Stripes slide in
-    entranceTl.to(stripeElements, {
-      autoAlpha: 1,
-      y: 0,
-      duration: 0.5,
-      ease: 'power2.out',
-      stagger: 0.1,
-    }, 0);
+    // Stripes
+    entranceTl.to(
+      stripeElements,
+      { autoAlpha: 1, y: 0, duration: 0.5, ease: 'power2.out', stagger: 0.1 },
+      0,
+    );
 
-    // 2. Date labels animate in with a pop + glow underline
-    entranceTl.to(dateLabelElements, {
-      autoAlpha: 1,
-      x: 0,
-      scale: 1,
-      duration: 0.6,
-      ease: 'back.out(1.5)',
-      stagger: 0.12,
-      onComplete: () => {
-        dateLabelElements.forEach((el) => el.classList.add('date-revealed'));
+    // Date labels — pop in with back ease + gradient underline
+    entranceTl.to(
+      dateLabelElements,
+      {
+        autoAlpha: 1,
+        x: 0,
+        scale: 1,
+        duration: 0.6,
+        ease: 'back.out(1.5)',
+        stagger: 0.12,
+        onComplete: () => {
+          dateLabelElements.forEach((el) => el.classList.add('date-revealed'));
+        },
       },
-    }, 0.2);
+      0.2,
+    );
 
-    // 3. Cards fade in
-    entranceTl.to(cardElements, {
-      autoAlpha: 1,
-      y: 0,
-      duration: 0.6,
-      ease: 'power3.out',
-      stagger: 0.12,
-    }, 0.15);
+    // Cards fade in
+    entranceTl.to(
+      cardElements,
+      { autoAlpha: 1, y: 0, duration: 0.6, ease: 'power3.out', stagger: 0.12 },
+      0.15,
+    );
 
-    // 4. First card — typing effect on description
+    // Image reveal on each card (clip-path expansion)
+    cardElements.forEach((card, i) => {
+      const imgWrap = card.querySelector('.project-card-image-wrap');
+      if (imgWrap) {
+        entranceTl.to(
+          imgWrap,
+          {
+            clipPath: 'inset(0% 0% 0% 0%)',
+            duration: 0.8,
+            ease: 'power3.inOut',
+          },
+          0.3 + i * 0.12,
+        );
+      }
+    });
+
+    // Title animations (clip-path wipe + glow)
+    cardElements.forEach((card, i) => {
+      const title = card.querySelector('.project-title');
+      if (title) {
+        gsap.set(title, { clipPath: 'inset(0 100% 0 0)' });
+        entranceTl.to(
+          title,
+          {
+            clipPath: 'inset(0 0% 0 0)',
+            duration: 0.7,
+            ease: 'power2.inOut',
+            onComplete: () => title.classList.add('title-glowing'),
+          },
+          0.4 + i * 0.15,
+        );
+      }
+    });
+
+    // Typing effect on the first card's description
     const firstCardDesc = cardElements[0]?.querySelector('.project-description');
     if (firstCardDesc) {
       const fullText = firstCardDesc.textContent?.trim() ?? '';
@@ -312,7 +363,6 @@ export class ExperienceComponent implements AfterViewInit {
 
     this.animations.push(entranceTl);
 
-    // Fire entrance when the stage enters the viewport
     const entranceSt = ScrollTrigger.create({
       trigger: stage,
       start: 'top 80%',
@@ -321,15 +371,18 @@ export class ExperienceComponent implements AfterViewInit {
     });
     this.scrollTriggers.push(entranceSt);
 
-    // ── Horizontal scroll (scrub-based, only handles translateX) ──
-    // start: 'top 15%' → pinning starts with breathing room above the heading
+    // ═══════════════════════════════════════════════════════
+    //  HORIZONTAL SCROLL (scrub-based with dwell zones)
+    // ═══════════════════════════════════════════════════════
+    // Reduced breathing room: top 8%
+    // Dwell zones: 12% pause at start, 12% pause at end
     const scrollTl = gsap.timeline({
       scrollTrigger: {
         trigger: stage,
-        start: 'top 15%',
+        start: 'top 8%',
         end: () => {
           const shift = getShift();
-          return `+=${Math.max(shift * 1.5 + window.innerHeight, window.innerHeight * 2.5)}`;
+          return `+=${Math.max(shift * 1.6 + window.innerHeight * 1.1, window.innerHeight * 2.8)}`;
         },
         scrub: 1.15,
         pin: true,
@@ -338,16 +391,22 @@ export class ExperienceComponent implements AfterViewInit {
       },
     });
 
-    scrollTl.fromTo(
+    // Dwell at start (0 → 0.12): nothing moves — user has time to see the content
+    scrollTl.to(track, { x: 0, duration: 0.12, ease: 'none' }, 0);
+
+    // Horizontal movement (0.12 → 0.88)
+    scrollTl.to(
       track,
-      { x: 0 },
       {
         x: () => -getShift(),
+        duration: 0.76,
         ease: 'none',
-        duration: 1,
       },
-      0,
+      0.12,
     );
+
+    // Dwell at end (0.88 → 1): nothing moves — user sees the last cards
+    scrollTl.to(track, { x: () => -getShift(), duration: 0.12, ease: 'none' }, 0.88);
 
     this.animations.push(scrollTl);
 

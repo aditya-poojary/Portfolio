@@ -97,15 +97,17 @@
                 rel="noopener noreferrer"
                 class="project-card group relative block rounded-xl overflow-hidden border border-white/[0.06] cursor-pointer no-underline"
               >
-                <!-- Full-bleed image -->
-                <img
-                  [ngSrc]="project.imageUrl"
-                  [alt]="project.imageAlt"
-                  width="1200"
-                  height="800"
-                  class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                  loading="lazy"
-                />
+                <!-- Full-bleed image with reveal clip -->
+                <div class="project-card-image-wrap absolute inset-0">
+                  <img
+                    [ngSrc]="project.imageUrl"
+                    [alt]="project.imageAlt"
+                    width="1200"
+                    height="800"
+                    class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                    loading="lazy"
+                  />
+                </div>
 
                 <!-- Dark overlay -->
                 <div
@@ -145,7 +147,7 @@
                 <!-- Title + subtitle overlay (bottom) -->
                 <div class="absolute bottom-0 left-0 right-0 p-7 z-10">
                   <h4
-                    class="font-heading font-semibold text-text-primary mb-1.5"
+                    class="project-title font-heading font-semibold text-text-primary mb-1.5"
                     style="font-size: clamp(1.5rem, 3vw, 2.25rem); line-height: 1.25"
                   >
                     {{ project.title }}
@@ -193,15 +195,17 @@
               rel="noopener noreferrer"
               class="project-card group relative block rounded-xl overflow-hidden border border-white/[0.06] cursor-pointer no-underline"
             >
-              <!-- Full-bleed image -->
-              <img
-                [ngSrc]="experiences()[1].projects[0].imageUrl"
-                [alt]="experiences()[1].projects[0].imageAlt"
-                width="1200"
-                height="800"
-                class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                loading="lazy"
-              />
+              <!-- Full-bleed image with reveal clip -->
+              <div class="project-card-image-wrap absolute inset-0">
+                <img
+                  [ngSrc]="experiences()[1].projects[0].imageUrl"
+                  [alt]="experiences()[1].projects[0].imageAlt"
+                  width="1200"
+                  height="800"
+                  class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  loading="lazy"
+                />
+              </div>
 
               <!-- Dark overlay -->
               <div
@@ -241,7 +245,7 @@
               <!-- Title overlay -->
               <div class="absolute bottom-0 left-0 right-0 p-7 z-10">
                 <h4
-                  class="font-heading font-semibold text-text-primary mb-1.5"
+                  class="project-title font-heading font-semibold text-text-primary mb-1.5"
                   style="font-size: clamp(1.5rem, 3vw, 2.25rem); line-height: 1.25"
                 >
                   {{ experiences()[1].projects[0].title }}
