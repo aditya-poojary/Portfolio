@@ -2,7 +2,7 @@
   <div class="container-custom">
     @if (experiences().length >= 2) {
       <div #horizontalStage class="experience-stage relative">
-        <!-- Heading — inside the pinned stage so it stays visible -->
+        <!-- Heading — pinned with the stage -->
         <h2
           class="font-heading text-h2 font-semibold text-text-primary mb-10 flex items-center gap-3"
         >
@@ -29,19 +29,19 @@
 
         <!-- Horizontal scroll track -->
         <div #horizontalTrack class="experience-track pb-2">
-          <!-- ── Stripes row (company headers) ──────────────── -->
+          <!-- ── Row 1: Company stripes ─────────────────────── -->
           <div class="experience-stripes-row">
-            <!-- Cortex Dynamics — spans 2 columns -->
+            <!-- Cortex Dynamics — spans across both project cards -->
             <div
               #companyStripe
-              class="company-stripe company-stripe-primary rounded-xl border border-white/8 px-7 py-5"
+              class="company-stripe company-stripe-primary rounded-xl border border-white/8 px-8 py-5"
               style="
                 background: linear-gradient(135deg, rgba(0, 77, 97, 0.22), rgba(130, 38, 89, 0.14));
                 box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
               "
             >
-              <div class="flex items-center justify-between gap-4">
-                <h3 class="font-heading text-h3 font-semibold text-text-primary">
+              <div class="flex items-center justify-between gap-6">
+                <h3 class="font-heading text-h3 font-semibold text-text-primary whitespace-nowrap">
                   {{ experiences()[0].company }}
                 </h3>
                 <span
@@ -52,21 +52,21 @@
               </div>
             </div>
 
-            <!-- Gogo Energy — 1 column -->
+            <!-- Gogo Energy — single column -->
             <div
               #companyStripe
-              class="company-stripe rounded-xl border border-white/8 px-7 py-5"
+              class="company-stripe rounded-xl border border-white/8 px-8 py-5"
               style="
                 background: linear-gradient(135deg, rgba(130, 38, 89, 0.2), rgba(0, 77, 97, 0.13));
                 box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
               "
             >
-              <div class="flex flex-col items-start gap-1">
-                <h3 class="font-heading text-h4 font-semibold text-text-primary">
+              <div class="flex items-center justify-between gap-4">
+                <h3 class="font-heading text-h4 font-semibold text-text-primary whitespace-nowrap">
                   {{ experiences()[1].company }}
                 </h3>
                 <span
-                  class="font-label text-xs font-medium tracking-wider uppercase text-accent-teal-light"
+                  class="font-label text-xs font-medium tracking-wider uppercase text-accent-teal-light shrink-0"
                 >
                   {{ experiences()[1].startDate }} — {{ experiences()[1].endDate }}
                 </span>
@@ -74,84 +74,79 @@
             </div>
           </div>
 
-          <!-- ── Cards row (projects) ───────────────────────── -->
-          <div class="experience-cards-row mt-6">
-            <!-- Cortex Dynamics projects (2 cards under the wide stripe) -->
+          <!-- ── Row 2: Project showcase cards ──────────────── -->
+          <div class="experience-cards-row mt-5">
+            <!-- Cortex Dynamics projects -->
             @for (project of experiences()[0].projects; track project.title) {
-              <article
+              <a
                 #projectCard
-                class="project-card group relative rounded-xl border border-white/4 overflow-hidden flex flex-col"
-                style="
-                  background: linear-gradient(
-                    135deg,
-                    rgba(34, 34, 34, 0.72),
-                    rgba(42, 42, 42, 0.38)
-                  );
-                  backdrop-filter: blur(10px);
-                "
+                [href]="project.githubUrl"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="project-card group relative block rounded-xl overflow-hidden border border-white/[0.06] cursor-pointer no-underline"
               >
-                <!-- Image section -->
+                <!-- Full-bleed image -->
+                <img
+                  [ngSrc]="project.imageUrl"
+                  [alt]="project.imageAlt"
+                  width="1200"
+                  height="800"
+                  class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  loading="lazy"
+                />
+
+                <!-- Dark overlay -->
                 <div
-                  class="relative border-b border-white/4 overflow-hidden"
-                  style="border-color: rgba(255, 255, 255, 0.05)"
-                >
-                  <img
-                    [ngSrc]="project.imageUrl"
-                    [alt]="project.imageAlt"
-                    width="1200"
-                    height="800"
-                    class="project-card-image w-full object-cover"
-                    loading="lazy"
-                  />
-                  <!-- Gradient overlay -->
-                  <div
-                    class="absolute inset-0 pointer-events-none"
-                    style="
-                      background: linear-gradient(
-                        to bottom,
-                        transparent 50%,
-                        rgba(34, 34, 34, 0.8)
-                      );
-                    "
-                  ></div>
+                  class="absolute inset-0 transition-opacity duration-500"
+                  style="background: rgba(0, 0, 0, 0.25)"
+                ></div>
+
+                <!-- Bottom gradient for text readability -->
+                <div
+                  class="absolute inset-0 pointer-events-none"
+                  style="
+                    background: linear-gradient(
+                      to top,
+                      rgba(0, 0, 0, 0.85) 0%,
+                      rgba(0, 0, 0, 0.4) 40%,
+                      transparent 70%
+                    );
+                  "
+                ></div>
+
+                <!-- Tech tags (top-right corner) -->
+                <div class="absolute top-5 right-5 flex flex-wrap gap-2 justify-end max-w-[60%] z-10">
+                  @for (tech of project.techStack; track tech) {
+                    <span
+                      class="font-label text-[11px] font-medium tracking-wide px-2.5 py-1 rounded-md border backdrop-blur-sm"
+                      style="
+                        color: var(--color-accent-teal-light);
+                        border-color: rgba(0, 110, 138, 0.3);
+                        background: rgba(0, 0, 0, 0.45);
+                      "
+                    >
+                      {{ tech }}
+                    </span>
+                  }
                 </div>
 
-                <!-- Content section -->
-                <div class="p-6 flex flex-col flex-1">
-                  <h4 class="font-heading text-h4 font-semibold text-text-primary mb-2">
+                <!-- Title + subtitle overlay (bottom) -->
+                <div class="absolute bottom-0 left-0 right-0 p-7 z-10">
+                  <h4
+                    class="font-heading font-semibold text-text-primary mb-1.5"
+                    style="font-size: clamp(1.5rem, 3vw, 2.25rem); line-height: 1.25"
+                  >
                     {{ project.title }}
                   </h4>
-
                   <p
-                    class="font-body text-sm text-text-secondary leading-relaxed mb-5 flex-1"
+                    class="font-body text-sm text-white/50 leading-relaxed line-clamp-2 max-w-[80%]"
                   >
                     {{ project.description }}
                   </p>
 
-                  <div class="flex flex-wrap gap-2 mb-5">
-                    @for (tech of project.techStack; track tech) {
-                      <span
-                        class="font-label text-[11px] font-medium tracking-wide px-2.5 py-1 rounded-md border"
-                        style="
-                          color: var(--color-accent-teal-light);
-                          border-color: rgba(0, 110, 138, 0.2);
-                          background: linear-gradient(
-                            135deg,
-                            rgba(0, 77, 97, 0.15),
-                            rgba(130, 38, 89, 0.1)
-                          );
-                        "
-                      >
-                        {{ tech }}
-                      </span>
-                    }
-                  </div>
-
-                  <a
-                    [href]="project.githubUrl"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="inline-flex items-center gap-2 font-label text-xs font-semibold tracking-wider uppercase text-accent-teal-light hover:text-text-primary transition-colors duration-300 mt-auto"
+                  <!-- GitHub arrow -->
+                  <div
+                    class="mt-4 inline-flex items-center gap-2 font-label text-xs font-semibold tracking-wider uppercase text-accent-teal-light group-hover:text-text-primary transition-colors duration-300"
                   >
                     <svg
                       viewBox="0 0 24 24"
@@ -164,86 +159,89 @@
                       />
                     </svg>
                     View on GitHub
-                  </a>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      class="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1"
+                    >
+                      <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                  </div>
                 </div>
-              </article>
+              </a>
             }
 
-            <!-- Gogo Energy project (1 card under the single stripe) -->
-            <article
+            <!-- Gogo Energy project -->
+            <a
               #projectCard
-              class="project-card group relative rounded-xl border border-white/4 overflow-hidden flex flex-col"
-              style="
-                background: linear-gradient(
-                  135deg,
-                  rgba(34, 34, 34, 0.72),
-                  rgba(42, 42, 42, 0.38)
-                );
-                backdrop-filter: blur(10px);
-              "
+              [href]="experiences()[1].projects[0].githubUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="project-card group relative block rounded-xl overflow-hidden border border-white/[0.06] cursor-pointer no-underline"
             >
-              <!-- Image section -->
+              <!-- Full-bleed image -->
+              <img
+                [ngSrc]="experiences()[1].projects[0].imageUrl"
+                [alt]="experiences()[1].projects[0].imageAlt"
+                width="1200"
+                height="800"
+                class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                loading="lazy"
+              />
+
+              <!-- Dark overlay -->
               <div
-                class="relative border-b border-white/4 overflow-hidden"
-                style="border-color: rgba(255, 255, 255, 0.05)"
-              >
-                <img
-                  [ngSrc]="experiences()[1].projects[0].imageUrl"
-                  [alt]="experiences()[1].projects[0].imageAlt"
-                  width="1200"
-                  height="800"
-                  class="project-card-image w-full object-cover"
-                  loading="lazy"
-                />
-                <!-- Gradient overlay -->
-                <div
-                  class="absolute inset-0 pointer-events-none"
-                  style="
-                    background: linear-gradient(
-                      to bottom,
-                      transparent 50%,
-                      rgba(34, 34, 34, 0.8)
-                    );
-                  "
-                ></div>
+                class="absolute inset-0 transition-opacity duration-500"
+                style="background: rgba(0, 0, 0, 0.25)"
+              ></div>
+
+              <!-- Bottom gradient -->
+              <div
+                class="absolute inset-0 pointer-events-none"
+                style="
+                  background: linear-gradient(
+                    to top,
+                    rgba(0, 0, 0, 0.85) 0%,
+                    rgba(0, 0, 0, 0.4) 40%,
+                    transparent 70%
+                  );
+                "
+              ></div>
+
+              <!-- Tech tags -->
+              <div class="absolute top-5 right-5 flex flex-wrap gap-2 justify-end max-w-[60%] z-10">
+                @for (tech of experiences()[1].projects[0].techStack; track tech) {
+                  <span
+                    class="font-label text-[11px] font-medium tracking-wide px-2.5 py-1 rounded-md border backdrop-blur-sm"
+                    style="
+                      color: var(--color-accent-teal-light);
+                      border-color: rgba(0, 110, 138, 0.3);
+                      background: rgba(0, 0, 0, 0.45);
+                    "
+                  >
+                    {{ tech }}
+                  </span>
+                }
               </div>
 
-              <!-- Content section -->
-              <div class="p-6 flex flex-col flex-1">
-                <h4 class="font-heading text-h4 font-semibold text-text-primary mb-2">
+              <!-- Title overlay -->
+              <div class="absolute bottom-0 left-0 right-0 p-7 z-10">
+                <h4
+                  class="font-heading font-semibold text-text-primary mb-1.5"
+                  style="font-size: clamp(1.5rem, 3vw, 2.25rem); line-height: 1.25"
+                >
                   {{ experiences()[1].projects[0].title }}
                 </h4>
-
                 <p
-                  class="font-body text-sm text-text-secondary leading-relaxed mb-5 flex-1"
+                  class="font-body text-sm text-white/50 leading-relaxed line-clamp-2 max-w-[80%]"
                 >
                   {{ experiences()[1].projects[0].description }}
                 </p>
 
-                <div class="flex flex-wrap gap-2 mb-5">
-                  @for (tech of experiences()[1].projects[0].techStack; track tech) {
-                    <span
-                      class="font-label text-[11px] font-medium tracking-wide px-2.5 py-1 rounded-md border"
-                      style="
-                        color: var(--color-accent-teal-light);
-                        border-color: rgba(0, 110, 138, 0.2);
-                        background: linear-gradient(
-                          135deg,
-                          rgba(0, 77, 97, 0.15),
-                          rgba(130, 38, 89, 0.1)
-                        );
-                      "
-                    >
-                      {{ tech }}
-                    </span>
-                  }
-                </div>
-
-                <a
-                  [href]="experiences()[1].projects[0].githubUrl"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="inline-flex items-center gap-2 font-label text-xs font-semibold tracking-wider uppercase text-accent-teal-light hover:text-text-primary transition-colors duration-300 mt-auto"
+                <div
+                  class="mt-4 inline-flex items-center gap-2 font-label text-xs font-semibold tracking-wider uppercase text-accent-teal-light group-hover:text-text-primary transition-colors duration-300"
                 >
                   <svg
                     viewBox="0 0 24 24"
@@ -256,9 +254,18 @@
                     />
                   </svg>
                   View on GitHub
-                </a>
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    class="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1"
+                  >
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                  </svg>
+                </div>
               </div>
-            </article>
+            </a>
           </div>
         </div>
       </div>

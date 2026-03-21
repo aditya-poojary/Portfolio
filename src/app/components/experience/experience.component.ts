@@ -55,27 +55,27 @@ interface ExperienceEntry {
       }
 
       /*
-        Grid layout:
-        - 3 equal columns, each ~30rem (480px)
-        - First stripe spans columns 1-2
-        - Two Cortex cards fill columns 1-2, one Gogo card fills column 3
-        - Cards match their stripe widths exactly
+        Layout: 3 columns of 58rem (928px) each.
+        - First stripe spans columns 1-2 (1876px + gap)
+        - Two Cortex cards fill cols 1-2, one Gogo card fills col 3
+        - Total track ≈ 2824px → healthy horizontal scroll
       */
       .experience-stripes-row,
       .experience-cards-row {
         display: grid;
-        grid-template-columns: repeat(3, 30rem);
+        grid-template-columns: repeat(3, 58rem);
         gap: 1.25rem;
       }
 
-      /* First company stripe spans 2 columns */
+      /* First company stripe spans 2 card columns */
       .company-stripe-primary {
         grid-column: 1 / span 2;
       }
 
-      /* Project cards: image + content fill */
-      .project-card-image {
-        height: 14rem;
+      /* Showcase cards — tall, image-dominant */
+      .project-card {
+        height: 34rem;
+        position: relative;
       }
 
       @media (max-width: 1100px) {
@@ -92,8 +92,8 @@ interface ExperienceEntry {
           grid-column: auto;
         }
 
-        .project-card-image {
-          height: 12rem;
+        .project-card {
+          height: 28rem;
         }
       }
 
@@ -204,24 +204,50 @@ export class ExperienceComponent implements AfterViewInit {
     const stripeElements = stripes.map((ref) => ref.nativeElement);
     const cardElements = cards.map((ref) => ref.nativeElement);
 
-    // Initial states
-    gsap.set(stripeElements, { autoAlpha: 0.72, y: 22 });
-    gsap.set(cardElements, {
-      autoAlpha: 0,
-      y: 64,
-      filter: 'blur(10px)',
-      rotateY: 6,
-      transformPerspective: 1000,
-    });
+    // How far the track overflows the stage
+    const getShift = () => Math.max(0, track.scrollWidth - stage.clientWidth);
 
-    // Master timeline: pin + horizontal scroll
-    const masterTimeline = gsap.timeline({
+    // ── Entrance animation (plays once when section enters viewport) ──
+    const entranceTl = gsap.timeline({ paused: true });
+
+    gsap.set(stripeElements, { autoAlpha: 0, y: 20 });
+    gsap.set(cardElements, { autoAlpha: 0, y: 40 });
+
+    entranceTl.to(stripeElements, {
+      autoAlpha: 1,
+      y: 0,
+      duration: 0.5,
+      ease: 'power2.out',
+      stagger: 0.1,
+    }, 0);
+
+    entranceTl.to(cardElements, {
+      autoAlpha: 1,
+      y: 0,
+      duration: 0.6,
+      ease: 'power3.out',
+      stagger: 0.12,
+    }, 0.15);
+
+    this.animations.push(entranceTl);
+
+    // Fire entrance when the stage enters the viewport
+    const entranceSt = ScrollTrigger.create({
+      trigger: stage,
+      start: 'top 80%',
+      onEnter: () => entranceTl.play(),
+      onLeaveBack: () => entranceTl.reverse(),
+    });
+    this.scrollTriggers.push(entranceSt);
+
+    // ── Horizontal scroll (scrub-based, only handles translateX) ──
+    const scrollTl = gsap.timeline({
       scrollTrigger: {
         trigger: stage,
         start: 'top top',
         end: () => {
-          const shift = Math.max(0, track.scrollWidth - stage.clientWidth);
-          return `+=${Math.max(shift * 1.35 + window.innerHeight * 0.9, window.innerHeight * 2.4)}`;
+          const shift = getShift();
+          return `+=${Math.max(shift * 1.5 + window.innerHeight, window.innerHeight * 2.5)}`;
         },
         scrub: 1.15,
         pin: true,
@@ -230,52 +256,20 @@ export class ExperienceComponent implements AfterViewInit {
       },
     });
 
-    // Horizontal translation of the track
-    masterTimeline.fromTo(
+    scrollTl.fromTo(
       track,
       { x: 0 },
       {
-        x: () => {
-          const shift = Math.max(0, track.scrollWidth - stage.clientWidth);
-          return -shift;
-        },
+        x: () => -getShift(),
         ease: 'none',
         duration: 1,
       },
       0,
     );
 
-    // Stripe reveal
-    masterTimeline.to(
-      stripeElements,
-      {
-        autoAlpha: 1,
-        y: 0,
-        duration: 0.22,
-        ease: 'power2.out',
-        stagger: 0.08,
-      },
-      0.04,
-    );
+    this.animations.push(scrollTl);
 
-    // Card reveal with blur + rotation unwind
-    masterTimeline.to(
-      cardElements,
-      {
-        autoAlpha: 1,
-        y: 0,
-        filter: 'blur(0px)',
-        rotateY: 0,
-        duration: 0.3,
-        ease: 'power3.out',
-        stagger: 0.1,
-      },
-      0.1,
-    );
-
-    this.animations.push(masterTimeline);
-
-    const trigger = masterTimeline.scrollTrigger;
+    const trigger = scrollTl.scrollTrigger;
     if (trigger) {
       this.scrollTriggers.push(trigger);
     }
