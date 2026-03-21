@@ -193,6 +193,7 @@ export class ExperienceComponent implements AfterViewInit {
   private readonly seedTexts = new WeakMap<HTMLElement, string>();
   private readonly typedElements = new WeakSet<HTMLElement>();
   private readonly activeIntervals = new Set<number>();
+  private readonly techTagHoverCleanups: Array<() => void> = [];
 
   @ViewChild('horizontalStage') private horizontalStageRef?: ElementRef<HTMLElement>;
   @ViewChild('horizontalTrack') private horizontalTrackRef?: ElementRef<HTMLElement>;
@@ -208,6 +209,9 @@ export class ExperienceComponent implements AfterViewInit {
 
   @ViewChildren('companyName', { read: ElementRef })
   private companyNameRefs?: QueryList<ElementRef<HTMLElement>>;
+
+  @ViewChildren('techTag', { read: ElementRef })
+  private techTagRefs?: QueryList<ElementRef<HTMLElement>>;
 
   protected readonly experiences = signal<ExperienceEntry[]>([
     {
@@ -270,6 +274,8 @@ export class ExperienceComponent implements AfterViewInit {
       this.activeIntervals.clear();
       this.animations.forEach((a) => a.kill());
       this.scrollTriggers.forEach((t) => t.kill());
+      this.techTagHoverCleanups.forEach((cleanup) => cleanup());
+      this.techTagHoverCleanups.length = 0;
     });
   }
 
@@ -442,6 +448,57 @@ export class ExperienceComponent implements AfterViewInit {
         onEnter: () => this.typeText(dateEls[1], 35),
       }));
     }
+
+    this.setupTechTagHoverEffects();
+  }
+
+  private setupTechTagHoverEffects(): void {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const techTags = this.techTagRefs?.toArray().map((ref) => ref.nativeElement) ?? [];
+    if (techTags.length === 0) return;
+
+    techTags.forEach((tag) => {
+      const computed = window.getComputedStyle(tag);
+      const baseColor = computed.color;
+      const baseBorderColor = computed.borderColor;
+      const baseBackgroundColor = computed.backgroundColor;
+
+      const onMouseEnter = () => {
+        gsap.to(tag, {
+          y: -2,
+          scale: 1.04,
+          duration: 0.22,
+          ease: 'power2.out',
+          color: 'var(--color-text-primary)',
+          borderColor: 'rgba(0, 110, 138, 0.48)',
+          backgroundColor: 'rgba(0, 77, 97, 0.34)',
+          boxShadow: '0 8px 18px rgba(0, 110, 138, 0.22), 0 0 0 1px rgba(163, 48, 112, 0.16)',
+        });
+      };
+
+      const onMouseLeave = () => {
+        gsap.to(tag, {
+          y: 0,
+          scale: 1,
+          duration: 0.24,
+          ease: 'power2.out',
+          color: baseColor,
+          borderColor: baseBorderColor,
+          backgroundColor: baseBackgroundColor,
+          boxShadow: '0 0 0 rgba(0, 0, 0, 0)',
+        });
+      };
+
+      tag.addEventListener('mouseenter', onMouseEnter);
+      tag.addEventListener('mouseleave', onMouseLeave);
+
+      this.techTagHoverCleanups.push(() => {
+        tag.removeEventListener('mouseenter', onMouseEnter);
+        tag.removeEventListener('mouseleave', onMouseLeave);
+        gsap.killTweensOf(tag);
+      });
+    });
   }
 
   /** Types text char-by-char. Only runs once per element. */

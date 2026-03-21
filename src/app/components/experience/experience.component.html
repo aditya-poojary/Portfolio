@@ -139,6 +139,7 @@
                 >
                   @for (tech of project.techStack; track tech) {
                     <span
+                      #techTag
                       class="font-label text-[11px] font-medium tracking-wide px-2.5 py-1 rounded-md border backdrop-blur-sm"
                       style="
                         color: var(--color-accent-teal-light);
@@ -249,6 +250,7 @@
               <div class="absolute top-5 right-5 flex flex-wrap gap-2 justify-end max-w-[60%] z-10">
                 @for (tech of experiences()[1].projects[0].techStack; track tech) {
                   <span
+                    #techTag
                     class="font-label text-[11px] font-medium tracking-wide px-2.5 py-1 rounded-md border backdrop-blur-sm"
                     style="
                       color: var(--color-accent-teal-light);
