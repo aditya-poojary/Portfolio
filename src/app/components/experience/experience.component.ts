@@ -71,7 +71,6 @@ interface ExperienceEntry {
         position: relative;
       }
 
-      /* Image reveal clip */
       .project-card-image-wrap {
         clip-path: inset(8% 8% 8% 8%);
         transition: clip-path 0s;
@@ -81,7 +80,6 @@ interface ExperienceEntry {
         clip-path: inset(0% 0% 0% 0%);
       }
 
-      /* Date label animation */
       .date-label {
         position: relative;
         overflow: hidden;
@@ -109,7 +107,6 @@ interface ExperienceEntry {
         transform: scaleX(1);
       }
 
-      /* Typing cursor blink */
       .typing-cursor::after {
         content: '▊';
         animation: blink 0.8s step-end infinite;
@@ -124,7 +121,6 @@ interface ExperienceEntry {
         }
       }
 
-      /* Project title glow */
       .project-title {
         text-shadow: 0 0 0 transparent;
         transition: text-shadow 0.6s ease;
@@ -194,9 +190,9 @@ export class ExperienceComponent implements AfterViewInit {
 
   private readonly scrollTriggers: ScrollTrigger[] = [];
   private readonly animations: gsap.core.Animation[] = [];
-  private readonly descriptionSeedText = new WeakMap<HTMLElement, string>();
-  private readonly typedDescriptions = new WeakSet<HTMLElement>();
-  private readonly activeTypingIntervals = new Set<number>();
+  private readonly seedTexts = new WeakMap<HTMLElement, string>();
+  private readonly typedElements = new WeakSet<HTMLElement>();
+  private readonly activeIntervals = new Set<number>();
 
   @ViewChild('horizontalStage') private horizontalStageRef?: ElementRef<HTMLElement>;
   @ViewChild('horizontalTrack') private horizontalTrackRef?: ElementRef<HTMLElement>;
@@ -209,6 +205,9 @@ export class ExperienceComponent implements AfterViewInit {
 
   @ViewChildren('dateLabel', { read: ElementRef })
   private dateLabelRefs?: QueryList<ElementRef<HTMLElement>>;
+
+  @ViewChildren('companyName', { read: ElementRef })
+  private companyNameRefs?: QueryList<ElementRef<HTMLElement>>;
 
   protected readonly experiences = signal<ExperienceEntry[]>([
     {
@@ -257,9 +256,7 @@ export class ExperienceComponent implements AfterViewInit {
   ]);
 
   ngAfterViewInit(): void {
-    if (!isPlatformBrowser(this.platformId)) {
-      return;
-    }
+    if (!isPlatformBrowser(this.platformId)) return;
 
     gsap.registerPlugin(ScrollTrigger);
 
@@ -269,10 +266,10 @@ export class ExperienceComponent implements AfterViewInit {
     }, 100);
 
     this.destroyRef.onDestroy(() => {
-      this.activeTypingIntervals.forEach((intervalId) => window.clearInterval(intervalId));
-      this.activeTypingIntervals.clear();
-      this.animations.forEach((animation) => animation.kill());
-      this.scrollTriggers.forEach((trigger) => trigger.kill());
+      this.activeIntervals.forEach((id) => window.clearInterval(id));
+      this.activeIntervals.clear();
+      this.animations.forEach((a) => a.kill());
+      this.scrollTriggers.forEach((t) => t.kill());
     });
   }
 
@@ -282,224 +279,193 @@ export class ExperienceComponent implements AfterViewInit {
     const stripes = this.stripeRefs?.toArray() ?? [];
     const cards = this.cardRefs?.toArray() ?? [];
     const dateLabels = this.dateLabelRefs?.toArray() ?? [];
+    const companyNames = this.companyNameRefs?.toArray() ?? [];
 
-    if (!stage || !track || stripes.length === 0 || cards.length === 0) {
-      return;
-    }
+    if (!stage || !track || stripes.length === 0 || cards.length === 0) return;
+    if (window.innerWidth < 1100) return;
 
-    if (window.innerWidth < 1100) {
-      return;
-    }
-
-    const stripeElements = stripes.map((ref) => ref.nativeElement);
-    const cardElements = cards.map((ref) => ref.nativeElement);
-    const dateLabelElements = dateLabels.map((ref) => ref.nativeElement);
-    const descriptionElements = cardElements
-      .map((card) => card.querySelector('.project-description'))
-      .filter((description): description is HTMLElement => description instanceof HTMLElement);
+    const stripeEls = stripes.map((r) => r.nativeElement);
+    const cardEls = cards.map((r) => r.nativeElement);
+    const dateEls = dateLabels.map((r) => r.nativeElement);
+    const nameEls = companyNames.map((r) => r.nativeElement);
 
     const getShift = () => Math.max(0, track.scrollWidth - stage.clientWidth);
 
+    // ─── Store seed text for ALL typable elements ───
+    const descEls = cardEls
+      .map((c) => c.querySelector('.project-description'))
+      .filter((d): d is HTMLElement => d instanceof HTMLElement);
+
+    [...descEls, ...nameEls, ...dateEls].forEach((el) => {
+      this.seedTexts.set(el, el.textContent?.trim() ?? '');
+    });
+
+    // Clear description text (they'll type on view)
+    descEls.forEach((d) => (d.textContent = ''));
+
     // ═══════════════════════════════════════════════════════
-    //  ENTRANCE ANIMATION (plays once when section enters)
+    //  ENTRANCE ANIMATION
     // ═══════════════════════════════════════════════════════
     const entranceTl = gsap.timeline({ paused: true });
 
-    gsap.set(stripeElements, { autoAlpha: 0, y: 20 });
-    gsap.set(cardElements, { autoAlpha: 0, y: 40 });
-    gsap.set(dateLabelElements, { autoAlpha: 0, x: 20, scale: 0.9 });
+    gsap.set(stripeEls, { autoAlpha: 0, y: 20 });
+    gsap.set(cardEls, { autoAlpha: 0, y: 40 });
+    gsap.set(dateEls, { autoAlpha: 0, x: 20, scale: 0.9 });
 
-    descriptionElements.forEach((descriptionElement) => {
-      const originalText = descriptionElement.textContent?.trim() ?? '';
-      this.descriptionSeedText.set(descriptionElement, originalText);
-      descriptionElement.textContent = '';
-      gsap.set(descriptionElement, { autoAlpha: 0.9 });
-    });
+    // Stripes fade in
+    entranceTl.to(stripeEls, {
+      autoAlpha: 1, y: 0, duration: 0.5, ease: 'power2.out', stagger: 0.1,
+    }, 0);
 
-    // Stripes
-    entranceTl.to(
-      stripeElements,
-      { autoAlpha: 1, y: 0, duration: 0.5, ease: 'power2.out', stagger: 0.1 },
-      0,
-    );
-
-    // Date labels — pop in with back ease + gradient underline
-    entranceTl.to(
-      dateLabelElements,
-      {
-        autoAlpha: 1,
-        x: 0,
-        scale: 1,
-        duration: 0.6,
-        ease: 'back.out(1.5)',
-        stagger: 0.12,
-        onComplete: () => {
-          dateLabelElements.forEach((el) => el.classList.add('date-revealed'));
-          gsap.fromTo(
-            dateLabelElements,
-            { boxShadow: '0 0 0 rgba(0, 110, 138, 0)' },
-            {
-              boxShadow: '0 0 18px rgba(0, 110, 138, 0.28)',
-              duration: 0.45,
-              ease: 'sine.out',
-              yoyo: true,
-              repeat: 1,
-              stagger: 0.1,
-            },
-          );
-        },
+    // Date labels pop in
+    entranceTl.to(dateEls, {
+      autoAlpha: 1, x: 0, scale: 1, duration: 0.6, ease: 'back.out(1.5)', stagger: 0.12,
+      onComplete: () => {
+        dateEls.forEach((el) => el.classList.add('date-revealed'));
+        gsap.fromTo(dateEls,
+          { boxShadow: '0 0 0 rgba(0, 110, 138, 0)' },
+          {
+            boxShadow: '0 0 18px rgba(0, 110, 138, 0.28)',
+            duration: 0.45, ease: 'sine.out', yoyo: true, repeat: 1, stagger: 0.1,
+          },
+        );
       },
-      0.2,
-    );
+    }, 0.2);
 
     // Cards fade in
-    entranceTl.to(
-      cardElements,
-      { autoAlpha: 1, y: 0, duration: 0.6, ease: 'power3.out', stagger: 0.12 },
-      0.15,
-    );
+    entranceTl.to(cardEls, {
+      autoAlpha: 1, y: 0, duration: 0.6, ease: 'power3.out', stagger: 0.12,
+    }, 0.15);
 
-    // Image reveal on each card (clip-path expansion)
-    cardElements.forEach((card, i) => {
-      const imgWrap = card.querySelector('.project-card-image-wrap');
-      if (imgWrap) {
-        entranceTl.to(
-          imgWrap,
-          {
-            clipPath: 'inset(0% 0% 0% 0%)',
-            duration: 0.8,
-            ease: 'power3.inOut',
-          },
-          0.3 + i * 0.12,
-        );
+    // Image clip-path reveal
+    cardEls.forEach((card, i) => {
+      const wrap = card.querySelector('.project-card-image-wrap');
+      if (wrap) {
+        entranceTl.to(wrap, {
+          clipPath: 'inset(0% 0% 0% 0%)', duration: 0.8, ease: 'power3.inOut',
+        }, 0.3 + i * 0.12);
       }
     });
 
-    // Title animations (clip-path wipe + glow)
-    cardElements.forEach((card, i) => {
+    // Title clip-path wipe
+    cardEls.forEach((card, i) => {
       const title = card.querySelector('.project-title');
       if (title) {
         gsap.set(title, { clipPath: 'inset(0 100% 0 0)' });
-        entranceTl.to(
-          title,
-          {
-            clipPath: 'inset(0 0% 0 0)',
-            duration: 0.7,
-            ease: 'power2.inOut',
-            onComplete: () => title.classList.add('title-glowing'),
-          },
-          0.4 + i * 0.15,
-        );
+        entranceTl.to(title, {
+          clipPath: 'inset(0 0% 0 0)', duration: 0.7, ease: 'power2.inOut',
+          onComplete: () => title.classList.add('title-glowing'),
+        }, 0.4 + i * 0.15);
       }
     });
+
+    // ── CORTEX: type company name, date, and first card desc on entrance ──
+    // (Cortex stripe is visible immediately — no horizontal scroll needed)
+    if (nameEls[0]) {
+      entranceTl.add(() => this.typeText(nameEls[0], 30), 0.35);
+    }
+    if (dateEls[0]) {
+      entranceTl.add(() => this.typeText(dateEls[0], 35), 0.55);
+    }
+    if (descEls[0]) {
+      entranceTl.add(() => this.typeText(descEls[0], 16), 0.65);
+    }
 
     this.animations.push(entranceTl);
 
     const entranceSt = ScrollTrigger.create({
-      trigger: stage,
-      start: 'top 80%',
+      trigger: stage, start: 'top 80%',
       onEnter: () => entranceTl.play(),
       onLeaveBack: () => entranceTl.reverse(),
     });
     this.scrollTriggers.push(entranceSt);
 
     // ═══════════════════════════════════════════════════════
-    //  HORIZONTAL SCROLL (scrub-based with dwell zones)
+    //  HORIZONTAL SCROLL (scrub + dwell zones)
     // ═══════════════════════════════════════════════════════
-    // Reduced breathing room: top 8%
-    // Dwell zones: 12% pause at start, 12% pause at end
     const scrollTl = gsap.timeline({
       scrollTrigger: {
-        trigger: stage,
-        start: 'top 8%',
+        trigger: stage, start: 'top 8%',
         end: () => {
           const shift = getShift();
           return `+=${Math.max(shift * 1.6 + window.innerHeight * 1.1, window.innerHeight * 2.8)}`;
         },
-        scrub: 1.15,
-        pin: true,
-        anticipatePin: 1,
-        invalidateOnRefresh: true,
+        scrub: 1.15, pin: true, anticipatePin: 1, invalidateOnRefresh: true,
       },
     });
 
-    // Dwell at start (0 → 0.12): nothing moves — user has time to see the content
     scrollTl.to(track, { x: 0, duration: 0.12, ease: 'none' }, 0);
-
-    // Horizontal movement (0.12 → 0.88)
-    scrollTl.to(
-      track,
-      {
-        x: () => -getShift(),
-        duration: 0.76,
-        ease: 'none',
-      },
-      0.12,
-    );
-
-    // Dwell at end (0.88 → 1): nothing moves — user sees the last cards
+    scrollTl.to(track, { x: () => -getShift(), duration: 0.76, ease: 'none' }, 0.12);
     scrollTl.to(track, { x: () => -getShift(), duration: 0.12, ease: 'none' }, 0.88);
 
     this.animations.push(scrollTl);
-
     const trigger = scrollTl.scrollTrigger;
-    if (trigger) {
-      this.scrollTriggers.push(trigger);
+    if (trigger) this.scrollTriggers.push(trigger);
+
+    // ═══════════════════════════════════════════════════════
+    //  PER-ELEMENT ON-VIEW TYPING (containerAnimation)
+    //  — Only triggers when the element scrolls into view
+    // ═══════════════════════════════════════════════════════
+
+    // Card 2 description (Spotify — scrolls into view)
+    if (descEls[1]) {
+      this.scrollTriggers.push(ScrollTrigger.create({
+        trigger: cardEls[1], containerAnimation: scrollTl,
+        start: 'left 75%',
+        onEnter: () => this.typeText(descEls[1], 16),
+      }));
     }
 
-    this.setupPerCardTypingTriggers(cardElements, scrollTl);
+    // Card 3 description (GoGo — scrolls into view)
+    if (descEls[2]) {
+      this.scrollTriggers.push(ScrollTrigger.create({
+        trigger: cardEls[2], containerAnimation: scrollTl,
+        start: 'left 75%',
+        onEnter: () => this.typeText(descEls[2], 16),
+      }));
+    }
+
+    // Gogo company name (second stripe — scrolls into view)
+    if (nameEls[1]) {
+      this.scrollTriggers.push(ScrollTrigger.create({
+        trigger: stripeEls[1], containerAnimation: scrollTl,
+        start: 'left 75%',
+        onEnter: () => this.typeText(nameEls[1], 30),
+      }));
+    }
+
+    // Gogo date label (second stripe — scrolls into view)
+    if (dateEls[1]) {
+      this.scrollTriggers.push(ScrollTrigger.create({
+        trigger: stripeEls[1], containerAnimation: scrollTl,
+        start: 'left 70%',
+        onEnter: () => this.typeText(dateEls[1], 35),
+      }));
+    }
   }
 
-  private setupPerCardTypingTriggers(
-    cardElements: HTMLElement[],
-    scrollTimeline: gsap.core.Timeline,
-  ): void {
-    cardElements.forEach((cardElement) => {
-      const descriptionElement = cardElement.querySelector('.project-description');
-      if (!(descriptionElement instanceof HTMLElement)) {
+  /** Types text char-by-char. Only runs once per element. */
+  private typeText(el: HTMLElement, ms = 16): void {
+    if (this.typedElements.has(el)) return;
+
+    const seed = this.seedTexts.get(el) ?? '';
+    if (!seed) return;
+
+    this.typedElements.add(el);
+    el.textContent = '';
+    el.classList.add('typing-cursor');
+
+    let i = 0;
+    const id = window.setInterval(() => {
+      if (i < seed.length) {
+        el.textContent = seed.slice(0, ++i);
         return;
       }
+      window.clearInterval(id);
+      this.activeIntervals.delete(id);
+      el.classList.remove('typing-cursor');
+    }, ms);
 
-      const cardTrigger = ScrollTrigger.create({
-        trigger: cardElement,
-        containerAnimation: scrollTimeline,
-        start: 'left 72%',
-        end: 'right 28%',
-        onEnter: () => this.playTyping(descriptionElement),
-        onEnterBack: () => this.playTyping(descriptionElement),
-      });
-
-      this.scrollTriggers.push(cardTrigger);
-    });
-  }
-
-  private playTyping(descriptionElement: HTMLElement): void {
-    if (this.typedDescriptions.has(descriptionElement)) {
-      return;
-    }
-
-    const seedText = this.descriptionSeedText.get(descriptionElement) ?? '';
-    if (seedText.length === 0) {
-      return;
-    }
-
-    this.typedDescriptions.add(descriptionElement);
-    descriptionElement.classList.add('typing-cursor');
-    descriptionElement.textContent = '';
-
-    let charIndex = 0;
-    const intervalId = window.setInterval(() => {
-      if (charIndex < seedText.length) {
-        descriptionElement.textContent = seedText.slice(0, charIndex + 1);
-        charIndex += 1;
-        return;
-      }
-
-      window.clearInterval(intervalId);
-      this.activeTypingIntervals.delete(intervalId);
-      descriptionElement.classList.remove('typing-cursor');
-    }, 16);
-
-    this.activeTypingIntervals.add(intervalId);
+    this.activeIntervals.add(id);
   }
 }
