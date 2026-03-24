@@ -109,30 +109,27 @@ interface PersonalProject {
         opacity: 0.5;
       }
 
-      /* ─── Card Content (Lower Part) ──────────────────────────── */
+      /* ─── Card Content (Lower Part) - Matches Education Card ─── */
       .card-content {
-        background: linear-gradient(
-          180deg,
-          var(--color-bg-elevated) 0%,
-          var(--color-bg-secondary) 100%
-        );
+        background: linear-gradient(135deg, rgba(34, 34, 34, 0.6), rgba(42, 42, 42, 0.3));
+        backdrop-filter: blur(8px);
         border-radius: 0 0 24px 24px;
         padding: 1.25rem 1.5rem;
-        border-top: 1px solid var(--color-border-default);
+        border-top: 1px solid rgba(255, 255, 255, 0.04);
       }
 
-      /* ─── Tech Stack Tags ────────────────────────────────────── */
+      /* ─── Tech Stack Tags (Metallic Silver) ──────────────────── */
       .tech-tag {
         display: inline-flex;
         align-items: center;
         padding: 0.4rem 0.85rem;
         border-radius: var(--radius-full);
-        border: 1px solid var(--color-accent-teal);
-        color: var(--color-accent-teal-light);
+        border: 1px solid rgba(192, 192, 192, 0.25);
+        color: var(--color-metallic-silver);
         background: linear-gradient(
           135deg,
-          rgba(0, 77, 97, 0.25) 0%,
-          rgba(0, 110, 138, 0.12) 100%
+          rgba(42, 42, 42, 0.8) 0%,
+          rgba(26, 26, 26, 0.6) 100%
         );
         font-size: 0.72rem;
         font-weight: 600;
@@ -144,29 +141,29 @@ interface PersonalProject {
         transform: translateY(-2px) scale(1.05);
         background: linear-gradient(
           135deg,
-          rgba(0, 77, 97, 0.45) 0%,
-          rgba(0, 110, 138, 0.25) 100%
+          rgba(60, 60, 60, 0.9) 0%,
+          rgba(42, 42, 42, 0.7) 100%
         );
-        border-color: var(--color-accent-teal-light);
+        border-color: var(--color-metallic-silver);
         color: var(--color-text-primary);
         box-shadow:
-          0 8px 20px rgba(0, 77, 97, 0.3),
-          0 0 0 1px rgba(0, 110, 138, 0.2);
+          0 8px 20px rgba(0, 0, 0, 0.4),
+          0 0 0 1px rgba(192, 192, 192, 0.15);
       }
 
-      /* ─── Link Buttons ───────────────────────────────────────── */
+      /* ─── Link Buttons (Metallic Silver) ─────────────────────── */
       .link-btn {
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
         padding: 0.55rem 1.1rem;
         border-radius: var(--radius-md);
-        border: 1px solid var(--color-accent-ruby);
-        color: var(--color-accent-ruby-light);
+        border: 1px solid rgba(192, 192, 192, 0.3);
+        color: var(--color-metallic-silver);
         background: linear-gradient(
           135deg,
-          rgba(130, 38, 89, 0.2) 0%,
-          rgba(163, 48, 112, 0.1) 100%
+          rgba(42, 42, 42, 0.8) 0%,
+          rgba(26, 26, 26, 0.6) 100%
         );
         font-size: 0.75rem;
         font-weight: 600;
@@ -177,15 +174,15 @@ interface PersonalProject {
 
       .link-btn:hover {
         color: var(--color-text-primary);
-        border-color: var(--color-accent-ruby-light);
+        border-color: var(--color-metallic-silver);
         transform: translateY(-2px);
         box-shadow:
-          0 8px 24px rgba(130, 38, 89, 0.35),
-          0 0 0 1px rgba(163, 48, 112, 0.25);
+          0 8px 24px rgba(0, 0, 0, 0.5),
+          0 0 0 1px rgba(192, 192, 192, 0.2);
         background: linear-gradient(
           135deg,
-          rgba(130, 38, 89, 0.35) 0%,
-          rgba(163, 48, 112, 0.2) 100%
+          rgba(60, 60, 60, 0.9) 0%,
+          rgba(42, 42, 42, 0.7) 100%
         );
       }
 
@@ -364,10 +361,10 @@ export class PersonalProjectsComponent implements AfterViewInit {
           duration: 0.25,
           ease: 'power2.out',
           color: 'var(--color-text-primary)',
-          borderColor: 'var(--color-accent-teal-light)',
-          backgroundColor: 'rgba(0, 77, 97, 0.4)',
+          borderColor: 'var(--color-metallic-silver)',
+          backgroundColor: 'rgba(60, 60, 60, 0.9)',
           boxShadow:
-            '0 10px 24px rgba(0, 110, 138, 0.3), 0 0 0 1px rgba(0, 110, 138, 0.2)',
+            '0 10px 24px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(192, 192, 192, 0.2)',
         });
       };
 

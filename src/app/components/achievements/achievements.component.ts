@@ -36,8 +36,8 @@ interface AchievementEntry {
         width: 2px;
         background: linear-gradient(
           to bottom,
-          rgba(130, 38, 89, 0.15),
-          rgba(0, 110, 138, 0.1),
+          rgba(192, 192, 192, 0.15),
+          rgba(128, 128, 128, 0.08),
           transparent
         );
         border-radius: 999px;
@@ -63,11 +63,11 @@ interface AchievementEntry {
       }
 
       .timeline-dot.dot-active {
-        border-color: var(--color-accent-teal-light) !important;
-        background: var(--color-accent-teal) !important;
+        border-color: var(--color-metallic-silver) !important;
+        background: rgba(192, 192, 192, 0.6) !important;
         box-shadow:
-          0 0 8px rgba(0, 110, 138, 0.5),
-          0 0 20px rgba(0, 110, 138, 0.2) !important;
+          0 0 8px rgba(192, 192, 192, 0.4),
+          0 0 20px rgba(192, 192, 192, 0.15) !important;
       }
 
       /* ─── Card accent bar (top glow line) ──────────────────── */
@@ -87,8 +87,7 @@ interface AchievementEntry {
         background: linear-gradient(
           90deg,
           transparent,
-          var(--color-accent-teal),
-          var(--color-accent-ruby),
+          var(--color-metallic-silver),
           transparent
         );
         opacity: 0;

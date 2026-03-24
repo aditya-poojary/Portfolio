@@ -5,8 +5,11 @@
   <div class="container-custom">
     <h2 class="font-heading text-h2 font-semibold text-text-primary mb-10 flex items-center gap-3">
       <span
-        class="inline-flex items-center justify-center w-9 h-9 rounded-lg border border-accent-ruby/30"
-        style="background: linear-gradient(135deg, rgba(130, 38, 89, 0.2), rgba(0, 77, 97, 0.1))"
+        class="inline-flex items-center justify-center w-9 h-9 rounded-lg border"
+        style="
+          border-color: rgba(192, 192, 192, 0.3);
+          background: linear-gradient(135deg, rgba(42, 42, 42, 0.8), rgba(26, 26, 26, 0.6));
+        "
       >
         <svg
           viewBox="0 0 24 24"
@@ -15,7 +18,8 @@
           stroke-width="1.8"
           stroke-linecap="round"
           stroke-linejoin="round"
-          class="w-4.5 h-4.5 text-accent-ruby-light"
+          class="w-4.5 h-4.5"
+          style="color: var(--color-metallic-silver)"
         >
           <circle cx="12" cy="8" r="6" />
           <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11" />
@@ -36,13 +40,13 @@
         style="
           background: linear-gradient(
             to bottom,
-            var(--color-accent-ruby-light),
-            var(--color-accent-teal),
-            var(--color-accent-ruby)
+            var(--color-metallic-silver),
+            rgba(192, 192, 192, 0.7),
+            rgba(128, 128, 128, 0.5)
           );
           box-shadow:
-            0 0 8px rgba(163, 48, 112, 0.5),
-            0 0 20px rgba(0, 110, 138, 0.25);
+            0 0 8px rgba(192, 192, 192, 0.4),
+            0 0 20px rgba(192, 192, 192, 0.15);
         "
       ></div>
 
@@ -53,9 +57,9 @@
             #timelineDot
             class="timeline-dot relative z-10 mt-1.5 shrink-0 w-3 h-3 rounded-full border-2 -ml-1.5"
             style="
-              border-color: var(--color-accent-ruby-light);
+              border-color: var(--color-metallic-silver);
               background: var(--color-bg-primary);
-              box-shadow: 0 0 8px rgba(130, 38, 89, 0.3);
+              box-shadow: 0 0 8px rgba(192, 192, 192, 0.3);
             "
           ></div>
 
@@ -69,7 +73,8 @@
           >
             <!-- Period label (text reveal) -->
             <span
-              class="text-reveal font-label text-xs font-medium tracking-wider text-accent-ruby-light uppercase mb-2 block"
+              class="text-reveal font-label text-xs font-medium tracking-wider uppercase mb-2 block"
+              style="color: var(--color-metallic-silver)"
             >
               {{ entry.period }}
             </span>
@@ -95,7 +100,8 @@
                 @for (bullet of entry.bullets; track bullet) {
                   <li class="bullet-item flex items-start gap-2.5 text-sm text-text-secondary">
                     <span
-                      class="mt-1.5 shrink-0 w-1.5 h-1.5 rounded-full bg-accent-ruby-light"
+                      class="mt-1.5 shrink-0 w-1.5 h-1.5 rounded-full"
+                      style="background: var(--color-metallic-silver)"
                     ></span>
                     <span class="leading-relaxed">{{ bullet }}</span>
                   </li>
@@ -110,13 +116,13 @@
                   <span
                     class="tag-item font-label text-[11px] font-medium tracking-wide px-2.5 py-1 rounded-md border"
                     style="
-                      color: var(--color-accent-teal-light);
+                      color: var(--color-metallic-silver);
                       background: linear-gradient(
                         135deg,
-                        rgba(0, 77, 97, 0.15),
-                        rgba(130, 38, 89, 0.1)
+                        rgba(42, 42, 42, 0.8),
+                        rgba(26, 26, 26, 0.6)
                       );
-                      border-color: rgba(0, 110, 138, 0.2);
+                      border-color: rgba(192, 192, 192, 0.25);
                     "
                   >
                     {{ tag }}
