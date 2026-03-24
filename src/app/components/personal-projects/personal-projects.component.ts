@@ -36,131 +36,157 @@ interface PersonalProject {
         will-change: transform, opacity;
       }
 
-      .flip-container {
-        perspective: 1000px;
+      /* ─── Flip Card Container ─────────────────────────────────── */
+      .flip-card {
+        background-color: transparent;
         height: 280px;
+        perspective: 1000px;
+        border-radius: 24px 24px 0 0;
       }
 
-      .flip-card {
+      /* ─── Inner card that actually rotates ───────────────────── */
+      .flip-card-inner {
         position: relative;
         width: 100%;
         height: 100%;
+        text-align: center;
+        transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         transform-style: preserve-3d;
-        transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
       }
 
-      .flip-card:hover {
+      /* ─── Hover on container triggers inner rotation ─────────── */
+      .flip-card:hover .flip-card-inner {
         transform: rotateY(180deg);
       }
 
+      /* ─── Front and Back faces ───────────────────────────────── */
       .flip-card-front,
       .flip-card-back {
         position: absolute;
-        inset: 0;
-        backface-visibility: hidden;
+        width: 100%;
+        height: 100%;
         -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
         border-radius: 24px 24px 0 0;
         overflow: hidden;
       }
 
-      .flip-card-back {
-        transform: rotateY(180deg);
+      .flip-card-front {
         background: linear-gradient(
           135deg,
-          rgba(0, 77, 97, 0.28),
-          rgba(130, 38, 89, 0.18)
+          var(--color-bg-elevated) 0%,
+          var(--color-bg-secondary) 100%
         );
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        padding: 1.5rem;
       }
 
+      .flip-card-back {
+        transform: rotateY(180deg);
+        overflow: hidden;
+      }
+
+      /* ─── Card Content (Lower Part) ──────────────────────────── */
       .card-content {
         background: var(--color-bg-secondary);
         border-radius: 0 0 24px 24px;
         padding: 1.25rem 1.5rem;
-        border-top: 1px solid rgba(255, 255, 255, 0.06);
+        border-top: 1px solid var(--color-border-default);
       }
 
+      /* ─── Tech Stack Tags ────────────────────────────────────── */
       .tech-tag {
         display: inline-flex;
         align-items: center;
         gap: 0.25rem;
-        padding: 0.3rem 0.65rem;
-        border-radius: 9999px;
-        border: 1px solid rgba(0, 110, 138, 0.3);
+        padding: 0.35rem 0.75rem;
+        border-radius: var(--radius-full);
+        border: 1px solid var(--color-border-accent);
         color: var(--color-accent-teal-light);
-        background: rgba(0, 77, 97, 0.16);
-        font-size: 0.7rem;
+        background: linear-gradient(
+          135deg,
+          rgba(0, 77, 97, 0.2) 0%,
+          rgba(130, 38, 89, 0.1) 100%
+        );
+        font-size: 0.72rem;
         font-weight: 500;
         letter-spacing: 0.02em;
-        transition:
-          transform 0.22s ease,
-          background 0.22s ease,
-          border-color 0.22s ease;
+        transition: var(--transition-base);
       }
 
       .tech-tag:hover {
         transform: translateY(-2px) scale(1.04);
-        background: rgba(0, 77, 97, 0.32);
-        border-color: rgba(0, 110, 138, 0.5);
+        background: linear-gradient(
+          135deg,
+          rgba(0, 77, 97, 0.35) 0%,
+          rgba(130, 38, 89, 0.2) 100%
+        );
+        border-color: var(--color-accent-teal-light);
+        box-shadow:
+          0 8px 20px rgba(0, 77, 97, 0.25),
+          0 0 0 1px rgba(163, 48, 112, 0.15);
       }
 
+      /* ─── Link Buttons ───────────────────────────────────────── */
       .link-btn {
         display: inline-flex;
         align-items: center;
         gap: 0.4rem;
-        padding: 0.45rem 0.85rem;
-        border-radius: 0.5rem;
-        border: 1px solid rgba(0, 110, 138, 0.28);
+        padding: 0.5rem 1rem;
+        border-radius: var(--radius-md);
+        border: 1px solid var(--color-border-accent);
         color: var(--color-accent-teal-light);
         background: linear-gradient(
           135deg,
-          rgba(0, 77, 97, 0.16),
-          rgba(130, 38, 89, 0.1)
+          rgba(0, 77, 97, 0.18) 0%,
+          rgba(130, 38, 89, 0.12) 100%
         );
-        font-size: 0.7rem;
+        font-size: 0.72rem;
         font-weight: 600;
         letter-spacing: 0.04em;
         text-transform: uppercase;
-        transition:
-          color 220ms ease,
-          border-color 220ms ease,
-          transform 220ms ease,
-          box-shadow 220ms ease;
+        transition: var(--transition-base);
       }
 
       .link-btn:hover {
         color: var(--color-text-primary);
-        border-color: rgba(163, 48, 112, 0.36);
+        border-color: var(--color-accent-ruby-light);
         transform: translateY(-2px);
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.28);
+        box-shadow:
+          0 8px 20px rgba(0, 0, 0, 0.3),
+          0 0 0 1px rgba(163, 48, 112, 0.2);
+        background: linear-gradient(
+          135deg,
+          rgba(0, 77, 97, 0.28) 0%,
+          rgba(130, 38, 89, 0.18) 100%
+        );
       }
 
+      /* ─── Feature Items ──────────────────────────────────────── */
       .feature-item {
         position: relative;
-        padding-left: 1rem;
-        font-size: 0.85rem;
+        padding-left: 1.25rem;
+        font-size: 0.88rem;
         color: var(--color-text-secondary);
-        line-height: 1.5;
+        line-height: 1.6;
+        text-align: left;
       }
 
       .feature-item::before {
         content: '';
         position: absolute;
         left: 0;
-        top: 0.5em;
-        width: 5px;
-        height: 5px;
+        top: 0.55em;
+        width: 6px;
+        height: 6px;
         border-radius: 50%;
         background: linear-gradient(
           135deg,
-          var(--color-accent-teal),
-          var(--color-accent-ruby)
+          var(--color-accent-teal-light) 0%,
+          var(--color-accent-ruby) 100%
         );
+        box-shadow: 0 0 8px rgba(0, 110, 138, 0.4);
       }
 
+      /* ─── Light Effect Overlay ───────────────────────────────── */
       .light-effect {
         position: absolute;
         top: 0;
@@ -169,18 +195,49 @@ interface PersonalProject {
         height: 60%;
         background: radial-gradient(
           50% 100%,
-          rgba(222, 222, 222, 0.15) 0%,
-          rgba(68, 68, 68, 0) 100%
+          rgba(0, 110, 138, 0.12) 0%,
+          transparent 100%
         );
-        filter: blur(15px);
-        opacity: 0.5;
+        filter: blur(20px);
+        opacity: 0.7;
         transform: translateX(-50%) rotate(45deg);
         pointer-events: none;
       }
 
+      /* ─── Feature Card Styling ───────────────────────────────── */
+      .feature-card {
+        background: linear-gradient(
+          145deg,
+          var(--color-bg-elevated) 0%,
+          var(--color-bg-secondary) 50%,
+          rgba(0, 77, 97, 0.08) 100%
+        );
+        border: 1px solid var(--color-border-light);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .feature-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--color-accent-teal),
+          var(--color-accent-ruby),
+          transparent
+        );
+        opacity: 0.6;
+      }
+
+      /* ─── Responsive ─────────────────────────────────────────── */
       @media (max-width: 768px) {
-        .flip-container {
-          height: 220px;
+        .flip-card {
+          height: 240px;
         }
 
         .project-card {
@@ -188,12 +245,13 @@ interface PersonalProject {
         }
       }
 
+      /* ─── Reduced Motion ─────────────────────────────────────── */
       @media (prefers-reduced-motion: reduce) {
-        .flip-card {
+        .flip-card-inner {
           transition: none;
         }
 
-        .flip-card:hover {
+        .flip-card:hover .flip-card-inner {
           transform: none;
         }
 
@@ -221,33 +279,38 @@ export class PersonalProjectsComponent implements AfterViewInit {
 
   protected readonly projects = signal<PersonalProject[]>([
     {
-      title: 'Project One',
-      description: 'A modern web application built with cutting-edge technologies.',
+      title: 'PlacePicker',
+      description:
+        'Discover nearby tourist hotspots with geolocation-based sorting and personal collections.',
       features: [
-        'Real-time data synchronization',
-        'Responsive design across devices',
-        'OAuth 2.0 authentication',
-        'RESTful API integration',
+        'Geolocation-based place sorting by distance',
+        'Personal collection with optimistic updates',
+        'Cloudinary CDN for optimized images',
+        'Custom useFetch hook for data management',
+        'Modal dialogs with timed progress indicators',
       ],
-      techStack: ['Angular', 'TypeScript', 'Tailwind CSS', 'Firebase'],
-      githubUrl: 'https://github.com/aditya-poojary/project-one',
-      liveUrl: 'https://project-one.example.com',
-      imageUrl: 'assets/images/placeholder.webp',
-      imageAlt: 'Project One screenshot',
+      techStack: ['React', 'Vite', 'Node.js', 'Express', 'Cloudinary'],
+      githubUrl: 'https://github.com/aditya-poojary/Tourist-Hotspot-Finder',
+      liveUrl: 'https://tourist-hotspot-finder-final.vercel.app/',
+      imageUrl: 'assets/images/tourist.webp',
+      imageAlt: 'PlacePicker - Tourist Hotspot Finder application',
     },
     {
-      title: 'Project Two',
-      description: 'Full-stack solution with modern architecture and seamless UX.',
+      title: 'Momentum',
+      description:
+        'Full-featured project management app with visual progress tracking and calendar scheduling.',
       features: [
-        'Server-side rendering for SEO',
-        'Dynamic component loading',
-        'Comprehensive test coverage',
-        'CI/CD pipeline integration',
+        'Project CRUD with trash/restore functionality',
+        'Visual progress charts using Recharts',
+        'Weekly calendar planner & scheduling',
+        'Firebase Auth with protected routes',
+        'User-specific Firestore data collections',
       ],
-      techStack: ['Next.js', 'React', 'Node.js', 'PostgreSQL'],
-      githubUrl: 'https://github.com/aditya-poojary/project-two',
-      imageUrl: 'assets/images/placeholder.webp',
-      imageAlt: 'Project Two screenshot',
+      techStack: ['React', 'Vite', 'Tailwind CSS', 'Firebase', 'Redux', 'Recharts'],
+      githubUrl: 'https://github.com/aditya-poojary/Momentum',
+      liveUrl: 'https://momentum-b275f.web.app/',
+      imageUrl: 'assets/images/momentum.webp',
+      imageAlt: 'Momentum - Project Management application',
     },
   ]);
 
@@ -275,16 +338,17 @@ export class PersonalProjectsComponent implements AfterViewInit {
 
     const cardEls = cards.map((r) => r.nativeElement);
 
-    gsap.set(cardEls, { autoAlpha: 0, y: 50 });
+    gsap.set(cardEls, { autoAlpha: 0, y: 60, scale: 0.95 });
 
     const entranceTl = gsap.timeline({ paused: true });
 
     entranceTl.to(cardEls, {
       autoAlpha: 1,
       y: 0,
-      duration: 0.7,
+      scale: 1,
+      duration: 0.8,
       ease: 'power3.out',
-      stagger: 0.15,
+      stagger: 0.18,
     });
 
     this.animations.push(entranceTl);
@@ -314,15 +378,15 @@ export class PersonalProjectsComponent implements AfterViewInit {
 
       const onMouseEnter = () => {
         gsap.to(tag, {
-          y: -2,
-          scale: 1.04,
-          duration: 0.22,
+          y: -3,
+          scale: 1.06,
+          duration: 0.25,
           ease: 'power2.out',
           color: 'var(--color-text-primary)',
-          borderColor: 'rgba(0, 110, 138, 0.48)',
-          backgroundColor: 'rgba(0, 77, 97, 0.34)',
+          borderColor: 'var(--color-accent-teal-light)',
+          backgroundColor: 'rgba(0, 77, 97, 0.38)',
           boxShadow:
-            '0 8px 18px rgba(0, 110, 138, 0.22), 0 0 0 1px rgba(163, 48, 112, 0.16)',
+            '0 10px 24px rgba(0, 110, 138, 0.28), 0 0 0 1px rgba(163, 48, 112, 0.18)',
         });
       };
 
@@ -330,7 +394,7 @@ export class PersonalProjectsComponent implements AfterViewInit {
         gsap.to(tag, {
           y: 0,
           scale: 1,
-          duration: 0.24,
+          duration: 0.28,
           ease: 'power2.out',
           color: baseColor,
           borderColor: baseBorderColor,
