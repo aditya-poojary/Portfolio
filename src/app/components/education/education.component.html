@@ -1,106 +1,108 @@
 <!-- ══════════════════════════════════════════════════════════
   EDUCATION — Horizontal Academic Journey Cards
   ══════════════════════════════════════════════════════════ -->
-<div class="mb-20 max-md:mb-16">
-  <h3 class="font-heading text-h3 font-semibold text-text-primary mb-10 flex items-center gap-3">
-    <span
-      class="inline-flex items-center justify-center w-8 h-8 rounded-lg border border-accent-teal/30"
-      style="background: rgba(0, 77, 97, 0.15)"
-    >
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="1.8"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        class="w-4 h-4 text-accent-teal-light"
+<section class="py-24 px-6 max-md:px-4 max-md:py-16">
+  <div class="container-custom">
+    <h2 class="font-heading text-h2 font-semibold text-text-primary mb-10 flex items-center gap-3">
+      <span
+        class="inline-flex items-center justify-center w-9 h-9 rounded-lg border border-accent-teal/30"
+        style="background: linear-gradient(135deg, rgba(0, 77, 97, 0.2), rgba(130, 38, 89, 0.1))"
       >
-        <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
-        <path d="M6 12v5c3 3 9 3 12 0v-5" />
-      </svg>
-    </span>
-    Education
-  </h3>
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="w-4.5 h-4.5 text-accent-teal-light"
+        >
+          <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+          <path d="M6 12v5c3 3 9 3 12 0v-5" />
+        </svg>
+      </span>
+      Education
+    </h2>
 
-  <!-- Horizontal cards -->
-  <div #educationGrid class="grid grid-cols-3 gap-5 max-lg:grid-cols-1">
-    @for (entry of education(); track entry.title; let i = $index) {
-      <div
-        #eduCard
-        class="edu-card group relative rounded-xl border border-white/4 transition-all duration-300 hover:border-white/8 hover:-translate-y-0.5 overflow-hidden h-full"
-        style="
-          background: linear-gradient(135deg, rgba(34, 34, 34, 0.6), rgba(42, 42, 42, 0.3));
-          backdrop-filter: blur(8px);
-        "
-      >
-        <!-- Top accent line -->
+    <!-- Horizontal cards -->
+    <div #educationGrid class="grid grid-cols-3 gap-5 max-lg:grid-cols-1">
+      @for (entry of education(); track entry.title; let i = $index) {
         <div
-          class="edu-accent-line absolute top-0 left-0 right-0 h-px"
+          #eduCard
+          class="edu-card group relative rounded-xl border border-white/4 transition-all duration-300 hover:border-white/8 hover:-translate-y-0.5 overflow-hidden h-full"
           style="
-            background: linear-gradient(
-              90deg,
-              transparent,
-              var(--color-accent-teal),
-              var(--color-accent-ruby),
-              transparent
-            );
+            background: linear-gradient(135deg, rgba(34, 34, 34, 0.6), rgba(42, 42, 42, 0.3));
+            backdrop-filter: blur(8px);
           "
-        ></div>
+        >
+          <!-- Top accent line -->
+          <div
+            class="edu-accent-line absolute top-0 left-0 right-0 h-px"
+            style="
+              background: linear-gradient(
+                90deg,
+                transparent,
+                var(--color-accent-teal),
+                var(--color-accent-ruby),
+                transparent
+              );
+            "
+          ></div>
 
-        <div class="p-6 max-md:p-5 flex flex-col gap-4 h-full">
-          <!-- Step indicator -->
-          <div class="flex items-center justify-between gap-3">
-            <div
-              class="shrink-0 w-10 h-10 rounded-lg flex items-center justify-center font-mono text-sm font-semibold tracking-wider border border-accent-teal/20"
-              style="color: var(--color-accent-teal-light); background: rgba(0, 77, 97, 0.1)"
-            >
-              {{ '0' + (i + 1) }}
+          <div class="p-6 max-md:p-5 flex flex-col gap-4 h-full">
+            <!-- Step indicator -->
+            <div class="flex items-center justify-between gap-3">
+              <div
+                class="shrink-0 w-10 h-10 rounded-lg flex items-center justify-center font-mono text-sm font-semibold tracking-wider border border-accent-teal/20"
+                style="color: var(--color-accent-teal-light); background: rgba(0, 77, 97, 0.1)"
+              >
+                {{ '0' + (i + 1) }}
+              </div>
+
+              <!-- Academic cap icon -->
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="edu-cap-icon w-7 h-7 text-white/4 group-hover:text-accent-teal/30 transition-colors duration-500"
+              >
+                <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+                <path d="M6 12v5c3 3 9 3 12 0v-5" />
+              </svg>
             </div>
 
-            <!-- Academic cap icon -->
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="edu-cap-icon w-7 h-7 text-white/4 group-hover:text-accent-teal/30 transition-colors duration-500"
-            >
-              <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
-              <path d="M6 12v5c3 3 9 3 12 0v-5" />
-            </svg>
-          </div>
+            <!-- Content -->
+            <div class="flex-1 min-w-0 flex flex-col">
+              <!-- Period -->
+              <span
+                class="edu-text-reveal font-label text-xs font-medium tracking-wider text-accent-teal-light uppercase mb-1.5 block"
+              >
+                {{ entry.period }}
+              </span>
 
-          <!-- Content -->
-          <div class="flex-1 min-w-0 flex flex-col">
-            <!-- Period -->
-            <span
-              class="edu-text-reveal font-label text-xs font-medium tracking-wider text-accent-teal-light uppercase mb-1.5 block"
-            >
-              {{ entry.period }}
-            </span>
+              <!-- Institution name -->
+              <h4 class="edu-text-reveal font-heading text-h4 font-semibold text-text-primary mb-1">
+                {{ entry.title }}
+              </h4>
 
-            <!-- Institution name -->
-            <h4 class="edu-text-reveal font-heading text-h4 font-semibold text-text-primary mb-1">
-              {{ entry.title }}
-            </h4>
+              <!-- Subtitle (degree/program) -->
+              <span class="edu-text-reveal font-label text-sm text-text-muted block">
+                {{ entry.subtitle }}
+              </span>
 
-            <!-- Subtitle (degree/program) -->
-            <span class="edu-text-reveal font-label text-sm text-text-muted block">
-              {{ entry.subtitle }}
-            </span>
-
-            <!-- Description (if present) -->
-            @if (entry.description) {
-              <p class="edu-text-reveal font-body text-sm text-text-secondary leading-relaxed mt-2">
-                {{ entry.description }}
-              </p>
-            }
+              <!-- Description (if present) -->
+              @if (entry.description) {
+                <p class="edu-text-reveal font-body text-sm text-text-secondary leading-relaxed mt-2">
+                  {{ entry.description }}
+                </p>
+              }
+            </div>
           </div>
         </div>
-      </div>
-    }
+      }
+    </div>
   </div>
-</div>
+</section>

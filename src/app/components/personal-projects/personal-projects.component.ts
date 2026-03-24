@@ -42,6 +42,7 @@ interface PersonalProject {
         height: 280px;
         perspective: 1000px;
         border-radius: 24px 24px 0 0;
+        overflow: hidden;
       }
 
       /* ─── Inner card that actually rotates ───────────────────── */
@@ -49,7 +50,6 @@ interface PersonalProject {
         position: relative;
         width: 100%;
         height: 100%;
-        text-align: center;
         transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         transform-style: preserve-3d;
       }
@@ -71,153 +71,29 @@ interface PersonalProject {
         overflow: hidden;
       }
 
+      /* Front: Image side */
       .flip-card-front {
-        background: linear-gradient(
-          135deg,
-          var(--color-bg-elevated) 0%,
-          var(--color-bg-secondary) 100%
-        );
+        background: var(--color-bg-secondary);
       }
 
+      /* Back: Features side with metallic silver/black gradient */
       .flip-card-back {
         transform: rotateY(180deg);
-        overflow: hidden;
-      }
-
-      /* ─── Card Content (Lower Part) ──────────────────────────── */
-      .card-content {
-        background: var(--color-bg-secondary);
-        border-radius: 0 0 24px 24px;
-        padding: 1.25rem 1.5rem;
-        border-top: 1px solid var(--color-border-default);
-      }
-
-      /* ─── Tech Stack Tags ────────────────────────────────────── */
-      .tech-tag {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.25rem;
-        padding: 0.35rem 0.75rem;
-        border-radius: var(--radius-full);
-        border: 1px solid var(--color-border-accent);
-        color: var(--color-accent-teal-light);
-        background: linear-gradient(
-          135deg,
-          rgba(0, 77, 97, 0.2) 0%,
-          rgba(130, 38, 89, 0.1) 100%
-        );
-        font-size: 0.72rem;
-        font-weight: 500;
-        letter-spacing: 0.02em;
-        transition: var(--transition-base);
-      }
-
-      .tech-tag:hover {
-        transform: translateY(-2px) scale(1.04);
-        background: linear-gradient(
-          135deg,
-          rgba(0, 77, 97, 0.35) 0%,
-          rgba(130, 38, 89, 0.2) 100%
-        );
-        border-color: var(--color-accent-teal-light);
-        box-shadow:
-          0 8px 20px rgba(0, 77, 97, 0.25),
-          0 0 0 1px rgba(163, 48, 112, 0.15);
-      }
-
-      /* ─── Link Buttons ───────────────────────────────────────── */
-      .link-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-        padding: 0.5rem 1rem;
-        border-radius: var(--radius-md);
-        border: 1px solid var(--color-border-accent);
-        color: var(--color-accent-teal-light);
-        background: linear-gradient(
-          135deg,
-          rgba(0, 77, 97, 0.18) 0%,
-          rgba(130, 38, 89, 0.12) 100%
-        );
-        font-size: 0.72rem;
-        font-weight: 600;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-        transition: var(--transition-base);
-      }
-
-      .link-btn:hover {
-        color: var(--color-text-primary);
-        border-color: var(--color-accent-ruby-light);
-        transform: translateY(-2px);
-        box-shadow:
-          0 8px 20px rgba(0, 0, 0, 0.3),
-          0 0 0 1px rgba(163, 48, 112, 0.2);
-        background: linear-gradient(
-          135deg,
-          rgba(0, 77, 97, 0.28) 0%,
-          rgba(130, 38, 89, 0.18) 100%
-        );
-      }
-
-      /* ─── Feature Items ──────────────────────────────────────── */
-      .feature-item {
-        position: relative;
-        padding-left: 1.25rem;
-        font-size: 0.88rem;
-        color: var(--color-text-secondary);
-        line-height: 1.6;
-        text-align: left;
-      }
-
-      .feature-item::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0.55em;
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: linear-gradient(
-          135deg,
-          var(--color-accent-teal-light) 0%,
-          var(--color-accent-ruby) 100%
-        );
-        box-shadow: 0 0 8px rgba(0, 110, 138, 0.4);
-      }
-
-      /* ─── Light Effect Overlay ───────────────────────────────── */
-      .light-effect {
-        position: absolute;
-        top: 0;
-        left: 50%;
-        width: 120%;
-        height: 60%;
-        background: radial-gradient(
-          50% 100%,
-          rgba(0, 110, 138, 0.12) 0%,
-          transparent 100%
-        );
-        filter: blur(20px);
-        opacity: 0.7;
-        transform: translateX(-50%) rotate(45deg);
-        pointer-events: none;
-      }
-
-      /* ─── Feature Card Styling ───────────────────────────────── */
-      .feature-card {
         background: linear-gradient(
           145deg,
-          var(--color-bg-elevated) 0%,
-          var(--color-bg-secondary) 50%,
-          rgba(0, 77, 97, 0.08) 100%
+          rgba(26, 26, 26, 0.98) 0%,
+          rgba(42, 42, 42, 0.95) 40%,
+          rgba(192, 192, 192, 0.08) 100%
         );
-        border: 1px solid var(--color-border-light);
-        position: relative;
-        overflow: hidden;
+        border: 1px solid rgba(192, 192, 192, 0.12);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 1.75rem;
       }
 
-      .feature-card::before {
+      /* Metallic shine effect on back */
+      .flip-card-back::before {
         content: '';
         position: absolute;
         top: 0;
@@ -227,11 +103,116 @@ interface PersonalProject {
         background: linear-gradient(
           90deg,
           transparent,
-          var(--color-accent-teal),
-          var(--color-accent-ruby),
+          var(--color-metallic-silver),
           transparent
         );
-        opacity: 0.6;
+        opacity: 0.5;
+      }
+
+      /* ─── Card Content (Lower Part) ──────────────────────────── */
+      .card-content {
+        background: linear-gradient(
+          180deg,
+          var(--color-bg-elevated) 0%,
+          var(--color-bg-secondary) 100%
+        );
+        border-radius: 0 0 24px 24px;
+        padding: 1.25rem 1.5rem;
+        border-top: 1px solid var(--color-border-default);
+      }
+
+      /* ─── Tech Stack Tags ────────────────────────────────────── */
+      .tech-tag {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.4rem 0.85rem;
+        border-radius: var(--radius-full);
+        border: 1px solid var(--color-accent-teal);
+        color: var(--color-accent-teal-light);
+        background: linear-gradient(
+          135deg,
+          rgba(0, 77, 97, 0.25) 0%,
+          rgba(0, 110, 138, 0.12) 100%
+        );
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.03em;
+        transition: var(--transition-base);
+      }
+
+      .tech-tag:hover {
+        transform: translateY(-2px) scale(1.05);
+        background: linear-gradient(
+          135deg,
+          rgba(0, 77, 97, 0.45) 0%,
+          rgba(0, 110, 138, 0.25) 100%
+        );
+        border-color: var(--color-accent-teal-light);
+        color: var(--color-text-primary);
+        box-shadow:
+          0 8px 20px rgba(0, 77, 97, 0.3),
+          0 0 0 1px rgba(0, 110, 138, 0.2);
+      }
+
+      /* ─── Link Buttons ───────────────────────────────────────── */
+      .link-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.55rem 1.1rem;
+        border-radius: var(--radius-md);
+        border: 1px solid var(--color-accent-ruby);
+        color: var(--color-accent-ruby-light);
+        background: linear-gradient(
+          135deg,
+          rgba(130, 38, 89, 0.2) 0%,
+          rgba(163, 48, 112, 0.1) 100%
+        );
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        transition: var(--transition-base);
+      }
+
+      .link-btn:hover {
+        color: var(--color-text-primary);
+        border-color: var(--color-accent-ruby-light);
+        transform: translateY(-2px);
+        box-shadow:
+          0 8px 24px rgba(130, 38, 89, 0.35),
+          0 0 0 1px rgba(163, 48, 112, 0.25);
+        background: linear-gradient(
+          135deg,
+          rgba(130, 38, 89, 0.35) 0%,
+          rgba(163, 48, 112, 0.2) 100%
+        );
+      }
+
+      /* ─── Feature Items ──────────────────────────────────────── */
+      .feature-item {
+        position: relative;
+        padding-left: 1.25rem;
+        font-size: 0.9rem;
+        color: var(--color-metallic-silver);
+        line-height: 1.65;
+        text-align: left;
+      }
+
+      .feature-item::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0.6em;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: linear-gradient(
+          135deg,
+          var(--color-accent-teal-light) 0%,
+          var(--color-accent-ruby-light) 100%
+        );
+        box-shadow: 0 0 10px rgba(0, 110, 138, 0.5);
       }
 
       /* ─── Responsive ─────────────────────────────────────────── */
@@ -384,9 +365,9 @@ export class PersonalProjectsComponent implements AfterViewInit {
           ease: 'power2.out',
           color: 'var(--color-text-primary)',
           borderColor: 'var(--color-accent-teal-light)',
-          backgroundColor: 'rgba(0, 77, 97, 0.38)',
+          backgroundColor: 'rgba(0, 77, 97, 0.4)',
           boxShadow:
-            '0 10px 24px rgba(0, 110, 138, 0.28), 0 0 0 1px rgba(163, 48, 112, 0.18)',
+            '0 10px 24px rgba(0, 110, 138, 0.3), 0 0 0 1px rgba(0, 110, 138, 0.2)',
         });
       };
 

@@ -36,73 +36,17 @@
           style="
             background-color: var(--color-bg-secondary);
             box-shadow:
-              rgba(0, 110, 138, 0.08) 0px 2px 4px 0px,
-              rgba(0, 0, 0, 0.3) 0px 4px 16px 0px;
+              rgba(0, 110, 138, 0.06) 0px 2px 4px 0px,
+              rgba(0, 0, 0, 0.35) 0px 4px 20px 0px;
           "
         >
-          <!-- Upper Part: Flip Card (Features / Image) -->
+          <!-- Upper Part: Flip Card -->
           <div class="flip-card">
             <div class="flip-card-inner">
-              <!-- Front: Features (What users see first) -->
-              <div class="flip-card-front feature-card p-6 flex flex-col justify-center">
-                <!-- Light Effect -->
-                <div class="light-effect"></div>
-
-                <!-- Project Title & Description -->
-                <div class="relative z-10 mb-5">
-                  <h3 class="font-heading text-h3 font-semibold text-text-primary mb-2">
-                    {{ project.title }}
-                  </h3>
-                  <p class="font-body text-sm text-text-secondary leading-relaxed">
-                    {{ project.description }}
-                  </p>
-                </div>
-
-                <!-- Features List -->
-                <div class="relative z-10">
-                  <h4
-                    class="font-label text-xs font-semibold tracking-wider uppercase text-accent-teal-light mb-3 flex items-center gap-2"
-                  >
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      class="w-3.5 h-3.5"
-                    >
-                      <polyline points="9 11 12 14 22 4" />
-                      <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
-                    </svg>
-                    Key Features
-                  </h4>
-                  <ul class="space-y-2">
-                    @for (feature of project.features; track feature) {
-                      <li class="feature-item">{{ feature }}</li>
-                    }
-                  </ul>
-                </div>
-
-                <!-- Hover Hint -->
-                <div
-                  class="absolute bottom-4 right-4 flex items-center gap-1.5 text-text-muted text-xs font-label"
-                >
-                  <span>Hover to preview</span>
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    class="w-3.5 h-3.5 animate-pulse"
-                  >
-                    <path d="M17 8l4 4-4 4" />
-                    <path d="M3 12h18" />
-                  </svg>
-                </div>
-              </div>
-
-              <!-- Back: Project Image (Revealed on hover) -->
-              <div class="flip-card-back">
+              <!-- Front: Image + Title Only -->
+              <div class="flip-card-front">
                 <div class="relative w-full h-full">
+                  <!-- Project Image -->
                   <img
                     [ngSrc]="project.imageUrl"
                     [alt]="project.imageAlt"
@@ -111,37 +55,83 @@
                     class="w-full h-full object-cover"
                     loading="lazy"
                   />
-                  <!-- Light Effect Overlay -->
-                  <div class="light-effect"></div>
+
                   <!-- Gradient Overlay -->
                   <div
                     class="absolute inset-0 pointer-events-none"
                     style="
                       background: linear-gradient(
                         to top,
-                        var(--color-bg-secondary) 0%,
-                        rgba(34, 34, 34, 0.4) 30%,
-                        transparent 60%
+                        rgba(26, 26, 26, 0.95) 0%,
+                        rgba(26, 26, 26, 0.5) 35%,
+                        transparent 65%
                       );
                     "
                   ></div>
-                  <!-- Project Title on Image -->
+
+                  <!-- Project Title -->
                   <div class="absolute bottom-5 left-5 right-5 z-10">
                     <h3
                       class="font-heading text-h3 font-semibold text-text-primary drop-shadow-lg"
                     >
                       {{ project.title }}
                     </h3>
-                    <p class="font-body text-sm text-text-secondary mt-1.5 line-clamp-2">
-                      {{ project.description }}
-                    </p>
+                  </div>
+
+                  <!-- Hover Hint -->
+                  <div
+                    class="absolute top-4 right-4 flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-label"
+                    style="
+                      color: var(--color-metallic-silver);
+                      background: rgba(0, 0, 0, 0.5);
+                      backdrop-filter: blur(4px);
+                    "
+                  >
+                    <span>Hover</span>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      class="w-3 h-3"
+                    >
+                      <path d="M17 8l4 4-4 4" />
+                    </svg>
                   </div>
                 </div>
+              </div>
+
+              <!-- Back: Features Only -->
+              <div class="flip-card-back">
+                <!-- Features Header -->
+                <h4
+                  class="font-label text-xs font-semibold tracking-wider uppercase mb-4 flex items-center gap-2"
+                  style="color: var(--color-accent-teal-light)"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    class="w-4 h-4"
+                  >
+                    <polyline points="9 11 12 14 22 4" />
+                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+                  </svg>
+                  Key Features
+                </h4>
+
+                <!-- Features List -->
+                <ul class="space-y-2.5">
+                  @for (feature of project.features; track feature) {
+                    <li class="feature-item">{{ feature }}</li>
+                  }
+                </ul>
               </div>
             </div>
           </div>
 
-          <!-- Lower Part: Tech Stack & Links -->
+          <!-- Lower Part: Tech Stack & Links (No flip effect) -->
           <div class="card-content">
             <!-- Tech Stack -->
             <div class="flex flex-wrap gap-2 mb-4">
