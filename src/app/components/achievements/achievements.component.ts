@@ -164,13 +164,6 @@ export class AchievementsComponent implements AfterViewInit {
     },
   ]);
 
-  protected readonly dsaStats = signal({
-    streak: '520+',
-    problemsSolved: '720+',
-    contestRating: '1510',
-    platforms: 'LeetCode, TCET & 10x Hackathons',
-  });
-
   ngAfterViewInit(): void {
     if (!isPlatformBrowser(this.platformId)) return;
 
