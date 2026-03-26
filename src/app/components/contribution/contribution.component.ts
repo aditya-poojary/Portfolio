@@ -1,0 +1,358 @@
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
+
+interface ContributionDay {
+  date: string;
+  count: number;
+  level: number;
+}
+
+interface ContributionWeek {
+  contributionDays: ContributionDay[];
+}
+
+interface GitHubContributions {
+  total: { [year: string]: number };
+  contributions: ContributionDay[];
+}
+
+@Component({
+  selector: 'app-contribution',
+  standalone: true,
+  imports: [CommonModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `
+    <section class="contribution-section py-16 px-4 md:px-8">
+      <div class="max-w-6xl mx-auto">
+        <div class="mb-8">
+          <h2 class="text-4xl font-bold tracking-tight text-metallic-silver">
+            Contribution Graph
+          </h2>
+        </div>
+
+        <div class="flex xl:flex-row flex-col gap-4">
+          <!-- Contribution Calendar -->
+          <div class="calendar-container p-6 md:p-8 rounded-lg max-w-fit overflow-x-auto">
+            @if (loading()) {
+              <div class="flex items-center justify-center h-[137px] w-[897px]">
+                <div class="loading-spinner"></div>
+              </div>
+            } @else if (error()) {
+              <div class="flex items-center justify-center h-[137px] text-metallic-silver/60">
+                Failed to load contributions
+              </div>
+            } @else {
+              <div class="calendar-scroll">
+                <svg [attr.width]="calendarWidth()" height="137" [attr.viewBox]="'0 0 ' + calendarWidth() + ' 137'" class="contribution-calendar">
+                  <!-- Month Labels -->
+                  <g class="month-labels">
+                    @for (month of monthLabels(); track month.name) {
+                      <text [attr.x]="month.x" y="10" class="month-label">{{ month.name }}</text>
+                    }
+                  </g>
+
+                  <!-- Contribution Grid -->
+                  @for (week of weeks(); track $index) {
+                    <g [attr.transform]="'translate(' + ($index * 17) + ', 22)'">
+                      @for (day of week; track day.date) {
+                        <rect
+                          [attr.x]="0"
+                          [attr.y]="getDayY(day.date)"
+                          width="13"
+                          height="13"
+                          rx="2"
+                          ry="2"
+                          [attr.fill]="getLevelColor(day.level)"
+                          [attr.data-date]="day.date"
+                          [attr.data-count]="day.count"
+                          class="contribution-cell"
+                        >
+                          <title>{{ day.count }} contributions on {{ day.date }}</title>
+                        </rect>
+                      }
+                    </g>
+                  }
+                </svg>
+              </div>
+
+              <!-- Footer -->
+              <footer class="calendar-footer mt-4 flex flex-wrap justify-between items-center gap-4">
+                <div class="contribution-count text-metallic-silver/80 text-sm">
+                  {{ totalContributions() }} contributions in {{ selectedYear() }}
+                </div>
+                <div class="legend-colors flex items-center gap-1">
+                  <span class="text-metallic-silver/60 text-sm mr-2">Less</span>
+                  @for (level of [0, 1, 2, 3, 4]; track level) {
+                    <svg width="13" height="13">
+                      <rect width="13" height="13" [attr.fill]="getLevelColor(level)" rx="2" ry="2"></rect>
+                    </svg>
+                  }
+                  <span class="text-metallic-silver/60 text-sm ml-2">More</span>
+                </div>
+              </footer>
+            }
+          </div>
+
+          <!-- Year Selector -->
+          <div class="flex justify-start xl:flex-col flex-row flex-wrap gap-2">
+            @for (year of availableYears(); track year) {
+              <button
+                (click)="selectYear(year)"
+                [class.active]="year === selectedYear()"
+                class="year-button"
+                [title]="'View Graph for the year ' + year"
+              >
+                {{ year }}
+              </button>
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+  `,
+  styles: `
+    .contribution-section {
+      background: linear-gradient(135deg, rgba(26, 26, 26, 0.95) 0%, rgba(42, 42, 42, 0.9) 100%);
+    }
+
+    .text-metallic-silver {
+      color: var(--color-metallic-silver, #c0c0c0);
+    }
+
+    .calendar-container {
+      background: linear-gradient(135deg, rgba(34, 34, 34, 0.6), rgba(42, 42, 42, 0.3));
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(192, 192, 192, 0.15);
+    }
+
+    .calendar-scroll {
+      overflow-x: auto;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(192, 192, 192, 0.3) transparent;
+    }
+
+    .calendar-scroll::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    .calendar-scroll::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .calendar-scroll::-webkit-scrollbar-thumb {
+      background: rgba(192, 192, 192, 0.3);
+      border-radius: 3px;
+    }
+
+    .month-label {
+      fill: rgba(192, 192, 192, 0.7);
+      font-size: 12px;
+      font-family: inherit;
+    }
+
+    .contribution-cell {
+      transition: opacity 0.15s ease;
+    }
+
+    .contribution-cell:hover {
+      opacity: 0.8;
+      stroke: rgba(192, 192, 192, 0.5);
+      stroke-width: 1;
+    }
+
+    .year-button {
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      background: linear-gradient(135deg, rgba(34, 34, 34, 0.8) 0%, rgba(26, 26, 26, 0.6) 100%);
+      color: rgba(192, 192, 192, 0.9);
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+    }
+
+    .year-button:hover {
+      border-color: rgba(192, 192, 192, 0.3);
+      background: linear-gradient(135deg, rgba(42, 42, 42, 0.9) 0%, rgba(34, 34, 34, 0.7) 100%);
+    }
+
+    .year-button.active {
+      background: linear-gradient(135deg, rgba(192, 192, 192, 0.9) 0%, rgba(160, 160, 160, 0.8) 100%);
+      color: rgba(26, 26, 26, 0.95);
+      border-color: transparent;
+    }
+
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(192, 192, 192, 0.2);
+      border-top-color: rgba(192, 192, 192, 0.8);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .calendar-footer {
+      border-top: 1px solid rgba(192, 192, 192, 0.1);
+      padding-top: 1rem;
+    }
+  `,
+})
+export class ContributionComponent implements OnInit {
+  private readonly http = inject(HttpClient);
+  private readonly username = 'aditya-poojary';
+
+  protected readonly loading = signal(true);
+  protected readonly error = signal(false);
+  protected readonly contributions = signal<ContributionDay[]>([]);
+  protected readonly totalsByYear = signal<{ [year: string]: number }>({});
+  protected readonly selectedYear = signal(new Date().getFullYear());
+
+  protected readonly availableYears = computed(() => {
+    const years = Object.keys(this.totalsByYear())
+      .map((y) => parseInt(y))
+      .sort((a, b) => b - a);
+    return years.length > 0 ? years : [new Date().getFullYear()];
+  });
+
+  protected readonly filteredContributions = computed(() => {
+    const year = this.selectedYear();
+    return this.contributions().filter((day) => {
+      const dayYear = new Date(day.date).getFullYear();
+      return dayYear === year;
+    });
+  });
+
+  protected readonly weeks = computed(() => {
+    const days = this.filteredContributions();
+    if (days.length === 0) return [];
+
+    const weeks: ContributionDay[][] = [];
+    let currentWeek: ContributionDay[] = [];
+
+    days.forEach((day, index) => {
+      const dayOfWeek = new Date(day.date).getDay();
+
+      if (dayOfWeek === 0 && currentWeek.length > 0) {
+        weeks.push(currentWeek);
+        currentWeek = [];
+      }
+
+      currentWeek.push(day);
+
+      if (index === days.length - 1) {
+        weeks.push(currentWeek);
+      }
+    });
+
+    return weeks;
+  });
+
+  protected readonly calendarWidth = computed(() => {
+    return this.weeks().length * 17;
+  });
+
+  protected readonly monthLabels = computed(() => {
+    const days = this.filteredContributions();
+    if (days.length === 0) return [];
+
+    const months: { name: string; x: number }[] = [];
+    const monthNames = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+
+    let lastMonth = -1;
+    let weekIndex = 0;
+
+    this.weeks().forEach((week, wIndex) => {
+      const firstDay = week[0];
+      if (firstDay) {
+        const month = new Date(firstDay.date).getMonth();
+        if (month !== lastMonth) {
+          months.push({
+            name: monthNames[month],
+            x: wIndex * 17,
+          });
+          lastMonth = month;
+        }
+      }
+    });
+
+    return months;
+  });
+
+  protected readonly totalContributions = computed(() => {
+    const year = this.selectedYear().toString();
+    return this.totalsByYear()[year] || 0;
+  });
+
+  ngOnInit(): void {
+    this.fetchContributions();
+  }
+
+  private fetchContributions(): void {
+    this.loading.set(true);
+    this.error.set(false);
+
+    this.http
+      .get<GitHubContributions>(
+        `https://github-contributions-api.jogruber.de/v4/${this.username}`
+      )
+      .subscribe({
+        next: (data) => {
+          this.contributions.set(data.contributions);
+          this.totalsByYear.set(data.total);
+          this.loading.set(false);
+        },
+        error: () => {
+          this.error.set(true);
+          this.loading.set(false);
+        },
+      });
+  }
+
+  protected selectYear(year: number): void {
+    this.selectedYear.set(year);
+  }
+
+  protected getDayY(date: string): number {
+    const dayOfWeek = new Date(date).getDay();
+    return dayOfWeek * 17;
+  }
+
+  protected getLevelColor(level: number): string {
+    // Metallic silver color palette
+    const colors = [
+      'rgba(42, 42, 42, 0.8)', // Level 0 - Dark background
+      'rgba(120, 120, 120, 0.7)', // Level 1 - Dim silver
+      'rgba(150, 150, 150, 0.8)', // Level 2 - Medium silver
+      'rgba(180, 180, 180, 0.9)', // Level 3 - Bright silver
+      'rgba(210, 210, 210, 1)', // Level 4 - Full metallic silver
+    ];
+    return colors[level] || colors[0];
+  }
+}

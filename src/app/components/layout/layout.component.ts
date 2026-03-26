@@ -3,6 +3,7 @@ import { AboutMeComponent } from '../about-me/about-me.component';
 import { ExperienceComponent } from '../experience/experience.component';
 import { PersonalProjectsComponent } from '../personal-projects/personal-projects.component';
 import { TechStackComponent } from '../tech-stack/tech-stack.component';
+import { ContributionComponent } from '../contribution/contribution.component';
 import { EducationComponent } from '../education/education.component';
 import { AchievementsComponent } from '../achievements/achievements.component';
 import { ProblemSolvingComponent } from '../problem-solving/problem-solving.component';
@@ -14,6 +15,7 @@ import { ProblemSolvingComponent } from '../problem-solving/problem-solving.comp
     ExperienceComponent,
     PersonalProjectsComponent,
     TechStackComponent,
+    ContributionComponent,
     EducationComponent,
     AchievementsComponent,
     ProblemSolvingComponent,
@@ -25,6 +27,7 @@ import { ProblemSolvingComponent } from '../problem-solving/problem-solving.comp
       <app-experience />
       <app-personal-projects />
       <app-tech-stack />
+      <app-contribution />
       <app-education />
       <app-achievements />
       <app-problem-solving />

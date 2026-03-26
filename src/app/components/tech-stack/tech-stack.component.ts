@@ -133,6 +133,7 @@ export class TechStackComponent implements AfterViewInit {
     },
     { name: 'JavaScript', icon: 'https://skillicons.dev/icons?i=js' },
     { name: 'TypeScript', icon: 'https://skillicons.dev/icons?i=ts' },
+    { name: 'Angular', icon: 'https://skillicons.dev/icons?i=angular' },
     { name: 'React', icon: 'https://skillicons.dev/icons?i=react' },
     { name: 'Next.js', icon: 'https://skillicons.dev/icons?i=nextjs' },
     { name: 'Tailwind CSS', icon: 'https://skillicons.dev/icons?i=tailwind' },
