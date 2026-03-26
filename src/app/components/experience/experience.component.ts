@@ -132,15 +132,25 @@ interface ExperienceEntry {
           0 0 40px rgba(0, 110, 138, 0.1);
       }
 
+      /* ─── GitHub Link (Black/Metallic Silver) ─────────────── */
+      .github-link {
+        color: var(--color-metallic-silver, #c0c0c0);
+      }
+
+      .github-link:hover {
+        color: var(--color-text-primary);
+      }
+
+      /* ─── Live Link (Black/Metallic Silver) ───────────────── */
       .live-link {
         display: inline-flex;
         align-items: center;
         gap: 0.4rem;
         padding: 0.35rem 0.72rem;
         border-radius: 0.5rem;
-        border: 1px solid rgba(0, 110, 138, 0.28);
-        color: var(--color-accent-teal-light);
-        background: linear-gradient(135deg, rgba(0, 77, 97, 0.16), rgba(130, 38, 89, 0.1));
+        border: 1px solid rgba(192, 192, 192, 0.25);
+        color: var(--color-metallic-silver, #c0c0c0);
+        background: linear-gradient(135deg, rgba(42, 42, 42, 0.8), rgba(26, 26, 26, 0.6));
         transition:
           color 220ms ease,
           border-color 220ms ease,
@@ -150,9 +160,48 @@ interface ExperienceEntry {
 
       .live-link:hover {
         color: var(--color-text-primary);
-        border-color: rgba(163, 48, 112, 0.36);
+        border-color: rgba(192, 192, 192, 0.5);
         transform: translateY(-1px);
         box-shadow: 0 8px 16px rgba(0, 0, 0, 0.28);
+      }
+
+      /* ─── Tech Stack Overlay (Slide down on hover) ─────────── */
+      .tech-stack-overlay {
+        transform: translateY(-100%);
+        opacity: 0;
+        transition:
+          transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+          opacity 0.3s ease;
+        background: linear-gradient(
+          to bottom,
+          rgba(0, 0, 0, 0.7) 0%,
+          rgba(0, 0, 0, 0.3) 70%,
+          transparent 100%
+        );
+        padding-top: 1.25rem;
+        padding-bottom: 2rem;
+      }
+
+      .project-card:hover .tech-stack-overlay {
+        transform: translateY(0);
+        opacity: 1;
+      }
+
+      /* ─── Tech Tag Item (Black/Metallic Silver) ─────────────── */
+      .tech-tag-item {
+        color: var(--color-metallic-silver, #c0c0c0);
+        border-color: rgba(192, 192, 192, 0.3);
+        background: linear-gradient(135deg, rgba(42, 42, 42, 0.9), rgba(26, 26, 26, 0.7));
+        transition:
+          transform 0.2s ease,
+          border-color 0.2s ease,
+          color 0.2s ease;
+      }
+
+      .tech-tag-item:hover {
+        color: var(--color-text-primary);
+        border-color: rgba(192, 192, 192, 0.5);
+        transform: translateY(-2px);
       }
 
       @media (max-width: 1100px) {
@@ -172,6 +221,12 @@ interface ExperienceEntry {
         .project-card {
           height: 28rem;
         }
+
+        /* Show tech tags always on mobile */
+        .tech-stack-overlay {
+          transform: translateY(0);
+          opacity: 1;
+        }
       }
 
       @media (prefers-reduced-motion: reduce) {
@@ -179,6 +234,11 @@ interface ExperienceEntry {
         .project-card {
           opacity: 1 !important;
           transform: none !important;
+        }
+
+        .tech-stack-overlay {
+          transform: translateY(0);
+          opacity: 1;
         }
       }
     `,
@@ -319,37 +379,73 @@ export class ExperienceComponent implements AfterViewInit {
     gsap.set(dateEls, { autoAlpha: 0, x: 20, scale: 0.9 });
 
     // Stripes fade in
-    entranceTl.to(stripeEls, {
-      autoAlpha: 1, y: 0, duration: 0.5, ease: 'power2.out', stagger: 0.1,
-    }, 0);
+    entranceTl.to(
+      stripeEls,
+      {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.5,
+        ease: 'power2.out',
+        stagger: 0.1,
+      },
+      0,
+    );
 
     // Date labels pop in
-    entranceTl.to(dateEls, {
-      autoAlpha: 1, x: 0, scale: 1, duration: 0.6, ease: 'back.out(1.5)', stagger: 0.12,
-      onComplete: () => {
-        dateEls.forEach((el) => el.classList.add('date-revealed'));
-        gsap.fromTo(dateEls,
-          { boxShadow: '0 0 0 rgba(0, 110, 138, 0)' },
-          {
-            boxShadow: '0 0 18px rgba(0, 110, 138, 0.28)',
-            duration: 0.45, ease: 'sine.out', yoyo: true, repeat: 1, stagger: 0.1,
-          },
-        );
+    entranceTl.to(
+      dateEls,
+      {
+        autoAlpha: 1,
+        x: 0,
+        scale: 1,
+        duration: 0.6,
+        ease: 'back.out(1.5)',
+        stagger: 0.12,
+        onComplete: () => {
+          dateEls.forEach((el) => el.classList.add('date-revealed'));
+          gsap.fromTo(
+            dateEls,
+            { boxShadow: '0 0 0 rgba(0, 110, 138, 0)' },
+            {
+              boxShadow: '0 0 18px rgba(0, 110, 138, 0.28)',
+              duration: 0.45,
+              ease: 'sine.out',
+              yoyo: true,
+              repeat: 1,
+              stagger: 0.1,
+            },
+          );
+        },
       },
-    }, 0.2);
+      0.2,
+    );
 
     // Cards fade in
-    entranceTl.to(cardEls, {
-      autoAlpha: 1, y: 0, duration: 0.6, ease: 'power3.out', stagger: 0.12,
-    }, 0.15);
+    entranceTl.to(
+      cardEls,
+      {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.6,
+        ease: 'power3.out',
+        stagger: 0.12,
+      },
+      0.15,
+    );
 
     // Image clip-path reveal
     cardEls.forEach((card, i) => {
       const wrap = card.querySelector('.project-card-image-wrap');
       if (wrap) {
-        entranceTl.to(wrap, {
-          clipPath: 'inset(0% 0% 0% 0%)', duration: 0.8, ease: 'power3.inOut',
-        }, 0.3 + i * 0.12);
+        entranceTl.to(
+          wrap,
+          {
+            clipPath: 'inset(0% 0% 0% 0%)',
+            duration: 0.8,
+            ease: 'power3.inOut',
+          },
+          0.3 + i * 0.12,
+        );
       }
     });
 
@@ -358,10 +454,16 @@ export class ExperienceComponent implements AfterViewInit {
       const title = card.querySelector('.project-title');
       if (title) {
         gsap.set(title, { clipPath: 'inset(0 100% 0 0)' });
-        entranceTl.to(title, {
-          clipPath: 'inset(0 0% 0 0)', duration: 0.7, ease: 'power2.inOut',
-          onComplete: () => title.classList.add('title-glowing'),
-        }, 0.4 + i * 0.15);
+        entranceTl.to(
+          title,
+          {
+            clipPath: 'inset(0 0% 0 0)',
+            duration: 0.7,
+            ease: 'power2.inOut',
+            onComplete: () => title.classList.add('title-glowing'),
+          },
+          0.4 + i * 0.15,
+        );
       }
     });
 
@@ -380,7 +482,8 @@ export class ExperienceComponent implements AfterViewInit {
     this.animations.push(entranceTl);
 
     const entranceSt = ScrollTrigger.create({
-      trigger: stage, start: 'top 80%',
+      trigger: stage,
+      start: 'top 80%',
       onEnter: () => entranceTl.play(),
       onLeaveBack: () => entranceTl.reverse(),
     });
@@ -391,12 +494,16 @@ export class ExperienceComponent implements AfterViewInit {
     // ═══════════════════════════════════════════════════════
     const scrollTl = gsap.timeline({
       scrollTrigger: {
-        trigger: stage, start: 'top 8%',
+        trigger: stage,
+        start: 'top 8%',
         end: () => {
           const shift = getShift();
           return `+=${Math.max(shift * 1.6 + window.innerHeight * 1.1, window.innerHeight * 2.8)}`;
         },
-        scrub: 1.15, pin: true, anticipatePin: 1, invalidateOnRefresh: true,
+        scrub: 1.15,
+        pin: true,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
       },
     });
 
@@ -415,38 +522,50 @@ export class ExperienceComponent implements AfterViewInit {
 
     // Card 2 description (Spotify — scrolls into view)
     if (descEls[1]) {
-      this.scrollTriggers.push(ScrollTrigger.create({
-        trigger: cardEls[1], containerAnimation: scrollTl,
-        start: 'left 75%',
-        onEnter: () => this.typeText(descEls[1], 16),
-      }));
+      this.scrollTriggers.push(
+        ScrollTrigger.create({
+          trigger: cardEls[1],
+          containerAnimation: scrollTl,
+          start: 'left 75%',
+          onEnter: () => this.typeText(descEls[1], 16),
+        }),
+      );
     }
 
     // Card 3 description (GoGo — scrolls into view)
     if (descEls[2]) {
-      this.scrollTriggers.push(ScrollTrigger.create({
-        trigger: cardEls[2], containerAnimation: scrollTl,
-        start: 'left 75%',
-        onEnter: () => this.typeText(descEls[2], 16),
-      }));
+      this.scrollTriggers.push(
+        ScrollTrigger.create({
+          trigger: cardEls[2],
+          containerAnimation: scrollTl,
+          start: 'left 75%',
+          onEnter: () => this.typeText(descEls[2], 16),
+        }),
+      );
     }
 
     // Gogo company name (second stripe — scrolls into view)
     if (nameEls[1]) {
-      this.scrollTriggers.push(ScrollTrigger.create({
-        trigger: stripeEls[1], containerAnimation: scrollTl,
-        start: 'left 75%',
-        onEnter: () => this.typeText(nameEls[1], 30),
-      }));
+      this.scrollTriggers.push(
+        ScrollTrigger.create({
+          trigger: stripeEls[1],
+          containerAnimation: scrollTl,
+          start: 'left 75%',
+          onEnter: () => this.typeText(nameEls[1], 30),
+        }),
+      );
     }
 
     // Gogo date label (second stripe — scrolls into view)
     if (dateEls[1]) {
-      this.scrollTriggers.push(ScrollTrigger.create({
-        trigger: stripeEls[1], containerAnimation: scrollTl,
-        start: 'left 70%',
-        onEnter: () => this.typeText(dateEls[1], 35),
-      }));
+      this.scrollTriggers.push(
+        ScrollTrigger.create({
+          trigger: stripeEls[1],
+          containerAnimation: scrollTl,
+          start: 'left 70%',
+          onEnter: () => this.typeText(dateEls[1], 35),
+        }),
+      );
     }
 
     this.setupTechTagHoverEffects();

@@ -202,18 +202,19 @@ export class AchievementsComponent implements AfterViewInit {
   }
 
   // ═══════════════════════════════════════════════════════════════
-  //  Timeline line "drawing" + dot activation
+  //  Timeline line "drawing" + dot activation with smooth scrolling
   // ═══════════════════════════════════════════════════════════════
   private setupTimelineProgress(): void {
     const container = this.timelineContainerRef?.nativeElement;
     const lineFill = this.timelineLineFillRef?.nativeElement;
     if (!container || !lineFill) return;
 
+    // Pin the section and create smooth scroll experience
     const st = ScrollTrigger.create({
       trigger: container,
-      start: 'top 80%',
-      end: 'bottom 25%',
-      scrub: 0.5,
+      start: 'top 65%',
+      end: 'bottom 20%',
+      scrub: 1.5, // Smoother scrub for a more enjoyable experience
       animation: gsap.fromTo(lineFill, { scaleY: 0 }, { scaleY: 1, ease: 'none' }),
       onUpdate: (self) => this.updateDotActivation(self.progress),
     });
@@ -245,53 +246,65 @@ export class AchievementsComponent implements AfterViewInit {
 
   // ═══════════════════════════════════════════════════════════════
   //  Timeline item reveal — card + text wipe + bullets + tags
+  //  with smooth scroll-triggered animations
   // ═══════════════════════════════════════════════════════════════
   private setupTimelineItemReveal(): void {
     const items = this.timelineItemRefs?.toArray() ?? [];
     if (items.length === 0) return;
 
-    items.forEach((itemRef) => {
+    items.forEach((itemRef, index) => {
       const el = itemRef.nativeElement;
       const card = el.querySelector('.timeline-card') as HTMLElement | null;
       const textReveals = el.querySelectorAll('.text-reveal');
       const bullets = el.querySelectorAll('.bullet-item');
       const tags = el.querySelectorAll('.tag-item');
 
-      // Build a per-card timeline
-      const tl = gsap.timeline({ paused: true, defaults: { ease: 'power3.out' } });
+      // Build a per-card timeline with smooth scroll-linked animation
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 80%',
+          end: 'top 40%',
+          scrub: 1.2, // Smooth scrub for enjoyable experience
+          toggleActions: 'play none none reverse',
+        },
+        defaults: { ease: 'power3.out' },
+      });
 
       // 1. Card entrance (fade + slide up)
-      tl.to(el, { autoAlpha: 1, y: 0, duration: 0.7 }, 0);
+      tl.fromTo(el, { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0, duration: 0.8 }, 0);
 
       // 2. Top accent bar glow
       if (card) {
-        tl.add(() => card.classList.add('card-revealed'), 0.35);
+        tl.add(() => card.classList.add('card-revealed'), 0.4);
       }
 
       // 3. Text reveal wipe (left -> right)
       if (textReveals.length > 0) {
-        tl.to(
+        tl.fromTo(
           textReveals,
+          { clipPath: 'inset(0 100% 0 0)' },
           {
             clipPath: 'inset(0 0% 0 0)',
-            duration: 0.6,
+            duration: 0.7,
             ease: 'power2.inOut',
-            stagger: 0.1,
+            stagger: 0.12,
           },
-          0.2,
+          0.25,
         );
       }
 
       // 4. Bullet items stagger
       if (bullets.length > 0) {
-        tl.to(
+        tl.fromTo(
           bullets,
+          { autoAlpha: 0, x: -16 },
           {
             autoAlpha: 1,
             x: 0,
-            duration: 0.4,
+            duration: 0.5,
             ease: 'power2.out',
-            stagger: 0.07,
+            stagger: 0.08,
           },
           0.5,
         );
@@ -299,33 +312,32 @@ export class AchievementsComponent implements AfterViewInit {
 
       // 5. Tag pills pop-in
       if (tags.length > 0) {
-        tl.to(
+        tl.fromTo(
           tags,
+          { autoAlpha: 0, scale: 0.8 },
           {
             autoAlpha: 1,
             scale: 1,
-            duration: 0.3,
+            duration: 0.4,
             ease: 'back.out(2)',
-            stagger: 0.05,
+            stagger: 0.06,
           },
-          0.65,
+          0.7,
         );
       }
 
       this.timelines.push(tl);
 
-      // ScrollTrigger for this item
-      const st = ScrollTrigger.create({
+      // Separate trigger for card glow removal on scroll back
+      const cardGlowSt = ScrollTrigger.create({
         trigger: el,
         start: 'top 85%',
-        onEnter: () => tl.play(),
         onLeaveBack: () => {
-          tl.reverse();
           card?.classList.remove('card-revealed');
         },
       });
 
-      this.scrollTriggers.push(st);
+      this.scrollTriggers.push(cardGlowSt);
     });
   }
 }

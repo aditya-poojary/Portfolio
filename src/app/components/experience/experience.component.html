@@ -41,7 +41,10 @@
               "
             >
               <div class="flex items-center justify-between gap-6">
-                <h3 #companyName class="company-name font-heading text-h3 font-semibold text-text-primary whitespace-nowrap">
+                <h3
+                  #companyName
+                  class="company-name font-heading text-h3 font-semibold text-text-primary whitespace-nowrap"
+                >
                   {{ experiences()[0].company }}
                 </h3>
                 <span
@@ -72,7 +75,10 @@
               "
             >
               <div class="flex items-center justify-between gap-4">
-                <h3 #companyName class="company-name font-heading text-h4 font-semibold text-text-primary whitespace-nowrap">
+                <h3
+                  #companyName
+                  class="company-name font-heading text-h4 font-semibold text-text-primary whitespace-nowrap"
+                >
                   {{ experiences()[1].company }}
                 </h3>
                 <span
@@ -133,19 +139,14 @@
                   "
                 ></div>
 
-                <!-- Tech tags (top-right corner) -->
+                <!-- Tech tags (top area - hidden by default, slides down on hover) -->
                 <div
-                  class="absolute top-5 right-5 flex flex-wrap gap-2 justify-end max-w-[60%] z-10"
+                  class="tech-stack-overlay absolute top-0 left-0 right-0 z-10 p-5 flex flex-wrap gap-2 justify-end"
                 >
                   @for (tech of project.techStack; track tech) {
                     <span
                       #techTag
-                      class="font-label text-[11px] font-medium tracking-wide px-2.5 py-1 rounded-md border backdrop-blur-sm"
-                      style="
-                        color: var(--color-accent-teal-light);
-                        border-color: rgba(0, 110, 138, 0.3);
-                      "
-                      [style.background]="i === 0 ? 'rgba(9, 24, 52, 0.78)' : 'rgba(0, 0, 0, 0.45)'"
+                      class="tech-tag-item font-label text-[11px] font-medium tracking-wide px-2.5 py-1 rounded-md border backdrop-blur-sm"
                     >
                       {{ tech }}
                     </span>
@@ -171,7 +172,7 @@
                       [href]="project.githubUrl"
                       target="_blank"
                       rel="noopener noreferrer"
-                      class="inline-flex items-center gap-2 font-label text-xs font-semibold tracking-wider uppercase text-accent-teal-light hover:text-text-primary transition-colors duration-300"
+                      class="github-link inline-flex items-center gap-2 font-label text-xs font-semibold tracking-wider uppercase transition-colors duration-300"
                     >
                       <svg
                         viewBox="0 0 24 24"
@@ -246,17 +247,14 @@
                 "
               ></div>
 
-              <!-- Tech tags -->
-              <div class="absolute top-5 right-5 flex flex-wrap gap-2 justify-end max-w-[60%] z-10">
+              <!-- Tech tags (top area - hidden by default, slides down on hover) -->
+              <div
+                class="tech-stack-overlay absolute top-0 left-0 right-0 z-10 p-5 flex flex-wrap gap-2 justify-end"
+              >
                 @for (tech of experiences()[1].projects[0].techStack; track tech) {
                   <span
                     #techTag
-                    class="font-label text-[11px] font-medium tracking-wide px-2.5 py-1 rounded-md border backdrop-blur-sm"
-                    style="
-                      color: var(--color-accent-teal-light);
-                      border-color: rgba(0, 110, 138, 0.3);
-                      background: rgba(0, 0, 0, 0.45);
-                    "
+                    class="tech-tag-item font-label text-[11px] font-medium tracking-wide px-2.5 py-1 rounded-md border backdrop-blur-sm"
                   >
                     {{ tech }}
                   </span>
@@ -280,7 +278,7 @@
                     [href]="experiences()[1].projects[0].githubUrl"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="inline-flex items-center gap-2 font-label text-xs font-semibold tracking-wider uppercase text-accent-teal-light hover:text-text-primary transition-colors duration-300"
+                    class="github-link inline-flex items-center gap-2 font-label text-xs font-semibold tracking-wider uppercase transition-colors duration-300"
                   >
                     <svg viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4" aria-hidden="true">
                       <path
