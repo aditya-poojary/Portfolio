@@ -271,22 +271,34 @@ export class ContributionComponent implements OnInit {
     const allContributions = this.contributions();
 
     if (this.isLastYearMode()) {
-      // Show last 365 days from today
+      // Show last ~1 year from today, aligned to week boundaries like GitHub
       const today = new Date();
-      const oneYearAgo = new Date();
+      today.setHours(23, 59, 59, 999); // End of today
+
+      // Calculate 1 year ago
+      const oneYearAgo = new Date(today);
       oneYearAgo.setFullYear(today.getFullYear() - 1);
 
-      return allContributions.filter((day) => {
-        const dayDate = new Date(day.date);
-        return dayDate >= oneYearAgo && dayDate <= today;
-      });
+      // Align start date to the previous Sunday (GitHub's week start)
+      const dayOfWeek = oneYearAgo.getDay(); // 0 = Sunday
+      oneYearAgo.setDate(oneYearAgo.getDate() - dayOfWeek);
+      oneYearAgo.setHours(0, 0, 0, 0); // Start of that Sunday
+
+      return allContributions
+        .filter((day) => {
+          const dayDate = new Date(day.date);
+          return dayDate >= oneYearAgo && dayDate <= today;
+        })
+        .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
     } else {
       // Show specific year
       const year = this.selectedYear();
-      return allContributions.filter((day) => {
-        const dayYear = new Date(day.date).getFullYear();
-        return dayYear === year;
-      });
+      return allContributions
+        .filter((day) => {
+          const dayYear = new Date(day.date).getFullYear();
+          return dayYear === year;
+        })
+        .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
     }
   });
 
