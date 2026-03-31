@@ -4,6 +4,7 @@ import { ExperienceComponent } from '../experience/experience.component';
 import { PersonalProjectsComponent } from '../personal-projects/personal-projects.component';
 import { TechStackComponent } from '../tech-stack/tech-stack.component';
 import { ContributionComponent } from '../contribution/contribution.component';
+import { LeetcodeContributionsComponent } from '../leetcode-contributions/leetcode-contributions.component';
 import { EducationComponent } from '../education/education.component';
 import { AchievementsComponent } from '../achievements/achievements.component';
 import { ProblemSolvingComponent } from '../problem-solving/problem-solving.component';
@@ -16,6 +17,7 @@ import { ProblemSolvingComponent } from '../problem-solving/problem-solving.comp
     PersonalProjectsComponent,
     TechStackComponent,
     ContributionComponent,
+    LeetcodeContributionsComponent,
     EducationComponent,
     AchievementsComponent,
     ProblemSolvingComponent,
@@ -28,6 +30,7 @@ import { ProblemSolvingComponent } from '../problem-solving/problem-solving.comp
       <app-personal-projects />
       <app-tech-stack />
       <app-contribution />
+      <app-leetcode-contributions />
       <app-education />
       <app-achievements />
       <app-problem-solving />

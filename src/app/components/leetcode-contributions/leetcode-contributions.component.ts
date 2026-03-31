@@ -9,20 +9,24 @@ import {
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 
+interface LeetCodeData {
+  username: string;
+  ranking: number;
+  streak: number;
+  totalActiveDays: number;
+  submissions: { difficulty: string; count: number }[];
+  calendar: { [timestamp: string]: number };
+  lastUpdated: string;
+}
+
 interface ContributionDay {
   date: string;
   count: number;
   level: number;
 }
 
-interface GitHubContributions {
-  total: { [year: string]: number };
-  contributions: ContributionDay[];
-}
-
 @Component({
-  selector: 'app-contribution',
-  standalone: true,
+  selector: 'app-leetcode-contributions',
   imports: [CommonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -35,28 +39,67 @@ interface GitHubContributions {
             <span
               class="inline-flex items-center justify-center w-9 h-9 rounded-lg border"
               style="
-                border-color: rgba(192, 192, 192, 0.3);
-                background: linear-gradient(135deg, rgba(42, 42, 42, 0.8), rgba(26, 26, 26, 0.6));
+                border-color: rgba(34, 197, 94, 0.3);
+                background: linear-gradient(135deg, rgba(22, 101, 52, 0.4), rgba(20, 83, 45, 0.3));
               "
             >
+              <svg viewBox="0 0 24 24" fill="none" class="w-4.5 h-4.5" style="color: #4ade80">
+                <path
+                  d="M16.102 17.93l-2.697 2.607c-.466.467-1.111.662-1.823.662s-1.357-.195-1.824-.662l-4.332-4.363c-.467-.467-.702-1.15-.702-1.863s.235-1.357.702-1.824l4.319-4.38c.467-.467 1.125-.645 1.837-.645s1.357.195 1.823.662l2.697 2.606c.514.515 1.365.497 1.9-.038.535-.536.553-1.387.038-1.901l-2.609-2.636a5.055 5.055 0 0 0-2.445-1.337l2.467-2.503c.516-.514.498-1.366-.037-1.901-.535-.535-1.387-.552-1.902-.038l-10.1 10.101c-.981.982-1.494 2.337-1.494 3.835 0 1.498.513 2.895 1.494 3.875l4.347 4.361c.981.979 2.337 1.452 3.834 1.452s2.853-.512 3.835-1.494l2.609-2.637c.514-.514.496-1.365-.039-1.9s-1.386-.553-1.899-.039zM20.811 13.01H10.666c-.702 0-1.27.604-1.27 1.346s.568 1.346 1.27 1.346h10.145c.701 0 1.27-.604 1.27-1.346s-.569-1.346-1.27-1.346z"
+                  fill="currentColor"
+                />
+              </svg>
+            </span>
+            LeetCode Journey
+          </h2>
+        </div>
+
+        <!-- Stats Row -->
+        <div class="flex flex-wrap gap-6 mb-8">
+          <!-- Streak Counter -->
+          <div class="stats-card flex items-center gap-4 px-5 py-4 rounded-xl">
+            <div class="flex items-center justify-center w-12 h-12 rounded-lg bg-green-900/30">
               <svg
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="w-4.5 h-4.5"
-                style="color: var(--color-metallic-silver)"
+                stroke-width="2"
+                class="w-6 h-6 text-green-400"
               >
-                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                <line x1="16" y1="2" x2="16" y2="6" />
-                <line x1="8" y1="2" x2="8" y2="6" />
-                <line x1="3" y1="10" x2="21" y2="10" />
+                <path
+                  d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
               </svg>
-            </span>
-            Contribution Graph
-          </h2>
+            </div>
+            <div>
+              <span class="streak-number font-heading text-3xl font-bold">{{
+                currentStreak()
+              }}</span>
+              <span class="block text-sm text-green-300/70 mt-0.5">day streak 🔥</span>
+            </div>
+          </div>
+
+          <!-- Global Rank -->
+          <div class="stats-card flex items-center gap-4 px-5 py-4 rounded-xl">
+            <div class="flex items-center justify-center w-12 h-12 rounded-lg bg-green-900/30">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                class="w-6 h-6 text-green-400"
+              >
+                <circle cx="12" cy="8" r="6" />
+                <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11" />
+              </svg>
+            </div>
+            <div>
+              <span class="rank-number font-heading text-3xl font-bold">#{{ ranking() }}</span>
+              <span class="block text-sm text-green-300/70 mt-0.5">global rank</span>
+            </div>
+          </div>
         </div>
 
         <div class="flex xl:flex-row flex-col gap-4">
@@ -67,7 +110,7 @@ interface GitHubContributions {
                 <div class="loading-spinner"></div>
               </div>
             } @else if (error()) {
-              <div class="flex items-center justify-center h-[137px] text-metallic-silver/60">
+              <div class="flex items-center justify-center h-[137px] text-green-300/60">
                 Failed to load contributions
               </div>
             } @else {
@@ -101,7 +144,7 @@ interface GitHubContributions {
                           [attr.data-count]="day.count"
                           class="contribution-cell"
                         >
-                          <title>{{ day.count }} contributions on {{ day.date }}</title>
+                          <title>{{ day.count }} submissions on {{ day.date }}</title>
                         </rect>
                       }
                     </g>
@@ -113,11 +156,11 @@ interface GitHubContributions {
               <footer
                 class="calendar-footer mt-4 flex flex-wrap justify-between items-center gap-4"
               >
-                <div class="contribution-count text-metallic-silver/80 text-sm">
-                  {{ totalContributions() }} contributions in {{ viewModeLabel() }}
+                <div class="contribution-count text-green-300/80 text-sm">
+                  {{ totalContributions() }} submissions in {{ viewModeLabel() }}
                 </div>
                 <div class="legend-colors flex items-center gap-1">
-                  <span class="text-metallic-silver/60 text-sm mr-2">Less</span>
+                  <span class="text-green-300/60 text-sm mr-2">Less</span>
                   @for (level of [0, 1, 2, 3, 4]; track level) {
                     <svg width="13" height="13">
                       <rect
@@ -129,7 +172,7 @@ interface GitHubContributions {
                       ></rect>
                     </svg>
                   }
-                  <span class="text-metallic-silver/60 text-sm ml-2">More</span>
+                  <span class="text-green-300/60 text-sm ml-2">More</span>
                 </div>
               </footer>
             }
@@ -142,7 +185,7 @@ interface GitHubContributions {
                 (click)="selectYear(year)"
                 [class.active]="year === selectedYear() && !isLastYearMode()"
                 class="year-button"
-                [title]="'View Graph for the year ' + year"
+                [title]="'View submissions for ' + year"
               >
                 {{ year }}
               </button>
@@ -153,19 +196,28 @@ interface GitHubContributions {
     </section>
   `,
   styles: `
-    .text-metallic-silver {
-      color: var(--color-metallic-silver, #c0c0c0);
+    .stats-card {
+      background: linear-gradient(135deg, rgba(22, 101, 52, 0.3), rgba(20, 83, 45, 0.2));
+      border: 1px solid rgba(34, 197, 94, 0.2);
+    }
+
+    .streak-number,
+    .rank-number {
+      background: linear-gradient(135deg, #4ade80, #22c55e);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .calendar-container {
-      background: linear-gradient(135deg, rgba(42, 42, 42, 0.8), rgba(26, 26, 26, 0.6));
-      border: 1px solid rgba(192, 192, 192, 0.15);
+      background: linear-gradient(135deg, rgba(22, 101, 52, 0.25), rgba(20, 83, 45, 0.15));
+      border: 1px solid rgba(34, 197, 94, 0.2);
     }
 
     .calendar-scroll {
       overflow-x: auto;
       scrollbar-width: thin;
-      scrollbar-color: rgba(192, 192, 192, 0.3) transparent;
+      scrollbar-color: rgba(34, 197, 94, 0.3) transparent;
     }
 
     .calendar-scroll::-webkit-scrollbar {
@@ -177,12 +229,12 @@ interface GitHubContributions {
     }
 
     .calendar-scroll::-webkit-scrollbar-thumb {
-      background: rgba(192, 192, 192, 0.3);
+      background: rgba(34, 197, 94, 0.3);
       border-radius: 3px;
     }
 
     .month-label {
-      fill: rgba(192, 192, 192, 0.7);
+      fill: rgba(134, 239, 172, 0.7);
       font-size: 12px;
       font-family: inherit;
     }
@@ -193,7 +245,7 @@ interface GitHubContributions {
 
     .contribution-cell:hover {
       opacity: 0.8;
-      stroke: rgba(192, 192, 192, 0.5);
+      stroke: rgba(74, 222, 128, 0.5);
       stroke-width: 1;
     }
 
@@ -202,32 +254,28 @@ interface GitHubContributions {
       border-radius: 0.5rem;
       font-size: 0.875rem;
       font-weight: 500;
-      background: linear-gradient(135deg, rgba(42, 42, 42, 0.8) 0%, rgba(26, 26, 26, 0.6) 100%);
-      color: rgba(192, 192, 192, 0.9);
-      border: 1px solid rgba(192, 192, 192, 0.15);
+      background: linear-gradient(135deg, rgba(22, 101, 52, 0.4) 0%, rgba(20, 83, 45, 0.25) 100%);
+      color: rgba(134, 239, 172, 0.9);
+      border: 1px solid rgba(34, 197, 94, 0.2);
       transition: all 0.2s ease;
     }
 
     .year-button:hover {
-      border-color: rgba(192, 192, 192, 0.3);
-      background: linear-gradient(135deg, rgba(50, 50, 50, 0.9) 0%, rgba(34, 34, 34, 0.7) 100%);
+      border-color: rgba(34, 197, 94, 0.4);
+      background: linear-gradient(135deg, rgba(22, 101, 52, 0.5) 0%, rgba(20, 83, 45, 0.35) 100%);
     }
 
     .year-button.active {
-      background: linear-gradient(
-        135deg,
-        rgba(192, 192, 192, 0.9) 0%,
-        rgba(160, 160, 160, 0.8) 100%
-      );
-      color: rgba(26, 26, 26, 0.95);
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.9) 0%, rgba(22, 163, 74, 0.8) 100%);
+      color: rgba(20, 83, 45, 0.95);
       border-color: transparent;
     }
 
     .loading-spinner {
       width: 40px;
       height: 40px;
-      border: 3px solid rgba(192, 192, 192, 0.2);
-      border-top-color: rgba(192, 192, 192, 0.8);
+      border: 3px solid rgba(34, 197, 94, 0.2);
+      border-top-color: rgba(74, 222, 128, 0.8);
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }
@@ -239,26 +287,67 @@ interface GitHubContributions {
     }
 
     .calendar-footer {
-      border-top: 1px solid rgba(192, 192, 192, 0.1);
+      border-top: 1px solid rgba(34, 197, 94, 0.15);
       padding-top: 1rem;
     }
   `,
 })
-export class ContributionComponent implements OnInit {
+export class LeetcodeContributionsComponent implements OnInit {
   private readonly http = inject(HttpClient);
-  private readonly username = 'aditya-poojary';
+
+  // Base streak count (starting from a reference date)
+  private readonly BASE_STREAK = 576;
+  private readonly BASE_DATE = new Date('2026-03-30');
 
   protected readonly loading = signal(true);
   protected readonly error = signal(false);
-  protected readonly contributions = signal<ContributionDay[]>([]);
-  protected readonly totalsByYear = signal<{ [year: string]: number }>({});
+  protected readonly leetcodeData = signal<LeetCodeData | null>(null);
   protected readonly selectedYear = signal(new Date().getFullYear());
-  protected readonly isLastYearMode = signal(true); // Start with last year mode
+  protected readonly isLastYearMode = signal(true);
+
+  protected readonly ranking = computed(() => {
+    const data = this.leetcodeData();
+    return data ? data.ranking.toLocaleString() : '—';
+  });
+
+  protected readonly currentStreak = computed(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const baseDate = new Date(this.BASE_DATE);
+    baseDate.setHours(0, 0, 0, 0);
+
+    const diffTime = today.getTime() - baseDate.getTime();
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+    return this.BASE_STREAK + diffDays;
+  });
+
+  protected readonly contributions = computed(() => {
+    const data = this.leetcodeData();
+    if (!data) return [];
+
+    const contributions: ContributionDay[] = [];
+    const calendar = data.calendar;
+
+    for (const [timestamp, count] of Object.entries(calendar)) {
+      const date = new Date(parseInt(timestamp) * 1000);
+      const dateStr = date.toISOString().split('T')[0];
+      const level = this.getLevel(count);
+      contributions.push({ date: dateStr, count, level });
+    }
+
+    return contributions.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  });
 
   protected readonly availableYears = computed(() => {
-    const years = Object.keys(this.totalsByYear())
-      .map((y) => parseInt(y))
-      .sort((a, b) => b - a);
+    const contributions = this.contributions();
+    const yearsSet = new Set<number>();
+
+    contributions.forEach((day) => {
+      yearsSet.add(new Date(day.date).getFullYear());
+    });
+
+    const years = Array.from(yearsSet).sort((a, b) => b - a);
     return years.length > 0 ? years : [new Date().getFullYear()];
   });
 
@@ -273,18 +362,15 @@ export class ContributionComponent implements OnInit {
     const allContributions = this.contributions();
 
     if (this.isLastYearMode()) {
-      // Show last ~1 year from today, aligned to week boundaries like GitHub
       const today = new Date();
-      today.setHours(23, 59, 59, 999); // End of today
+      today.setHours(23, 59, 59, 999);
 
-      // Calculate 1 year ago
       const oneYearAgo = new Date(today);
       oneYearAgo.setFullYear(today.getFullYear() - 1);
 
-      // Align start date to the previous Sunday (GitHub's week start)
-      const dayOfWeek = oneYearAgo.getDay(); // 0 = Sunday
+      const dayOfWeek = oneYearAgo.getDay();
       oneYearAgo.setDate(oneYearAgo.getDate() - dayOfWeek);
-      oneYearAgo.setHours(0, 0, 0, 0); // Start of that Sunday
+      oneYearAgo.setHours(0, 0, 0, 0);
 
       return allContributions
         .filter((day) => {
@@ -293,24 +379,15 @@ export class ContributionComponent implements OnInit {
         })
         .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
     } else {
-      // Show specific year
       const year = this.selectedYear();
       return allContributions
-        .filter((day) => {
-          const dayYear = new Date(day.date).getFullYear();
-          return dayYear === year;
-        })
+        .filter((day) => new Date(day.date).getFullYear() === year)
         .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
     }
   });
 
   protected readonly totalContributions = computed(() => {
-    if (this.isLastYearMode()) {
-      // Sum contributions from filtered data
-      return this.filteredContributions().reduce((sum, day) => sum + day.count, 0);
-    }
-    const year = this.selectedYear().toString();
-    return this.totalsByYear()[year] || 0;
+    return this.filteredContributions().reduce((sum, day) => sum + day.count, 0);
   });
 
   protected readonly weeks = computed(() => {
@@ -382,26 +459,23 @@ export class ContributionComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.fetchContributions();
+    this.fetchLeetCodeData();
   }
 
-  private fetchContributions(): void {
+  private fetchLeetCodeData(): void {
     this.loading.set(true);
     this.error.set(false);
 
-    this.http
-      .get<GitHubContributions>(`https://github-contributions-api.jogruber.de/v4/${this.username}`)
-      .subscribe({
-        next: (data) => {
-          this.contributions.set(data.contributions);
-          this.totalsByYear.set(data.total);
-          this.loading.set(false);
-        },
-        error: () => {
-          this.error.set(true);
-          this.loading.set(false);
-        },
-      });
+    this.http.get<LeetCodeData>('/data/leetcode.json').subscribe({
+      next: (data) => {
+        this.leetcodeData.set(data);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.error.set(true);
+        this.loading.set(false);
+      },
+    });
   }
 
   protected selectYear(year: number): void {
@@ -414,14 +488,22 @@ export class ContributionComponent implements OnInit {
     return dayOfWeek * 17;
   }
 
+  private getLevel(count: number): number {
+    if (count === 0) return 0;
+    if (count <= 2) return 1;
+    if (count <= 5) return 2;
+    if (count <= 10) return 3;
+    return 4;
+  }
+
   protected getLevelColor(level: number): string {
-    // Light mint/lime green color palette for GitHub
+    // Dark green color palette for LeetCode
     const colors = [
-      'rgba(42, 42, 42, 0.8)', // Level 0 - Dark background
-      'rgba(110, 231, 183, 0.5)', // Level 1 - Soft mint
-      'rgba(52, 211, 153, 0.7)', // Level 2 - Light emerald
-      'rgba(16, 185, 129, 0.85)', // Level 3 - Medium emerald
-      'rgba(5, 150, 105, 1)', // Level 4 - Deep emerald/teal
+      'rgba(22, 27, 34, 0.8)', // Level 0 - Dark background
+      'rgba(14, 68, 41, 0.9)', // Level 1 - Darkest green
+      'rgba(0, 109, 50, 0.95)', // Level 2 - Dark green
+      'rgba(38, 166, 65, 1)', // Level 3 - Medium green
+      'rgba(57, 211, 83, 1)', // Level 4 - Bright green
     ];
     return colors[level] || colors[0];
   }
