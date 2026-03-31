@@ -7,7 +7,7 @@ import { ContributionComponent } from '../contribution/contribution.component';
 import { LeetcodeContributionsComponent } from '../leetcode-contributions/leetcode-contributions.component';
 import { EducationComponent } from '../education/education.component';
 import { AchievementsComponent } from '../achievements/achievements.component';
-import { ProblemSolvingComponent } from '../problem-solving/problem-solving.component';
+import { GetInTouchComponent } from '../get-in-touch/get-in-touch.component';
 
 @Component({
   selector: 'app-layout',
@@ -20,7 +20,7 @@ import { ProblemSolvingComponent } from '../problem-solving/problem-solving.comp
     LeetcodeContributionsComponent,
     EducationComponent,
     AchievementsComponent,
-    ProblemSolvingComponent,
+    GetInTouchComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -33,7 +33,7 @@ import { ProblemSolvingComponent } from '../problem-solving/problem-solving.comp
       <app-leetcode-contributions />
       <app-education />
       <app-achievements />
-      <app-problem-solving />
+      <app-get-in-touch />
     </div>
   `,
 })

@@ -215,7 +215,7 @@ interface ContributionDay {
             @for (year of availableYears(); track year) {
               <button
                 (click)="selectYear(year)"
-                [class.active]="year === selectedYear() && !isLastYearMode()"
+                [class.active]="year === selectedYear()"
                 class="year-button"
                 [title]="'View submissions for ' + year"
               >
@@ -350,7 +350,6 @@ export class LeetcodeContributionsComponent implements OnInit {
   protected readonly error = signal(false);
   protected readonly leetcodeData = signal<LeetCodeData | null>(null);
   protected readonly selectedYear = signal(new Date().getFullYear());
-  protected readonly isLastYearMode = signal(true);
 
   protected readonly ranking = computed(() => {
     const data = this.leetcodeData();
@@ -394,51 +393,23 @@ export class LeetcodeContributionsComponent implements OnInit {
     return contributions.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   });
 
+  // Available years: 2024, 2025, 2026 (contributions started July 2024)
   protected readonly availableYears = computed(() => {
-    const contributions = this.contributions();
-    const yearsSet = new Set<number>();
-
-    contributions.forEach((day) => {
-      yearsSet.add(new Date(day.date).getFullYear());
-    });
-
-    const years = Array.from(yearsSet).sort((a, b) => b - a);
-    return years.length > 0 ? years : [new Date().getFullYear()];
+    return [2026, 2025, 2024];
   });
 
   protected readonly viewModeLabel = computed(() => {
-    if (this.isLastYearMode()) {
-      return 'the last year';
-    }
     return this.selectedYear().toString();
   });
 
   protected readonly filteredContributions = computed(() => {
     const allContributions = this.contributions();
+    const year = this.selectedYear();
 
-    if (this.isLastYearMode()) {
-      const today = new Date();
-      today.setHours(23, 59, 59, 999);
-
-      const oneYearAgo = new Date(today);
-      oneYearAgo.setFullYear(today.getFullYear() - 1);
-
-      const dayOfWeek = oneYearAgo.getDay();
-      oneYearAgo.setDate(oneYearAgo.getDate() - dayOfWeek);
-      oneYearAgo.setHours(0, 0, 0, 0);
-
-      return allContributions
-        .filter((day) => {
-          const dayDate = new Date(day.date);
-          return dayDate >= oneYearAgo && dayDate <= today;
-        })
-        .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-    } else {
-      const year = this.selectedYear();
-      return allContributions
-        .filter((day) => new Date(day.date).getFullYear() === year)
-        .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-    }
+    // Filter contributions for the selected year
+    return allContributions
+      .filter((day) => new Date(day.date).getFullYear() === year)
+      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   });
 
   protected readonly totalContributions = computed(() => {
@@ -534,7 +505,6 @@ export class LeetcodeContributionsComponent implements OnInit {
   }
 
   protected selectYear(year: number): void {
-    this.isLastYearMode.set(false);
     this.selectedYear.set(year);
   }
 
