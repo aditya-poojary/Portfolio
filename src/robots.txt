@@ -1,0 +1,13 @@
+# robots.txt for adityapoojary.dev
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://adityapoojary.dev/sitemap.xml
+
+# Crawl-delay for polite crawling
+Crawl-delay: 10
+
+# Block specific paths if any
+Disallow: /api/
+Disallow: /admin/
