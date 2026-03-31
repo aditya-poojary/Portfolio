@@ -39,18 +39,23 @@ interface ContributionDay {
             <span
               class="inline-flex items-center justify-center w-9 h-9 rounded-lg border"
               style="
-                border-color: rgba(34, 197, 94, 0.3);
-                background: linear-gradient(135deg, rgba(22, 101, 52, 0.4), rgba(20, 83, 45, 0.3));
+                border-color: rgba(192, 192, 192, 0.3);
+                background: linear-gradient(135deg, rgba(42, 42, 42, 0.8), rgba(26, 26, 26, 0.6));
               "
             >
-              <svg viewBox="0 0 24 24" fill="none" class="w-4.5 h-4.5" style="color: #4ade80">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                class="w-4.5 h-4.5"
+                style="color: var(--color-metallic-silver)"
+              >
                 <path
                   d="M16.102 17.93l-2.697 2.607c-.466.467-1.111.662-1.823.662s-1.357-.195-1.824-.662l-4.332-4.363c-.467-.467-.702-1.15-.702-1.863s.235-1.357.702-1.824l4.319-4.38c.467-.467 1.125-.645 1.837-.645s1.357.195 1.823.662l2.697 2.606c.514.515 1.365.497 1.9-.038.535-.536.553-1.387.038-1.901l-2.609-2.636a5.055 5.055 0 0 0-2.445-1.337l2.467-2.503c.516-.514.498-1.366-.037-1.901-.535-.535-1.387-.552-1.902-.038l-10.1 10.101c-.981.982-1.494 2.337-1.494 3.835 0 1.498.513 2.895 1.494 3.875l4.347 4.361c.981.979 2.337 1.452 3.834 1.452s2.853-.512 3.835-1.494l2.609-2.637c.514-.514.496-1.365-.039-1.9s-1.386-.553-1.899-.039zM20.811 13.01H10.666c-.702 0-1.27.604-1.27 1.346s.568 1.346 1.27 1.346h10.145c.701 0 1.27-.604 1.27-1.346s-.569-1.346-1.27-1.346z"
                   fill="currentColor"
                 />
               </svg>
             </span>
-            LeetCode Journey
+            DSA Journey
           </h2>
         </div>
 
@@ -58,13 +63,14 @@ interface ContributionDay {
         <div class="flex flex-wrap gap-6 mb-8">
           <!-- Streak Counter -->
           <div class="stats-card flex items-center gap-4 px-5 py-4 rounded-xl">
-            <div class="flex items-center justify-center w-12 h-12 rounded-lg bg-green-900/30">
+            <div class="flex items-center justify-center w-12 h-12 rounded-lg icon-bg">
               <svg
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
                 stroke-width="2"
-                class="w-6 h-6 text-green-400"
+                class="w-6 h-6"
+                style="color: var(--color-metallic-silver)"
               >
                 <path
                   d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"
@@ -74,30 +80,56 @@ interface ContributionDay {
               </svg>
             </div>
             <div>
-              <span class="streak-number font-heading text-3xl font-bold">{{
-                currentStreak()
-              }}</span>
-              <span class="block text-sm text-green-300/70 mt-0.5">day streak 🔥</span>
+              <span class="stat-number font-heading text-3xl font-bold">{{ currentStreak() }}</span>
+              <span class="block text-sm stat-label mt-0.5">day streak 🔥</span>
             </div>
           </div>
 
           <!-- Global Rank -->
           <div class="stats-card flex items-center gap-4 px-5 py-4 rounded-xl">
-            <div class="flex items-center justify-center w-12 h-12 rounded-lg bg-green-900/30">
+            <div class="flex items-center justify-center w-12 h-12 rounded-lg icon-bg">
               <svg
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
                 stroke-width="2"
-                class="w-6 h-6 text-green-400"
+                class="w-6 h-6"
+                style="color: var(--color-metallic-silver)"
               >
                 <circle cx="12" cy="8" r="6" />
                 <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11" />
               </svg>
             </div>
             <div>
-              <span class="rank-number font-heading text-3xl font-bold">#{{ ranking() }}</span>
-              <span class="block text-sm text-green-300/70 mt-0.5">global rank</span>
+              <span class="stat-number font-heading text-3xl font-bold">#{{ ranking() }}</span>
+              <span class="block text-sm stat-label mt-0.5">global rank</span>
+            </div>
+          </div>
+
+          <!-- Total Questions Solved -->
+          <div class="stats-card flex items-center gap-4 px-5 py-4 rounded-xl">
+            <div class="flex items-center justify-center w-12 h-12 rounded-lg icon-bg">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                class="w-6 h-6"
+                style="color: var(--color-metallic-silver)"
+              >
+                <path d="M9 11l3 3L22 4" stroke-linecap="round" stroke-linejoin="round" />
+                <path
+                  d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+            <div>
+              <span class="stat-number font-heading text-3xl font-bold">{{
+                totalQuestionsSolved()
+              }}</span>
+              <span class="block text-sm stat-label mt-0.5">questions solved</span>
             </div>
           </div>
         </div>
@@ -110,7 +142,7 @@ interface ContributionDay {
                 <div class="loading-spinner"></div>
               </div>
             } @else if (error()) {
-              <div class="flex items-center justify-center h-[137px] text-green-300/60">
+              <div class="flex items-center justify-center h-[137px] text-metallic-silver/60">
                 Failed to load contributions
               </div>
             } @else {
@@ -156,11 +188,11 @@ interface ContributionDay {
               <footer
                 class="calendar-footer mt-4 flex flex-wrap justify-between items-center gap-4"
               >
-                <div class="contribution-count text-green-300/80 text-sm">
+                <div class="contribution-count text-metallic-silver/80 text-sm">
                   {{ totalContributions() }} submissions in {{ viewModeLabel() }}
                 </div>
                 <div class="legend-colors flex items-center gap-1">
-                  <span class="text-green-300/60 text-sm mr-2">Less</span>
+                  <span class="text-metallic-silver/60 text-sm mr-2">Less</span>
                   @for (level of [0, 1, 2, 3, 4]; track level) {
                     <svg width="13" height="13">
                       <rect
@@ -172,7 +204,7 @@ interface ContributionDay {
                       ></rect>
                     </svg>
                   }
-                  <span class="text-green-300/60 text-sm ml-2">More</span>
+                  <span class="text-metallic-silver/60 text-sm ml-2">More</span>
                 </div>
               </footer>
             }
@@ -196,28 +228,39 @@ interface ContributionDay {
     </section>
   `,
   styles: `
-    .stats-card {
-      background: linear-gradient(135deg, rgba(22, 101, 52, 0.3), rgba(20, 83, 45, 0.2));
-      border: 1px solid rgba(34, 197, 94, 0.2);
+    .text-metallic-silver {
+      color: var(--color-metallic-silver, #c0c0c0);
     }
 
-    .streak-number,
-    .rank-number {
-      background: linear-gradient(135deg, #4ade80, #22c55e);
+    .stats-card {
+      background: linear-gradient(135deg, rgba(42, 42, 42, 0.8), rgba(26, 26, 26, 0.6));
+      border: 1px solid rgba(192, 192, 192, 0.15);
+    }
+
+    .icon-bg {
+      background: rgba(192, 192, 192, 0.1);
+    }
+
+    .stat-number {
+      background: linear-gradient(135deg, rgba(192, 192, 192, 0.95), rgba(160, 160, 160, 0.85));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
 
+    .stat-label {
+      color: rgba(192, 192, 192, 0.7);
+    }
+
     .calendar-container {
-      background: linear-gradient(135deg, rgba(22, 101, 52, 0.25), rgba(20, 83, 45, 0.15));
-      border: 1px solid rgba(34, 197, 94, 0.2);
+      background: linear-gradient(135deg, rgba(42, 42, 42, 0.8), rgba(26, 26, 26, 0.6));
+      border: 1px solid rgba(192, 192, 192, 0.15);
     }
 
     .calendar-scroll {
       overflow-x: auto;
       scrollbar-width: thin;
-      scrollbar-color: rgba(34, 197, 94, 0.3) transparent;
+      scrollbar-color: rgba(192, 192, 192, 0.3) transparent;
     }
 
     .calendar-scroll::-webkit-scrollbar {
@@ -229,12 +272,12 @@ interface ContributionDay {
     }
 
     .calendar-scroll::-webkit-scrollbar-thumb {
-      background: rgba(34, 197, 94, 0.3);
+      background: rgba(192, 192, 192, 0.3);
       border-radius: 3px;
     }
 
     .month-label {
-      fill: rgba(134, 239, 172, 0.7);
+      fill: rgba(192, 192, 192, 0.7);
       font-size: 12px;
       font-family: inherit;
     }
@@ -245,7 +288,7 @@ interface ContributionDay {
 
     .contribution-cell:hover {
       opacity: 0.8;
-      stroke: rgba(74, 222, 128, 0.5);
+      stroke: rgba(192, 192, 192, 0.5);
       stroke-width: 1;
     }
 
@@ -254,28 +297,32 @@ interface ContributionDay {
       border-radius: 0.5rem;
       font-size: 0.875rem;
       font-weight: 500;
-      background: linear-gradient(135deg, rgba(22, 101, 52, 0.4) 0%, rgba(20, 83, 45, 0.25) 100%);
-      color: rgba(134, 239, 172, 0.9);
-      border: 1px solid rgba(34, 197, 94, 0.2);
+      background: linear-gradient(135deg, rgba(42, 42, 42, 0.8) 0%, rgba(26, 26, 26, 0.6) 100%);
+      color: rgba(192, 192, 192, 0.9);
+      border: 1px solid rgba(192, 192, 192, 0.15);
       transition: all 0.2s ease;
     }
 
     .year-button:hover {
-      border-color: rgba(34, 197, 94, 0.4);
-      background: linear-gradient(135deg, rgba(22, 101, 52, 0.5) 0%, rgba(20, 83, 45, 0.35) 100%);
+      border-color: rgba(192, 192, 192, 0.3);
+      background: linear-gradient(135deg, rgba(50, 50, 50, 0.9) 0%, rgba(34, 34, 34, 0.7) 100%);
     }
 
     .year-button.active {
-      background: linear-gradient(135deg, rgba(34, 197, 94, 0.9) 0%, rgba(22, 163, 74, 0.8) 100%);
-      color: rgba(20, 83, 45, 0.95);
+      background: linear-gradient(
+        135deg,
+        rgba(192, 192, 192, 0.9) 0%,
+        rgba(160, 160, 160, 0.8) 100%
+      );
+      color: rgba(26, 26, 26, 0.95);
       border-color: transparent;
     }
 
     .loading-spinner {
       width: 40px;
       height: 40px;
-      border: 3px solid rgba(34, 197, 94, 0.2);
-      border-top-color: rgba(74, 222, 128, 0.8);
+      border: 3px solid rgba(192, 192, 192, 0.2);
+      border-top-color: rgba(192, 192, 192, 0.8);
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }
@@ -287,7 +334,7 @@ interface ContributionDay {
     }
 
     .calendar-footer {
-      border-top: 1px solid rgba(34, 197, 94, 0.15);
+      border-top: 1px solid rgba(192, 192, 192, 0.1);
       padding-top: 1rem;
     }
   `,
@@ -296,7 +343,7 @@ export class LeetcodeContributionsComponent implements OnInit {
   private readonly http = inject(HttpClient);
 
   // Base streak count (starting from a reference date)
-  private readonly BASE_STREAK = 576;
+  private readonly BASE_STREAK = 575;
   private readonly BASE_DATE = new Date('2026-03-30');
 
   protected readonly loading = signal(true);
@@ -320,6 +367,14 @@ export class LeetcodeContributionsComponent implements OnInit {
     const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
     return this.BASE_STREAK + diffDays;
+  });
+
+  protected readonly totalQuestionsSolved = computed(() => {
+    const data = this.leetcodeData();
+    if (!data) return '—';
+    const allSubmissions = data.submissions.find((s) => s.difficulty === 'All');
+    const count = allSubmissions ? allSubmissions.count : 0;
+    return (count + 101).toLocaleString();
   });
 
   protected readonly contributions = computed(() => {
@@ -497,13 +552,13 @@ export class LeetcodeContributionsComponent implements OnInit {
   }
 
   protected getLevelColor(level: number): string {
-    // Dark green color palette for LeetCode
+    // Green color palette for LeetCode (matching provided design)
     const colors = [
-      'rgba(22, 27, 34, 0.8)', // Level 0 - Dark background
-      'rgba(14, 68, 41, 0.9)', // Level 1 - Darkest green
-      'rgba(0, 109, 50, 0.95)', // Level 2 - Dark green
-      'rgba(38, 166, 65, 1)', // Level 3 - Medium green
-      'rgba(57, 211, 83, 1)', // Level 4 - Bright green
+      '#161b22', // Level 0 - Dark background (--fill-tertiary)
+      '#0e4429', // Level 1 - Dark green (--green-20)
+      '#006d32', // Level 2 - Medium green (--green-60)
+      '#26a641', // Level 3 - Bright green (--green-80)
+      '#39d353', // Level 4 - Light green
     ];
     return colors[level] || colors[0];
   }

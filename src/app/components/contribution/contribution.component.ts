@@ -415,13 +415,13 @@ export class ContributionComponent implements OnInit {
   }
 
   protected getLevelColor(level: number): string {
-    // Light mint/lime green color palette for GitHub
+    // Purple/blue color palette for GitHub (matching provided design)
     const colors = [
-      'rgba(42, 42, 42, 0.8)', // Level 0 - Dark background
-      'rgba(110, 231, 183, 0.5)', // Level 1 - Soft mint
-      'rgba(52, 211, 153, 0.7)', // Level 2 - Light emerald
-      'rgba(16, 185, 129, 0.85)', // Level 3 - Medium emerald
-      'rgba(5, 150, 105, 1)', // Level 4 - Deep emerald/teal
+      '#1a1625', // Level 0 - Dark purple background
+      '#222351', // Level 1 - Dark blue
+      '#2b4580', // Level 2 - Medium blue
+      '#3d3fe5', // Level 3 - Bright blue
+      '#4673ff', // Level 4 - Light blue
     ];
     return colors[level] || colors[0];
   }
