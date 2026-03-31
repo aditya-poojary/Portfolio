@@ -405,11 +405,53 @@ export class LeetcodeContributionsComponent implements OnInit {
   protected readonly filteredContributions = computed(() => {
     const allContributions = this.contributions();
     const year = this.selectedYear();
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const currentYear = today.getFullYear();
 
-    // Filter contributions for the selected year
-    return allContributions
-      .filter((day) => new Date(day.date).getFullYear() === year)
-      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    // Create a map of existing contributions for quick lookup
+    const contributionMap = new Map<string, ContributionDay>();
+    allContributions.forEach((day) => {
+      contributionMap.set(day.date, day);
+    });
+
+    // Calculate date range: rolling 1 year window like GitHub
+    // For current year: from same date last year to today
+    // For past years: full calendar year (Jan 1 to Dec 31)
+    let startDate: Date;
+    let endDate: Date;
+
+    if (year === currentYear) {
+      // Rolling year: from today minus 1 year to today
+      endDate = new Date(today);
+      startDate = new Date(today);
+      startDate.setFullYear(startDate.getFullYear() - 1);
+      startDate.setDate(startDate.getDate() + 1); // Start from next day of last year
+    } else {
+      // Past year: show Jan 1 to Dec 31 of that year
+      startDate = new Date(year, 0, 1);
+      endDate = new Date(year, 11, 31);
+    }
+
+    // Generate all dates in the range with empty boxes where no data exists
+    const result: ContributionDay[] = [];
+    const current = new Date(startDate);
+
+    while (current <= endDate) {
+      const dateStr = current.toISOString().split('T')[0];
+      const existing = contributionMap.get(dateStr);
+
+      if (existing) {
+        result.push(existing);
+      } else {
+        // Empty box - no contributions for this date
+        result.push({ date: dateStr, count: 0, level: 0 });
+      }
+
+      current.setDate(current.getDate() + 1);
+    }
+
+    return result;
   });
 
   protected readonly totalContributions = computed(() => {
