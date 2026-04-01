@@ -7,19 +7,13 @@ import {
   ElementRef,
   inject,
   OnInit,
+  PLATFORM_ID,
   signal,
   ViewChild,
 } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { CommonModule } from '@angular/common';
-
-// Type declarations for GSAP
-declare const gsap: {
-  to: (target: unknown, vars: Record<string, unknown>) => unknown;
-  from: (target: unknown, vars: Record<string, unknown>) => unknown;
-  set: (target: unknown, vars: Record<string, unknown>) => unknown;
-  timeline: (vars?: Record<string, unknown>) => unknown;
-};
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import gsap from 'gsap';
 
 interface ContributionDay {
   date: string;
@@ -500,6 +494,7 @@ export class ContributionsUnifiedComponent implements OnInit, AfterViewInit {
   @ViewChild('statsCards') statsCardsRef!: ElementRef<HTMLDivElement>;
 
   private readonly http = inject(HttpClient);
+  private readonly platformId = inject(PLATFORM_ID);
   private readonly githubUsername = 'aditya-poojary';
 
   // Platform selection
@@ -721,7 +716,7 @@ export class ContributionsUnifiedComponent implements OnInit, AfterViewInit {
   }
 
   private animateStatsCards(): void {
-    if (typeof gsap === 'undefined') return;
+    if (!isPlatformBrowser(this.platformId)) return;
 
     const cards = this.statsCardsRef?.nativeElement?.querySelectorAll('.stats-card');
     if (!cards || cards.length === 0) return;
