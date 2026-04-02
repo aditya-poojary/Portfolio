@@ -23,7 +23,7 @@ interface TechItem {
   selector: 'app-tech-stack',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <section class="py-24 px-6 max-md:px-4 max-md:py-16">
+    <section id="tech" class="scroll-mt-28 py-24 px-6 max-md:px-4 max-md:py-16">
       <div class="container-custom">
         <!-- Section Heading -->
         <h2

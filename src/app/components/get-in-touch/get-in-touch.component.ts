@@ -8,7 +8,7 @@ import { HttpClient } from '@angular/common/http';
   imports: [CommonModule, ReactiveFormsModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <section id="contact" class="py-24 px-6 max-md:px-4 max-md:py-16">
+    <section id="contact" class="scroll-mt-28 py-24 px-6 max-md:px-4 max-md:py-16">
       <div class="container-custom">
         <div class="text-center mb-12">
           <h2

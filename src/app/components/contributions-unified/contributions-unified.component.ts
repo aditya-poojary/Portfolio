@@ -43,7 +43,7 @@ type Platform = 'github' | 'leetcode';
   imports: [CommonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <section id="journey" class="py-24 px-6 max-md:px-4 max-md:py-16">
+    <section id="problem-solving" class="scroll-mt-28 py-24 px-6 max-md:px-4 max-md:py-16">
       <div class="container-custom">
         <div class="mb-8">
           <h2
