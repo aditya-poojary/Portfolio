@@ -2,13 +2,14 @@ import { AfterViewInit, Component, DestroyRef, PLATFORM_ID, inject, signal } fro
 import { isPlatformBrowser } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { CursorFollowerComponent } from './components/utilities/cursor-follower.component';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ScrollSmoother } from 'gsap/ScrollSmoother';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, NavbarComponent],
+  imports: [RouterOutlet, NavbarComponent, CursorFollowerComponent],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })

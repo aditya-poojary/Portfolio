@@ -124,6 +124,11 @@
     min-height: 100dvh;
   }
 
+  body.custom-cursor-enabled,
+  body.custom-cursor-enabled * {
+    cursor: none !important;
+  }
+
   /* Headings */
   h1,
   h2,
