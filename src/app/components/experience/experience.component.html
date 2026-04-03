@@ -1,7 +1,8 @@
 <section id="experience" class="scroll-mt-28 py-24 px-6 max-md:px-4 max-md:py-16">
   <div class="container-custom">
     @if (experiences().length >= 2) {
-      <div #horizontalStage class="experience-stage relative">
+      <!-- ═══ DESKTOP: Horizontal scroll GSAP layout (>1100px) ═══ -->
+      <div #horizontalStage class="experience-stage relative desktop-only">
         <!-- Heading — pinned with the stage -->
         <h2
           class="font-heading text-h2 font-semibold text-text-primary mb-10 flex items-center gap-3"
@@ -312,6 +313,126 @@
             </article>
           </div>
         </div>
+      </div>
+
+      <!-- ═══ MOBILE/TABLET: Stacked vertical layout (≤1100px) ═══ -->
+      <div class="mobile-only">
+        <h2
+          class="font-heading text-h2 font-semibold text-text-primary mb-8 flex items-center gap-3"
+        >
+          <span
+            class="inline-flex items-center justify-center w-9 h-9 rounded-lg border border-accent-ruby/30"
+            style="background: rgba(130, 38, 89, 0.14)"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="w-4.5 h-4.5 text-accent-ruby-light"
+            >
+              <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+              <path d="M16 3v8" />
+              <path d="M8 3v4" />
+            </svg>
+          </span>
+          Experience
+        </h2>
+
+        @for (exp of experiences(); track exp.company) {
+          <div class="mb-8">
+            <!-- Company Stripe -->
+            <div
+              class="mobile-company-stripe rounded-xl border border-white/8 px-5 py-4 mb-4"
+              [style.background]="$index === 0
+                ? 'linear-gradient(135deg, rgba(0, 77, 97, 0.22), rgba(130, 38, 89, 0.14))'
+                : 'linear-gradient(135deg, rgba(130, 38, 89, 0.2), rgba(0, 77, 97, 0.13))'"
+              style="box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3)"
+            >
+              <div class="flex items-center justify-between gap-3 flex-wrap">
+                <h3 class="font-heading text-lg font-semibold text-text-primary">
+                  {{ exp.company }}
+                </h3>
+                <span
+                  class="font-label text-xs font-semibold tracking-wider uppercase shrink-0 px-2.5 py-1 rounded-md border"
+                  style="
+                    color: var(--color-accent-teal-light);
+                    border-color: rgba(0, 110, 138, 0.25);
+                    background: linear-gradient(135deg, rgba(0, 77, 97, 0.2), rgba(130, 38, 89, 0.12));
+                  "
+                >
+                  {{ exp.startDate }} — {{ exp.endDate }}
+                </span>
+              </div>
+            </div>
+
+            <!-- Project Cards (stacked) -->
+            <div class="flex flex-col gap-4">
+              @for (project of exp.projects; track project.title) {
+                <article
+                  class="mobile-project-card rounded-xl border border-white/8 overflow-hidden"
+                  style="
+                    background: linear-gradient(135deg, rgba(34, 34, 34, 0.8), rgba(26, 26, 26, 0.6));
+                    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+                  "
+                >
+                  <!-- Project Image Banner -->
+                  <div class="relative w-full" style="height: 140px">
+                    <img
+                      [ngSrc]="project.imageUrl"
+                      [alt]="project.imageAlt"
+                      width="600"
+                      height="280"
+                      class="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                    <div
+                      class="absolute inset-0 pointer-events-none"
+                      style="background: linear-gradient(to top, rgba(26, 26, 26, 0.9) 0%, rgba(26, 26, 26, 0.3) 40%, transparent 70%)"
+                    ></div>
+                  </div>
+
+                  <!-- Card Content -->
+                  <div class="px-5 pb-5 pt-3">
+                    <h4 class="font-heading text-base font-semibold text-text-primary mb-3">
+                      {{ project.title }}
+                    </h4>
+                    <div class="flex items-center gap-3 flex-wrap">
+                      <a
+                        [href]="project.githubUrl"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="mobile-link-btn"
+                      >
+                        <svg viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4" aria-hidden="true">
+                          <path d="M12 .5A12 12 0 0 0 8.2 23.9c.6.1.8-.3.8-.6v-2.1c-3.3.7-4-1.4-4-1.4-.6-1.3-1.3-1.6-1.3-1.6-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-5.8 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.2 11.2 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.5-5.5 5.8.4.3.8 1 .8 2.1v3.2c0 .4.2.7.8.6A12 12 0 0 0 12 .5Z" />
+                        </svg>
+                        GitHub
+                      </a>
+                      @if (project.liveUrl) {
+                        <a
+                          [href]="project.liveUrl"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="mobile-link-btn"
+                        >
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4" aria-hidden="true">
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="2" y1="12" x2="22" y2="12" />
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                          </svg>
+                          Live
+                        </a>
+                      }
+                    </div>
+                  </div>
+                </article>
+              }
+            </div>
+          </div>
+        }
       </div>
     }
   </div>

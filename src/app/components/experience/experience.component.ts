@@ -227,6 +227,48 @@ interface ExperienceEntry {
           transform: translateY(0);
           opacity: 1;
         }
+
+        .desktop-only {
+          display: none !important;
+        }
+      }
+
+      .mobile-only {
+        display: none;
+      }
+
+      @media (max-width: 1100px) {
+        .mobile-only {
+          display: block;
+        }
+      }
+
+      @media (min-width: 1101px) {
+        .desktop-only {
+          display: block;
+        }
+      }
+
+      .mobile-link-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        border: 1px solid rgba(192, 192, 192, 0.25);
+        color: var(--color-metallic-silver, #c0c0c0);
+        background: linear-gradient(135deg, rgba(42, 42, 42, 0.8), rgba(26, 26, 26, 0.6));
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        text-decoration: none;
+        transition: color 200ms ease, border-color 200ms ease;
+      }
+
+      .mobile-link-btn:hover {
+        color: var(--color-text-primary);
+        border-color: rgba(192, 192, 192, 0.5);
       }
 
       @media (prefers-reduced-motion: reduce) {

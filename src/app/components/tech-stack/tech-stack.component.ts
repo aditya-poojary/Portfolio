@@ -70,7 +70,7 @@ interface TechItem {
                 class="w-10 h-10 object-contain"
                 loading="lazy"
               />
-              <h4 class="text-sm ml-4 font-medium" style="color: var(--color-metallic-silver)">
+              <h4 class="tech-name text-sm ml-4 font-medium" style="color: var(--color-metallic-silver)">
                 {{ tech.name }}
               </h4>
             </div>
@@ -99,6 +99,19 @@ interface TechItem {
 
       .tech-card:hover h4 {
         color: var(--color-text-primary) !important;
+      }
+
+      @media (max-width: 768px) {
+        .tech-card {
+          width: auto !important;
+          min-width: unset;
+          padding: 0.65rem;
+          justify-content: center;
+        }
+
+        .tech-name {
+          display: none;
+        }
       }
 
       @media (prefers-reduced-motion: reduce) {

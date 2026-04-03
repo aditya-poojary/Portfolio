@@ -54,8 +54,15 @@ interface PersonalProject {
         transform-style: preserve-3d;
       }
 
-      /* ─── Hover on container triggers inner rotation ─────────── */
-      .flip-card:hover .flip-card-inner {
+      /* ─── Hover on container triggers inner rotation (pointer devices only) ─── */
+      @media (hover: hover) {
+        .flip-card:hover .flip-card-inner {
+          transform: rotateY(180deg);
+        }
+      }
+
+      /* ─── Click-to-flip on touch devices via .flipped class ─── */
+      .flip-card-inner.flipped {
         transform: rotateY(180deg);
       }
 
@@ -90,6 +97,7 @@ interface PersonalProject {
         flex-direction: column;
         justify-content: center;
         padding: 1.75rem;
+        overflow-y: auto;
       }
 
       /* Metallic shine effect on back */
@@ -221,6 +229,25 @@ interface PersonalProject {
         .project-card {
           max-width: 100%;
         }
+
+        .tech-stack-row {
+          flex-wrap: wrap;
+          overflow: hidden;
+          max-height: 2.1rem;
+        }
+
+        .flip-card-back {
+          padding: 1.25rem;
+        }
+
+        .flip-card-back .feature-item {
+          font-size: 0.78rem;
+          line-height: 1.5;
+        }
+
+        .flip-card-back .space-y-2\.5 > * + * {
+          margin-top: 0.4rem;
+        }
       }
 
       /* ─── Reduced Motion ─────────────────────────────────────── */
@@ -248,6 +275,12 @@ export class PersonalProjectsComponent implements AfterViewInit {
   private readonly scrollTriggers: ScrollTrigger[] = [];
   private readonly animations: gsap.core.Animation[] = [];
   private readonly techTagHoverCleanups: Array<() => void> = [];
+
+  /** Track which cards are flipped (for touch devices) */
+  protected readonly flippedCards = signal<Set<number>>(new Set());
+
+  /** Whether device supports hover (pointer device) */
+  protected readonly isTouchDevice = signal(false);
 
   @ViewChildren('projectCard', { read: ElementRef })
   private cardRefs?: QueryList<ElementRef<HTMLElement>>;
@@ -295,6 +328,9 @@ export class PersonalProjectsComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     if (!isPlatformBrowser(this.platformId)) return;
 
+    // Detect touch device
+    this.isTouchDevice.set(!window.matchMedia('(hover: hover)').matches);
+
     gsap.registerPlugin(ScrollTrigger);
 
     setTimeout(() => {
@@ -308,6 +344,22 @@ export class PersonalProjectsComponent implements AfterViewInit {
       this.techTagHoverCleanups.forEach((cleanup) => cleanup());
       this.techTagHoverCleanups.length = 0;
     });
+  }
+
+  /** Toggle flip state for a specific card (touch devices) */
+  protected toggleFlip(index: number): void {
+    const current = this.flippedCards();
+    const next = new Set(current);
+    if (next.has(index)) {
+      next.delete(index);
+    } else {
+      next.add(index);
+    }
+    this.flippedCards.set(next);
+  }
+
+  protected isFlipped(index: number): boolean {
+    return this.flippedCards().has(index);
   }
 
   private setupAnimations(): void {

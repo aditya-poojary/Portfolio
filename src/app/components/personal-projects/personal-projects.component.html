@@ -29,7 +29,7 @@
 
     <!-- Projects Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-      @for (project of projects(); track project.title) {
+      @for (project of projects(); track project.title; let idx = $index) {
         <article
           #projectCard
           class="project-card rounded-3xl border border-border-default overflow-hidden"
@@ -41,8 +41,8 @@
           "
         >
           <!-- Upper Part: Flip Card -->
-          <div class="flip-card">
-            <div class="flip-card-inner">
+          <div class="flip-card" (click)="isTouchDevice() && toggleFlip(idx)">
+            <div class="flip-card-inner" [class.flipped]="isFlipped(idx)">
               <!-- Front: Image + Title Only -->
               <div class="flip-card-front">
                 <div class="relative w-full h-full">
@@ -87,7 +87,7 @@
                       backdrop-filter: blur(4px);
                     "
                   >
-                    <span>Hover</span>
+                    <span>{{ isTouchDevice() ? 'Click' : 'Hover' }}</span>
                     <svg
                       viewBox="0 0 24 24"
                       fill="none"
@@ -134,7 +134,7 @@
           <!-- Lower Part: Tech Stack & Links (No flip effect) -->
           <div class="card-content">
             <!-- Tech Stack -->
-            <div class="flex flex-wrap gap-2 mb-4">
+            <div class="tech-stack-row flex flex-wrap gap-2 mb-4">
               @for (tech of project.techStack; track tech) {
                 <span #techTag class="tech-tag font-label">
                   {{ tech }}

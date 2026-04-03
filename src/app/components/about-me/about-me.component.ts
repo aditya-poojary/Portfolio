@@ -54,6 +54,18 @@ import { FloatingDockComponent, DockItem } from '../utilities/floating-dock.comp
         left: 100%;
       }
     }
+
+    @media (hover: none) {
+      .name-reveal {
+        color: transparent;
+        -webkit-text-stroke-color: transparent;
+        background-size: 100% 100%;
+      }
+
+      .name-reveal::after {
+        display: none;
+      }
+    }
   `,
 })
 export class AboutMeComponent implements OnInit {

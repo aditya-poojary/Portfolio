@@ -89,6 +89,16 @@ export class CursorFollowerComponent implements OnInit, OnDestroy {
     this.isHoveringInteractive = Boolean(interactive);
   };
 
+  private readonly handleDocumentMouseLeave = (): void => {
+    this.dotRef.nativeElement.style.opacity = '0';
+    this.blobRef.nativeElement.style.opacity = '0';
+  };
+
+  private readonly handleDocumentMouseEnter = (): void => {
+    this.dotRef.nativeElement.style.opacity = '1';
+    this.blobRef.nativeElement.style.opacity = this.isHoveringInteractive ? '0.26' : '0.38';
+  };
+
   ngOnInit(): void {
     if (!isPlatformBrowser(this.platformId)) return;
 
@@ -110,6 +120,8 @@ export class CursorFollowerComponent implements OnInit, OnDestroy {
 
     window.addEventListener('mousemove', this.handleMouseMove, { passive: true });
     document.addEventListener('mouseover', this.handleMouseOver, { passive: true });
+    document.documentElement.addEventListener('mouseleave', this.handleDocumentMouseLeave);
+    document.documentElement.addEventListener('mouseenter', this.handleDocumentMouseEnter);
 
     this.frameId = window.requestAnimationFrame(this.animateBlob);
   }
@@ -119,6 +131,8 @@ export class CursorFollowerComponent implements OnInit, OnDestroy {
 
     window.removeEventListener('mousemove', this.handleMouseMove);
     document.removeEventListener('mouseover', this.handleMouseOver);
+    document.documentElement.removeEventListener('mouseleave', this.handleDocumentMouseLeave);
+    document.documentElement.removeEventListener('mouseenter', this.handleDocumentMouseEnter);
     document.body.classList.remove('custom-cursor-enabled');
 
     if (this.frameId !== null) {

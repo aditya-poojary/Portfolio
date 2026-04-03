@@ -106,7 +106,7 @@ type Platform = 'github' | 'leetcode';
         <!-- GitHub Contribution Graph -->
         @if (activePlatform() === 'github') {
           <div class="flex xl:flex-row flex-col gap-4">
-            <div class="calendar-container p-6 md:p-8 rounded-lg max-w-fit overflow-x-auto">
+            <div class="calendar-container p-6 md:p-8 rounded-lg max-w-full overflow-x-auto">
               @if (githubLoading()) {
                 <div class="flex items-center justify-center h-[137px] w-[897px]">
                   <div class="loading-spinner"></div>
@@ -189,7 +189,7 @@ type Platform = 'github' | 'leetcode';
         <!-- LeetCode Contribution Graph -->
         @if (activePlatform() === 'leetcode') {
           <div class="flex xl:flex-row flex-col gap-4 mb-8">
-            <div class="calendar-container p-6 md:p-8 rounded-lg max-w-fit overflow-x-auto">
+            <div class="calendar-container p-6 md:p-8 rounded-lg max-w-full overflow-x-auto">
               @if (leetcodeLoading()) {
                 <div class="flex items-center justify-center h-[137px] w-[897px]">
                   <div class="loading-spinner"></div>
@@ -487,6 +487,31 @@ type Platform = 'github' | 'leetcode';
     .calendar-footer {
       border-top: 1px solid rgba(192, 192, 192, 0.1);
       padding-top: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .calendar-container {
+        max-width: 100%;
+        padding: 1rem;
+      }
+
+      .stats-card {
+        padding: 0.65rem 0.85rem;
+      }
+
+      .stats-card .icon-bg {
+        width: 2.25rem;
+        height: 2.25rem;
+      }
+
+      .stats-card .icon-bg svg {
+        width: 1.15rem;
+        height: 1.15rem;
+      }
+
+      .stat-number {
+        font-size: 1.35rem !important;
+      }
     }
   `,
 })
