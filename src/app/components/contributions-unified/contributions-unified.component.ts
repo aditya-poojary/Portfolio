@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -189,81 +188,7 @@ type Platform = 'github' | 'leetcode';
 
         <!-- LeetCode Contribution Graph -->
         @if (activePlatform() === 'leetcode') {
-          <!-- LeetCode Stats Cards -->
-          <div #statsCards class="stats-cards-container flex flex-wrap gap-6 mb-8">
-            <div class="stats-card flex items-center gap-4 px-5 py-4 rounded-xl">
-              <div class="flex items-center justify-center w-12 h-12 rounded-lg icon-bg">
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  class="w-6 h-6"
-                  style="color: var(--color-metallic-silver)"
-                >
-                  <path
-                    d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-              </div>
-              <div>
-                <span class="stat-number font-heading text-3xl font-bold">{{
-                  leetcodeStreak()
-                }}</span>
-                <span class="block text-sm stat-label mt-0.5">day streak 🔥</span>
-              </div>
-            </div>
-            <div class="stats-card flex items-center gap-4 px-5 py-4 rounded-xl">
-              <div class="flex items-center justify-center w-12 h-12 rounded-lg icon-bg">
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  class="w-6 h-6"
-                  style="color: var(--color-metallic-silver)"
-                >
-                  <circle cx="12" cy="8" r="6" />
-                  <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11" />
-                </svg>
-              </div>
-              <div>
-                <span class="stat-number font-heading text-3xl font-bold"
-                  >#{{ leetcodeRanking() }}</span
-                >
-                <span class="block text-sm stat-label mt-0.5">global rank</span>
-              </div>
-            </div>
-            <div class="stats-card flex items-center gap-4 px-5 py-4 rounded-xl">
-              <div class="flex items-center justify-center w-12 h-12 rounded-lg icon-bg">
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  class="w-6 h-6"
-                  style="color: var(--color-metallic-silver)"
-                >
-                  <path d="M9 11l3 3L22 4" stroke-linecap="round" stroke-linejoin="round" />
-                  <path
-                    d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-              </div>
-              <div>
-                <span class="stat-number font-heading text-3xl font-bold">{{
-                  leetcodeTotalQuestions()
-                }}</span>
-                <span class="block text-sm stat-label mt-0.5">questions solved</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="flex xl:flex-row flex-col gap-4">
+          <div class="flex xl:flex-row flex-col gap-4 mb-8">
             <div class="calendar-container p-6 md:p-8 rounded-lg max-w-fit overflow-x-auto">
               @if (leetcodeLoading()) {
                 <div class="flex items-center justify-center h-[137px] w-[897px]">
@@ -342,6 +267,80 @@ type Platform = 'github' | 'leetcode';
               }
             </div>
           </div>
+
+          <!-- LeetCode Stats Cards -->
+          <div #statsCards class="stats-cards-container flex flex-wrap gap-6">
+            <div class="stats-card flex items-center gap-4 px-5 py-4 rounded-xl">
+              <div class="flex items-center justify-center w-12 h-12 rounded-lg icon-bg">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  class="w-6 h-6"
+                  style="color: var(--color-metallic-silver)"
+                >
+                  <path
+                    d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+              <div>
+                <span class="stat-number font-heading text-3xl font-bold">{{
+                  leetcodeStreak()
+                }}</span>
+                <span class="block text-sm stat-label mt-0.5">day streak 🔥</span>
+              </div>
+            </div>
+            <div class="stats-card flex items-center gap-4 px-5 py-4 rounded-xl">
+              <div class="flex items-center justify-center w-12 h-12 rounded-lg icon-bg">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  class="w-6 h-6"
+                  style="color: var(--color-metallic-silver)"
+                >
+                  <circle cx="12" cy="8" r="6" />
+                  <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11" />
+                </svg>
+              </div>
+              <div>
+                <span class="stat-number font-heading text-3xl font-bold"
+                  >#{{ leetcodeRanking() }}</span
+                >
+                <span class="block text-sm stat-label mt-0.5">global rank</span>
+              </div>
+            </div>
+            <div class="stats-card flex items-center gap-4 px-5 py-4 rounded-xl">
+              <div class="flex items-center justify-center w-12 h-12 rounded-lg icon-bg">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  class="w-6 h-6"
+                  style="color: var(--color-metallic-silver)"
+                >
+                  <path d="M9 11l3 3L22 4" stroke-linecap="round" stroke-linejoin="round" />
+                  <path
+                    d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+              <div>
+                <span class="stat-number font-heading text-3xl font-bold">{{
+                  leetcodeTotalQuestions()
+                }}</span>
+                <span class="block text-sm stat-label mt-0.5">questions solved</span>
+              </div>
+            </div>
+          </div>
         }
       </div>
     </section>
@@ -381,6 +380,7 @@ type Platform = 'github' | 'leetcode';
 
     .stats-cards-container {
       opacity: 1;
+      will-change: transform, opacity;
     }
 
     .stats-card {
@@ -490,7 +490,7 @@ type Platform = 'github' | 'leetcode';
     }
   `,
 })
-export class ContributionsUnifiedComponent implements OnInit, AfterViewInit {
+export class ContributionsUnifiedComponent implements OnInit {
   @ViewChild('statsCards') statsCardsRef!: ElementRef<HTMLDivElement>;
 
   private readonly http = inject(HttpClient);
@@ -708,26 +708,29 @@ export class ContributionsUnifiedComponent implements OnInit, AfterViewInit {
     this.fetchLeetCodeData();
   }
 
-  ngAfterViewInit(): void {
-    // Initial animation if starting with LeetCode (unlikely but handling it)
-    if (this.activePlatform() === 'leetcode') {
-      setTimeout(() => this.animateStatsCards(), 100);
-    }
-  }
-
   private animateStatsCards(): void {
     if (!isPlatformBrowser(this.platformId)) return;
 
     const cards = this.statsCardsRef?.nativeElement?.querySelectorAll('.stats-card');
     if (!cards || cards.length === 0) return;
 
-    gsap.from(cards, {
-      y: -30,
-      opacity: 0,
-      duration: 0.5,
+    gsap.fromTo(
+      cards,
+      {
+        y: 26,
+        opacity: 0,
+        filter: 'blur(6px)',
+      },
+      {
+        y: 0,
+        opacity: 1,
+        filter: 'blur(0px)',
+      duration: 0.65,
       stagger: 0.1,
-      ease: 'power2.out',
-    });
+      ease: 'power3.out',
+      clearProps: 'all',
+      },
+    );
   }
 
   protected selectPlatform(platform: Platform): void {

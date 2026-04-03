@@ -14,13 +14,13 @@ import { ScrollSmoother } from 'gsap/ScrollSmoother';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 type SectionId =
-  | 'home'
   | 'about'
-  | 'tech'
-  | 'projects'
-  | 'problem-solving'
-  | 'achievements'
   | 'experience'
+  | 'projects'
+  | 'tech'
+  | 'problem-solving'
+  | 'education'
+  | 'achievements'
   | 'contact';
 
 @Component({
@@ -30,14 +30,15 @@ type SectionId =
     <header #navbar class="fixed left-0 top-0 z-[1000] w-full navbar-bg" [class.navbar-scrolled]="isScrolled()">
       <div class="mx-auto flex h-[70px] max-w-[1280px] items-center px-4 lg:px-8">
         <nav class="hidden items-center gap-6 lg:flex">
-          <button class="nav-link" [class.nav-link-active]="activeSection() === 'home'" (click)="scrollToSection('home')">
-            Home
-          </button>
           <button class="nav-link" [class.nav-link-active]="activeSection() === 'about'" (click)="scrollToSection('about')">
             About
           </button>
-          <button class="nav-link" [class.nav-link-active]="activeSection() === 'tech'" (click)="scrollToSection('tech')">
-            Tech Stack
+          <button
+            class="nav-link"
+            [class.nav-link-active]="activeSection() === 'experience'"
+            (click)="scrollToSection('experience')"
+          >
+            Experience
           </button>
           <button
             class="nav-link"
@@ -46,12 +47,22 @@ type SectionId =
           >
             Projects
           </button>
+          <button class="nav-link" [class.nav-link-active]="activeSection() === 'tech'" (click)="scrollToSection('tech')">
+            Tech Stack
+          </button>
           <button
             class="nav-link"
             [class.nav-link-active]="activeSection() === 'problem-solving'"
             (click)="scrollToSection('problem-solving')"
           >
-            Problem Solving
+            Contributions
+          </button>
+          <button
+            class="nav-link"
+            [class.nav-link-active]="activeSection() === 'education'"
+            (click)="scrollToSection('education')"
+          >
+            Education
           </button>
           <button
             class="nav-link"
@@ -59,13 +70,6 @@ type SectionId =
             (click)="scrollToSection('achievements')"
           >
             Achievements
-          </button>
-          <button
-            class="nav-link"
-            [class.nav-link-active]="activeSection() === 'experience'"
-            (click)="scrollToSection('experience')"
-          >
-            Experience
           </button>
         </nav>
 
@@ -90,13 +94,13 @@ type SectionId =
         [class.mobile-menu-open]="mobileMenuVisible()"
       >
         <nav class="mx-4 mb-4 flex flex-col gap-1 rounded-2xl p-4 mobile-menu-inner">
-          <button class="mobile-link" (click)="scrollToSection('home'); closeMenu()">Home</button>
           <button class="mobile-link" (click)="scrollToSection('about'); closeMenu()">About</button>
-          <button class="mobile-link" (click)="scrollToSection('tech'); closeMenu()">Tech Stack</button>
-          <button class="mobile-link" (click)="scrollToSection('projects'); closeMenu()">Projects</button>
-          <button class="mobile-link" (click)="scrollToSection('problem-solving'); closeMenu()">Problem Solving</button>
-          <button class="mobile-link" (click)="scrollToSection('achievements'); closeMenu()">Achievements</button>
           <button class="mobile-link" (click)="scrollToSection('experience'); closeMenu()">Experience</button>
+          <button class="mobile-link" (click)="scrollToSection('projects'); closeMenu()">Projects</button>
+          <button class="mobile-link" (click)="scrollToSection('tech'); closeMenu()">Tech Stack</button>
+          <button class="mobile-link" (click)="scrollToSection('problem-solving'); closeMenu()">Contributions</button>
+          <button class="mobile-link" (click)="scrollToSection('education'); closeMenu()">Education</button>
+          <button class="mobile-link" (click)="scrollToSection('achievements'); closeMenu()">Achievements</button>
           <button class="mobile-link-cta" (click)="scrollToSection('contact'); closeMenu()">Get in Touch</button>
         </nav>
       </div>
@@ -109,21 +113,22 @@ type SectionId =
     }
 
     .navbar-bg {
-      background: rgba(13, 13, 13, 0.6);
+      background: linear-gradient(135deg, rgba(8, 8, 8, 0.93), rgba(20, 20, 20, 0.88));
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      transition: background 0.25s ease, border-color 0.25s ease;
+      border-bottom: 1px solid rgba(192, 192, 192, 0.2);
+      transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
     }
 
     .navbar-scrolled {
-      background: rgba(13, 13, 13, 0.76);
-      border-bottom-color: rgba(255, 255, 255, 0.12);
+      background: linear-gradient(135deg, rgba(4, 4, 4, 0.96), rgba(15, 15, 15, 0.92));
+      border-bottom-color: rgba(192, 192, 192, 0.28);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
     }
 
     .nav-link {
       position: relative;
-      color: rgba(255, 255, 255, 0.78);
+      color: rgba(192, 192, 192, 0.82);
       font-size: 0.9rem;
       font-weight: 500;
       transition: color 0.25s ease;
@@ -136,14 +141,14 @@ type SectionId =
       bottom: -6px;
       width: 100%;
       height: 2px;
-      background: #00ff85;
+      background: linear-gradient(90deg, rgba(165, 165, 165, 0.85), rgba(235, 235, 235, 0.95));
       transform: scaleX(0);
       transform-origin: left;
       transition: transform 0.25s ease;
     }
 
     .nav-link:hover {
-      color: #1e90ff;
+      color: rgba(235, 235, 235, 0.95);
     }
 
     .nav-link:hover::after {
@@ -151,7 +156,7 @@ type SectionId =
     }
 
     .nav-link-active {
-      color: #00ff85;
+      color: #f3f3f3;
     }
 
     .nav-link-active::after {
@@ -161,30 +166,32 @@ type SectionId =
     .nav-cta {
       align-items: center;
       border-radius: 9999px;
-      background: #00ff85;
-      color: #0a0a0a;
+      background: linear-gradient(145deg, rgba(32, 32, 32, 0.95), rgba(10, 10, 10, 0.92));
+      border: 1px solid rgba(192, 192, 192, 0.45);
+      color: rgba(235, 235, 235, 0.95);
       font-size: 0.78rem;
       font-weight: 700;
       padding: 0.65rem 1.2rem;
       text-transform: uppercase;
-      transition: transform 0.2s ease, filter 0.2s ease;
+      transition: transform 0.2s ease, filter 0.2s ease, border-color 0.2s ease;
     }
 
     .nav-cta:hover {
-      filter: brightness(1.05);
+      border-color: rgba(236, 236, 236, 0.75);
+      filter: brightness(1.07);
       transform: translateY(-1px);
     }
 
     .hamburger-line {
-      background: rgba(255, 255, 255, 0.92);
+      background: rgba(214, 214, 214, 0.92);
       transition: all 0.25s ease;
     }
 
     .mobile-menu-inner {
-      background: rgba(13, 13, 13, 0.86);
+      background: linear-gradient(145deg, rgba(8, 8, 8, 0.94), rgba(20, 20, 20, 0.9));
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(192, 192, 192, 0.2);
     }
 
     .mobile-menu {
@@ -213,17 +220,17 @@ type SectionId =
     }
 
     .mobile-link {
-      color: rgba(255, 255, 255, 0.82);
+      color: rgba(205, 205, 205, 0.9);
     }
 
     .mobile-link:hover {
-      background: rgba(30, 144, 255, 0.14);
-      color: #1e90ff;
+      background: rgba(192, 192, 192, 0.12);
+      color: rgba(242, 242, 242, 0.96);
     }
 
     .mobile-link-cta {
-      background: #00ff85;
-      color: #0a0a0a;
+      background: linear-gradient(135deg, rgba(210, 210, 210, 0.94), rgba(155, 155, 155, 0.88));
+      color: #101010;
       font-weight: 700;
       margin-top: 0.25rem;
       text-align: center;
@@ -237,17 +244,17 @@ export class NavbarComponent implements AfterViewInit {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly destroyRef = inject(DestroyRef);
   private readonly sectionIds: SectionId[] = [
-    'home',
     'about',
-    'tech',
-    'projects',
-    'problem-solving',
-    'achievements',
     'experience',
+    'projects',
+    'tech',
+    'problem-solving',
+    'education',
+    'achievements',
     'contact',
   ];
 
-  protected readonly activeSection = signal<SectionId>('home');
+  protected readonly activeSection = signal<SectionId>('about');
   protected readonly isScrolled = signal(false);
   protected readonly isMobileMenuOpen = signal(false);
   protected readonly mobileMenuVisible = signal(false);
