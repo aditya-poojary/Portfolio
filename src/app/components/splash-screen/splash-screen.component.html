@@ -1,0 +1,18 @@
+<div
+  *ngIf="isVisible()"
+  class="splash-overlay"
+  [class.hiding]="isHiding()"
+  [class.pulse]="isPulse()"
+  aria-hidden="true"
+  role="status"
+  aria-live="polite"
+>
+  <div class="letter-row">
+    @for (item of letters(); track $index) {
+      <div class="letter-group">
+        <span class="letter" [class.visible]="item.visible">{{ item.char }}</span>
+        <span class="cursor" [class.active]="item.activeCursor">|</span>
+      </div>
+    }
+  </div>
+</div>

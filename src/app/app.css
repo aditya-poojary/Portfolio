@@ -16,3 +16,14 @@
   min-height: 100dvh;
   will-change: transform;
 }
+
+.main-content {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.6s ease;
+}
+
+.main-content.app-ready {
+  opacity: 1;
+  visibility: visible;
+}
