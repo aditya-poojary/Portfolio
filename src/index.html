@@ -140,6 +140,13 @@
     />
   </head>
   <body>
+    <!-- Pre-Angular splash screen to prevent content flash -->
+    <style id="splash-critical-css">
+      .main-content {
+        opacity: 0 !important;
+        visibility: hidden !important;
+      }
+    </style>
     <app-root></app-root>
   </body>
 </html>
