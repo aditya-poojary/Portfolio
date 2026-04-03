@@ -1,7 +1,7 @@
 <!-- ══════════════════════════════════════════════════════════
   EDUCATION — Horizontal Academic Journey Cards
   ══════════════════════════════════════════════════════════ -->
-<section id="education" class="scroll-mt-28 py-24 px-6 max-md:px-4 max-md:py-16">
+<section id="education" class="scroll-mt-28 py-24 px-6 max-md:px-1 max-md:py-16">
   <div class="container-custom">
     <h2 class="font-heading text-h2 font-semibold text-text-primary mb-10 flex items-center gap-3">
       <span
@@ -95,7 +95,9 @@
 
               <!-- Description (if present) -->
               @if (entry.description) {
-                <p class="edu-text-reveal font-body text-sm text-text-secondary leading-relaxed mt-2">
+                <p
+                  class="edu-text-reveal font-body text-sm text-text-secondary leading-relaxed mt-2"
+                >
                   {{ entry.description }}
                 </p>
               }
