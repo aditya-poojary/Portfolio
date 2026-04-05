@@ -76,7 +76,7 @@ type Platform = 'github' | 'leetcode';
         </div>
 
         <!-- Platform Toggle Buttons -->
-        <div class="flex gap-3 mb-8">
+        <div class="flex flex-wrap gap-3 mb-8">
           <button
             (click)="selectPlatform('github')"
             [class.active]="activePlatform() === 'github'"
@@ -105,10 +105,10 @@ type Platform = 'github' | 'leetcode';
 
         <!-- GitHub Contribution Graph -->
         @if (activePlatform() === 'github') {
-          <div class="flex xl:flex-row flex-col gap-4">
-            <div class="calendar-container p-6 md:p-8 rounded-lg max-w-full overflow-x-auto">
+          <div class="flex xl:flex-row flex-col gap-4 min-w-0">
+            <div class="calendar-container p-6 md:p-8 rounded-lg min-w-0">
               @if (githubLoading()) {
-                <div class="flex items-center justify-center h-[137px] w-[897px]">
+                <div class="flex items-center justify-center h-[137px]">
                   <div class="loading-spinner"></div>
                 </div>
               } @else if (githubError()) {
@@ -172,7 +172,7 @@ type Platform = 'github' | 'leetcode';
                 </footer>
               }
             </div>
-            <div class="flex justify-start xl:flex-col flex-row flex-wrap gap-2">
+            <div class="year-buttons-side flex justify-start xl:flex-col flex-row flex-wrap gap-2">
               @for (year of githubAvailableYears(); track year) {
                 <button
                   (click)="selectGitHubYear(year)"
@@ -188,10 +188,10 @@ type Platform = 'github' | 'leetcode';
 
         <!-- LeetCode Contribution Graph -->
         @if (activePlatform() === 'leetcode') {
-          <div class="flex xl:flex-row flex-col gap-4 mb-8">
-            <div class="calendar-container p-6 md:p-8 rounded-lg max-w-full overflow-x-auto">
+          <div class="flex xl:flex-row flex-col gap-4 mb-8 min-w-0">
+            <div class="calendar-container p-6 md:p-8 rounded-lg min-w-0">
               @if (leetcodeLoading()) {
-                <div class="flex items-center justify-center h-[137px] w-[897px]">
+                <div class="flex items-center justify-center h-[137px]">
                   <div class="loading-spinner"></div>
                 </div>
               } @else if (leetcodeError()) {
@@ -255,7 +255,7 @@ type Platform = 'github' | 'leetcode';
                 </footer>
               }
             </div>
-            <div class="flex justify-start xl:flex-col flex-row flex-wrap gap-2">
+            <div class="year-buttons-side flex justify-start xl:flex-col flex-row flex-wrap gap-2">
               @for (year of leetcodeAvailableYears(); track year) {
                 <button
                   (click)="selectLeetCodeYear(year)"
@@ -350,12 +350,14 @@ type Platform = 'github' | 'leetcode';
       color: var(--color-metallic-silver, #c0c0c0);
     }
 
+    /* Fix 6: Platform buttons wrap on small screens */
     .platform-button {
       background: linear-gradient(135deg, rgba(42, 42, 42, 0.8) 0%, rgba(26, 26, 26, 0.6) 100%);
       color: rgba(192, 192, 192, 0.8);
       border: 1px solid rgba(192, 192, 192, 0.15);
       font-weight: 500;
       transition: all 0.2s ease;
+      flex-shrink: 0;
     }
 
     .platform-button:hover {
@@ -378,7 +380,11 @@ type Platform = 'github' | 'leetcode';
       color: rgba(26, 26, 26, 0.95);
     }
 
+    /* Fix 5: Stats cards wrap properly */
     .stats-cards-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
       opacity: 1;
       will-change: transform, opacity;
     }
@@ -386,6 +392,8 @@ type Platform = 'github' | 'leetcode';
     .stats-card {
       background: linear-gradient(135deg, rgba(42, 42, 42, 0.8), rgba(26, 26, 26, 0.6));
       border: 1px solid rgba(192, 192, 192, 0.15);
+      flex: 1 1 200px;
+      min-width: 0;
     }
 
     .icon-bg {
@@ -403,13 +411,31 @@ type Platform = 'github' | 'leetcode';
       color: rgba(192, 192, 192, 0.7);
     }
 
+    /* Calendar container - fits content on desktop, constrained on mobile */
     .calendar-container {
       background: linear-gradient(135deg, rgba(42, 42, 42, 0.8), rgba(26, 26, 26, 0.6));
       border: 1px solid rgba(192, 192, 192, 0.15);
+      box-sizing: border-box;
+      overflow: visible;
+      /* Desktop: fit to content */
+      width: fit-content;
+      max-width: fit-content;
     }
 
+    /* Mobile: constrain to viewport and allow scroll */
+    @media (max-width: 1024px) {
+      .calendar-container {
+        width: 100%;
+        max-width: 100%;
+      }
+    }
+
+    /* Calendar scroll wrapper - enables horizontal scroll on mobile */
     .calendar-scroll {
+      display: block;
       overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
       scrollbar-width: thin;
       scrollbar-color: rgba(192, 192, 192, 0.3) transparent;
     }
@@ -427,6 +453,12 @@ type Platform = 'github' | 'leetcode';
       border-radius: 3px;
     }
 
+    /* SVG calendar - ensures proper sizing */
+    .contribution-calendar {
+      display: block;
+      min-width: max-content;
+    }
+
     .month-label {
       fill: rgba(192, 192, 192, 0.7);
       font-size: 12px;
@@ -441,6 +473,11 @@ type Platform = 'github' | 'leetcode';
       opacity: 0.8;
       stroke: rgba(192, 192, 192, 0.5);
       stroke-width: 1;
+    }
+
+    /* Fix 4: Year buttons side stays fixed width */
+    .year-buttons-side {
+      flex-shrink: 0;
     }
 
     .year-button {
@@ -489,9 +526,28 @@ type Platform = 'github' | 'leetcode';
       padding-top: 1rem;
     }
 
+    /* Fix 7: Calendar footer stacks on mobile */
+    @media (max-width: 480px) {
+      .calendar-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+      }
+    }
+
+    /* Fix 5: Stats cards column on very small screens */
+    @media (max-width: 640px) {
+      .stats-cards-container {
+        flex-direction: column;
+      }
+
+      .stats-card {
+        flex: 1 1 auto;
+      }
+    }
+
     @media (max-width: 768px) {
       .calendar-container {
-        max-width: 100%;
         padding: 1rem;
       }
 
@@ -750,10 +806,10 @@ export class ContributionsUnifiedComponent implements OnInit {
         y: 0,
         opacity: 1,
         filter: 'blur(0px)',
-      duration: 0.65,
-      stagger: 0.1,
-      ease: 'power3.out',
-      clearProps: 'all',
+        duration: 0.65,
+        stagger: 0.1,
+        ease: 'power3.out',
+        clearProps: 'all',
       },
     );
   }

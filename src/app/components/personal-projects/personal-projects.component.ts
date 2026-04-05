@@ -108,12 +108,7 @@ interface PersonalProject {
         left: 0;
         right: 0;
         height: 1px;
-        background: linear-gradient(
-          90deg,
-          transparent,
-          var(--color-metallic-silver),
-          transparent
-        );
+        background: linear-gradient(90deg, transparent, var(--color-metallic-silver), transparent);
         opacity: 0.5;
       }
 
@@ -134,11 +129,7 @@ interface PersonalProject {
         border-radius: var(--radius-full);
         border: 1px solid rgba(192, 192, 192, 0.25);
         color: var(--color-metallic-silver);
-        background: linear-gradient(
-          135deg,
-          rgba(42, 42, 42, 0.8) 0%,
-          rgba(26, 26, 26, 0.6) 100%
-        );
+        background: linear-gradient(135deg, rgba(42, 42, 42, 0.8) 0%, rgba(26, 26, 26, 0.6) 100%);
         font-size: 0.72rem;
         font-weight: 600;
         letter-spacing: 0.03em;
@@ -147,11 +138,7 @@ interface PersonalProject {
 
       .tech-tag:hover {
         transform: translateY(-2px) scale(1.05);
-        background: linear-gradient(
-          135deg,
-          rgba(60, 60, 60, 0.9) 0%,
-          rgba(42, 42, 42, 0.7) 100%
-        );
+        background: linear-gradient(135deg, rgba(60, 60, 60, 0.9) 0%, rgba(42, 42, 42, 0.7) 100%);
         border-color: var(--color-metallic-silver);
         color: var(--color-text-primary);
         box-shadow:
@@ -168,11 +155,7 @@ interface PersonalProject {
         border-radius: var(--radius-md);
         border: 1px solid rgba(192, 192, 192, 0.3);
         color: var(--color-metallic-silver);
-        background: linear-gradient(
-          135deg,
-          rgba(42, 42, 42, 0.8) 0%,
-          rgba(26, 26, 26, 0.6) 100%
-        );
+        background: linear-gradient(135deg, rgba(42, 42, 42, 0.8) 0%, rgba(26, 26, 26, 0.6) 100%);
         font-size: 0.75rem;
         font-weight: 600;
         letter-spacing: 0.05em;
@@ -187,11 +170,7 @@ interface PersonalProject {
         box-shadow:
           0 8px 24px rgba(0, 0, 0, 0.5),
           0 0 0 1px rgba(192, 192, 192, 0.2);
-        background: linear-gradient(
-          135deg,
-          rgba(60, 60, 60, 0.9) 0%,
-          rgba(42, 42, 42, 0.7) 100%
-        );
+        background: linear-gradient(135deg, rgba(60, 60, 60, 0.9) 0%, rgba(42, 42, 42, 0.7) 100%);
       }
 
       /* ─── Feature Items ──────────────────────────────────────── */
@@ -415,8 +394,7 @@ export class PersonalProjectsComponent implements AfterViewInit {
           color: 'var(--color-text-primary)',
           borderColor: 'var(--color-metallic-silver)',
           backgroundColor: 'rgba(60, 60, 60, 0.9)',
-          boxShadow:
-            '0 10px 24px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(192, 192, 192, 0.2)',
+          boxShadow: '0 10px 24px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(192, 192, 192, 0.2)',
         });
       };
 

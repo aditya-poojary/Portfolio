@@ -59,9 +59,9 @@ interface GitHubContributions {
           </h2>
         </div>
 
-        <div class="flex xl:flex-row flex-col gap-4">
+        <div class="flex xl:flex-row flex-col gap-4 min-w-0">
           <!-- Contribution Calendar -->
-          <div class="calendar-container p-6 md:p-8 rounded-lg max-w-fit overflow-x-auto">
+          <div class="calendar-container p-6 md:p-8 rounded-lg min-w-0">
             @if (loading()) {
               <div class="flex items-center justify-center h-[137px] w-[897px]">
                 <div class="loading-spinner"></div>
@@ -160,10 +160,26 @@ interface GitHubContributions {
     .calendar-container {
       background: linear-gradient(135deg, rgba(42, 42, 42, 0.8), rgba(26, 26, 26, 0.6));
       border: 1px solid rgba(192, 192, 192, 0.15);
+      box-sizing: border-box;
+      overflow: visible;
+      /* Desktop: fit to content */
+      width: fit-content;
+      max-width: fit-content;
+    }
+
+    /* Mobile: constrain to viewport and allow scroll */
+    @media (max-width: 1024px) {
+      .calendar-container {
+        width: 100%;
+        max-width: 100%;
+      }
     }
 
     .calendar-scroll {
+      display: block;
       overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
       scrollbar-width: thin;
       scrollbar-color: rgba(192, 192, 192, 0.3) transparent;
     }

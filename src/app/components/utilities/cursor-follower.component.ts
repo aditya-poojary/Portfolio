@@ -47,13 +47,20 @@ import { isPlatformBrowser } from '@angular/common';
       width: 40px;
       height: 40px;
       border-radius: 9999px;
-      background: radial-gradient(circle, rgba(212, 212, 212, 0.36) 0%, rgba(150, 150, 150, 0.2) 60%, rgba(90, 90, 90, 0.08) 100%);
+      background: radial-gradient(
+        circle,
+        rgba(212, 212, 212, 0.36) 0%,
+        rgba(150, 150, 150, 0.2) 60%,
+        rgba(90, 90, 90, 0.08) 100%
+      );
       border: 1px solid rgba(192, 192, 192, 0.35);
       opacity: 0.38;
       box-shadow: 0 0 32px rgba(192, 192, 192, 0.26);
       backdrop-filter: blur(6px);
       -webkit-backdrop-filter: blur(6px);
-      transition: transform 0.2s ease, opacity 0.2s ease;
+      transition:
+        transform 0.2s ease,
+        opacity 0.2s ease;
     }
   `,
 })
