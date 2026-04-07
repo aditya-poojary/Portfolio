@@ -27,10 +27,27 @@ type SectionId =
   selector: 'app-navbar',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <header #navbar class="fixed left-0 top-0 z-[1000] w-full navbar-bg" [class.navbar-scrolled]="isScrolled()">
-      <div class="mx-auto flex h-[70px] max-w-[1280px] items-center px-4 lg:px-8">
-        <nav class="hidden items-center gap-6 lg:flex">
-          <button class="nav-link" [class.nav-link-active]="activeSection() === 'about'" (click)="scrollToSection('about')">
+    <header
+      #navbar
+      class="fixed left-0 top-0 z-[1000] w-full navbar-bg"
+      [class.navbar-scrolled]="isScrolled()"
+    >
+      <div
+        class="mx-auto flex h-[58px] md:h-[62px] lg:h-[64px] max-w-[1280px] items-center px-4 lg:pl-2 lg:pr-8"
+      >
+        <button
+          class="brand-logo shrink-0"
+          (click)="scrollToSection('about')"
+          aria-label="Go to top"
+        >
+          <img src="assets/images/logo.png" alt="Aditya logo" class="brand-logo-image" />
+        </button>
+        <nav class="hidden items-center gap-6 lg:flex lg:ml-auto lg:mr-auto">
+          <button
+            class="nav-link"
+            [class.nav-link-active]="activeSection() === 'about'"
+            (click)="scrollToSection('about')"
+          >
             About
           </button>
           <button
@@ -47,7 +64,11 @@ type SectionId =
           >
             Projects
           </button>
-          <button class="nav-link" [class.nav-link-active]="activeSection() === 'tech'" (click)="scrollToSection('tech')">
+          <button
+            class="nav-link"
+            [class.nav-link-active]="activeSection() === 'tech'"
+            (click)="scrollToSection('tech')"
+          >
             Tech Stack
           </button>
           <button
@@ -73,17 +94,30 @@ type SectionId =
           </button>
         </nav>
 
-        <button class="ml-auto nav-cta hidden lg:inline-flex" (click)="scrollToSection('contact')">Get in Touch</button>
+        <button class="ml-auto nav-cta hidden lg:inline-flex" (click)="scrollToSection('contact')">
+          Get in Touch
+        </button>
 
         <button
-          class="ml-auto flex h-10 w-10 items-center justify-center lg:hidden"
+          class="ml-auto flex h-9 w-9 items-center justify-center lg:hidden"
           aria-label="Toggle menu"
           (click)="toggleMenu()"
         >
           <div class="relative h-4 w-6">
-            <span class="hamburger-line absolute left-0 top-0 h-px w-full" [class.top-1/2]="isMobileMenuOpen()" [class.rotate-45]="isMobileMenuOpen()"></span>
-            <span class="hamburger-line absolute left-0 top-1/2 h-px w-full" [class.opacity-0]="isMobileMenuOpen()"></span>
-            <span class="hamburger-line absolute left-0 top-full h-px w-full" [class.top-1/2]="isMobileMenuOpen()" [class.-rotate-45]="isMobileMenuOpen()"></span>
+            <span
+              class="hamburger-line absolute left-0 top-0 h-px w-full"
+              [class.top-1/2]="isMobileMenuOpen()"
+              [class.rotate-45]="isMobileMenuOpen()"
+            ></span>
+            <span
+              class="hamburger-line absolute left-0 top-1/2 h-px w-full"
+              [class.opacity-0]="isMobileMenuOpen()"
+            ></span>
+            <span
+              class="hamburger-line absolute left-0 top-full h-px w-full"
+              [class.top-1/2]="isMobileMenuOpen()"
+              [class.-rotate-45]="isMobileMenuOpen()"
+            ></span>
           </div>
         </button>
       </div>
@@ -95,20 +129,42 @@ type SectionId =
       >
         <nav class="mx-4 mb-4 flex flex-col gap-1 rounded-2xl p-4 mobile-menu-inner">
           <button class="mobile-link" (click)="scrollToSection('about'); closeMenu()">About</button>
-          <button class="mobile-link" (click)="scrollToSection('experience'); closeMenu()">Experience</button>
-          <button class="mobile-link" (click)="scrollToSection('projects'); closeMenu()">Projects</button>
-          <button class="mobile-link" (click)="scrollToSection('tech'); closeMenu()">Tech Stack</button>
-          <button class="mobile-link" (click)="scrollToSection('problem-solving'); closeMenu()">Contributions</button>
-          <button class="mobile-link" (click)="scrollToSection('education'); closeMenu()">Education</button>
-          <button class="mobile-link" (click)="scrollToSection('achievements'); closeMenu()">Achievements</button>
-          <button class="mobile-link-cta" (click)="scrollToSection('contact'); closeMenu()">Get in Touch</button>
+          <button class="mobile-link" (click)="scrollToSection('experience'); closeMenu()">
+            Experience
+          </button>
+          <button class="mobile-link" (click)="scrollToSection('projects'); closeMenu()">
+            Projects
+          </button>
+          <button class="mobile-link" (click)="scrollToSection('tech'); closeMenu()">
+            Tech Stack
+          </button>
+          <button class="mobile-link" (click)="scrollToSection('problem-solving'); closeMenu()">
+            Contributions
+          </button>
+          <button class="mobile-link" (click)="scrollToSection('education'); closeMenu()">
+            Education
+          </button>
+          <button class="mobile-link" (click)="scrollToSection('achievements'); closeMenu()">
+            Achievements
+          </button>
+          <button class="mobile-link-cta" (click)="scrollToSection('contact'); closeMenu()">
+            Get in Touch
+          </button>
         </nav>
       </div>
     </header>
   `,
   styles: `
     :host {
-      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        Segoe UI,
+        Roboto,
+        Helvetica,
+        Arial,
+        sans-serif;
       letter-spacing: 0.02em;
     }
 
@@ -117,7 +173,10 @@ type SectionId =
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       border-bottom: 1px solid rgba(192, 192, 192, 0.2);
-      transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+      transition:
+        background 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
     }
 
     .navbar-scrolled {
@@ -129,7 +188,7 @@ type SectionId =
     .nav-link {
       position: relative;
       color: rgba(192, 192, 192, 0.82);
-      font-size: 0.9rem;
+      font-size: 0.84rem;
       font-weight: 500;
       transition: color 0.25s ease;
     }
@@ -171,9 +230,12 @@ type SectionId =
       color: rgba(235, 235, 235, 0.95);
       font-size: 0.78rem;
       font-weight: 700;
-      padding: 0.65rem 1.2rem;
+      padding: 0.5rem 1rem;
       text-transform: uppercase;
-      transition: transform 0.2s ease, filter 0.2s ease, border-color 0.2s ease;
+      transition:
+        transform 0.2s ease,
+        filter 0.2s ease,
+        border-color 0.2s ease;
     }
 
     .nav-cta:hover {
@@ -198,7 +260,9 @@ type SectionId =
       opacity: 0;
       pointer-events: none;
       transform: translateY(-8px);
-      transition: opacity 0.22s ease, transform 0.22s ease;
+      transition:
+        opacity 0.22s ease,
+        transform 0.22s ease;
       visibility: hidden;
     }
 
@@ -212,9 +276,9 @@ type SectionId =
     .mobile-link,
     .mobile-link-cta {
       border-radius: 0.65rem;
-      font-size: 0.9rem;
+      font-size: 0.86rem;
       font-weight: 500;
-      padding: 0.7rem 0.9rem;
+      padding: 0.58rem 0.82rem;
       text-align: left;
       transition: all 0.2s ease;
     }
@@ -234,6 +298,40 @@ type SectionId =
       font-weight: 700;
       margin-top: 0.25rem;
       text-align: center;
+    }
+
+    .brand-logo {
+      width: 44px;
+      height: 44px;
+      border-radius: 0;
+      border: none;
+      background: transparent;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      transition:
+        transform 0.2s ease,
+        filter 0.2s ease;
+    }
+
+    .brand-logo:hover {
+      transform: translateY(-1px);
+      filter: drop-shadow(0 0 10px rgba(192, 192, 192, 0.35));
+    }
+
+    .brand-logo-image {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 0;
+    }
+
+    @media (max-width: 768px) {
+      .brand-logo {
+        width: 38px;
+        height: 38px;
+      }
     }
   `,
 })

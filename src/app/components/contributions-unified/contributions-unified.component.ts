@@ -35,6 +35,11 @@ interface LeetCodeData {
   lastUpdated: string;
 }
 
+interface VerticalWeekRow {
+  monthLabel: string;
+  week: (ContributionDay | null)[];
+}
+
 type Platform = 'github' | 'leetcode';
 
 @Component({
@@ -44,9 +49,10 @@ type Platform = 'github' | 'leetcode';
   template: `
     <section id="problem-solving" class="scroll-mt-28 py-24 px-6 max-md:px-4 max-md:py-16">
       <div class="container-custom">
-        <div class="mb-8">
+        <!-- Header -->
+        <div class="mb-6">
           <h2
-            class="font-heading text-h2 font-semibold text-text-primary mb-12 flex items-center gap-3"
+            class="font-heading text-h2 font-semibold text-text-primary mb-4 flex items-center gap-3"
           >
             <span
               class="inline-flex items-center justify-center w-9 h-9 rounded-lg border"
@@ -75,8 +81,8 @@ type Platform = 'github' | 'leetcode';
           </h2>
         </div>
 
-        <!-- Platform Toggle Buttons -->
-        <div class="flex flex-wrap gap-3 mb-8">
+        <!-- Platform Toggle Buttons - Under subtitle -->
+        <div class="flex flex-wrap gap-3 mb-6">
           <button
             (click)="selectPlatform('github')"
             [class.active]="activePlatform() === 'github'"
@@ -105,74 +111,113 @@ type Platform = 'github' | 'leetcode';
 
         <!-- GitHub Contribution Graph -->
         @if (activePlatform() === 'github') {
-          <div class="flex xl:flex-row flex-col gap-4 min-w-0">
-            <div class="calendar-container p-6 md:p-8 rounded-lg min-w-0">
+          <div class="calendar-wrapper">
+            <div class="calendar-with-years">
+              <div class="calendar-container p-4 md:p-6 rounded-xl">
               @if (githubLoading()) {
-                <div class="flex items-center justify-center h-[137px]">
+                <div class="flex items-center justify-center h-[200px]">
                   <div class="loading-spinner"></div>
                 </div>
               } @else if (githubError()) {
-                <div class="flex items-center justify-center h-[137px] text-metallic-silver/60">
+                <div class="flex items-center justify-center h-[200px] text-metallic-silver/60">
                   Failed to load contributions
                 </div>
               } @else {
-                <div class="calendar-scroll">
-                  <svg
-                    [attr.width]="githubCalendarWidth()"
-                    height="137"
-                    [attr.viewBox]="'0 0 ' + githubCalendarWidth() + ' 137'"
-                    class="contribution-calendar"
-                  >
-                    <g class="month-labels">
-                      @for (month of githubMonthLabels(); track month.name + month.x) {
-                        <text [attr.x]="month.x" y="10" class="month-label">{{ month.name }}</text>
-                      }
-                    </g>
-                    @for (week of githubWeeks(); track $index) {
-                      <g [attr.transform]="'translate(' + $index * 17 + ', 22)'">
-                        @for (day of week; track day.date) {
-                          <rect
-                            [attr.x]="0"
-                            [attr.y]="getDayY(day.date)"
-                            width="13"
-                            height="13"
-                            rx="2"
-                            ry="2"
-                            [attr.fill]="getGitHubLevelColor(day.level)"
-                            class="contribution-cell"
-                          >
-                            <title>{{ day.count }} contributions on {{ day.date }}</title>
-                          </rect>
-                        }
-                      </g>
+                <div class="graph-mobile">
+                  <div class="vertical-graph">
+                    @for (row of githubVerticalRows(); track row.monthLabel + '-' + $index) {
+                      <div class="month-row">
+                        <span class="month-label-vertical">{{ row.monthLabel }}</span>
+                        <div class="month-weeks">
+                          <div class="week-row">
+                            @for (day of row.week; track $index) {
+                              @if (day) {
+                                <div
+                                  class="contribution-cell"
+                                  [style.background-color]="getGitHubLevelColor(day.level)"
+                                  [title]="day.count + ' contributions on ' + day.date"
+                                ></div>
+                              } @else {
+                                <div class="contribution-cell contribution-cell-empty"></div>
+                              }
+                            }
+                          </div>
+                        </div>
+                      </div>
                     }
-                  </svg>
+                  </div>
                 </div>
+
+                <div class="graph-desktop-layout">
+                  <div class="graph-horizontal">
+                    <div class="horizontal-grid">
+                      <div class="weeks-area">
+                        <div class="month-label-track">
+                          @for (week of githubWeeks(); track $index) {
+                            @if (getMonthLabelForWeek(githubWeeks(), $index)) {
+                              <span
+                                class="month-label-horizontal"
+                                [style.left]="'calc(' + $index + ' * (var(--h-cell-size) + var(--h-week-gap)))'"
+                              >
+                                {{ getMonthLabelForWeek(githubWeeks(), $index) }}
+                              </span>
+                            }
+                          }
+                        </div>
+                        <div class="weeks-row">
+                          @for (week of githubWeeks(); track $index) {
+                            <div class="week-column">
+                              @for (day of week; track day.date) {
+                                <div
+                                  class="contribution-cell horizontal-cell"
+                                  [style.background-color]="getGitHubLevelColor(day.level)"
+                                  [title]="day.count + ' contributions on ' + day.date"
+                                ></div>
+                              }
+                            </div>
+                          }
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Footer with legend -->
                 <footer
                   class="calendar-footer mt-4 flex flex-wrap justify-between items-center gap-4"
                 >
                   <div class="contribution-count text-metallic-silver/80 text-sm">
                     {{ githubTotalContributions() }} contributions in {{ githubViewModeLabel() }}
                   </div>
-                  <div class="legend-colors flex items-center gap-1">
-                    <span class="text-metallic-silver/60 text-sm mr-2">Less</span>
+                  <div class="legend-colors flex items-center gap-1.5">
+                    <span class="text-metallic-silver/60 text-xs mr-1">Less</span>
                     @for (level of [0, 1, 2, 3, 4]; track level) {
-                      <svg width="13" height="13">
-                        <rect
-                          width="13"
-                          height="13"
-                          [attr.fill]="getGitHubLevelColor(level)"
-                          rx="2"
-                          ry="2"
-                        ></rect>
-                      </svg>
+                      <div
+                        class="legend-cell"
+                        [style.background-color]="getGitHubLevelColor(level)"
+                      ></div>
                     }
-                    <span class="text-metallic-silver/60 text-sm ml-2">More</span>
+                    <span class="text-metallic-silver/60 text-xs ml-1">More</span>
                   </div>
                 </footer>
               }
+              </div>
+
+              <div class="year-buttons-side">
+                @for (year of githubAvailableYears(); track year) {
+                  <button
+                    (click)="selectGitHubYear(year)"
+                    [class.active]="year === githubSelectedYear() && !isGitHubLastYearMode()"
+                    class="year-button"
+                  >
+                    {{ year }}
+                  </button>
+                }
+              </div>
             </div>
-            <div class="year-buttons-side flex justify-start xl:flex-col flex-row flex-wrap gap-2">
+
+            <!-- Year buttons at the bottom -->
+            <div class="year-buttons-bottom-mobile flex justify-center flex-wrap gap-2 mt-4">
               @for (year of githubAvailableYears(); track year) {
                 <button
                   (click)="selectGitHubYear(year)"
@@ -188,74 +233,113 @@ type Platform = 'github' | 'leetcode';
 
         <!-- LeetCode Contribution Graph -->
         @if (activePlatform() === 'leetcode') {
-          <div class="flex xl:flex-row flex-col gap-4 mb-8 min-w-0">
-            <div class="calendar-container p-6 md:p-8 rounded-lg min-w-0">
+          <div class="calendar-wrapper mb-8">
+            <div class="calendar-with-years">
+              <div class="calendar-container p-4 md:p-6 rounded-xl">
               @if (leetcodeLoading()) {
-                <div class="flex items-center justify-center h-[137px]">
+                <div class="flex items-center justify-center h-[200px]">
                   <div class="loading-spinner"></div>
                 </div>
               } @else if (leetcodeError()) {
-                <div class="flex items-center justify-center h-[137px] text-metallic-silver/60">
+                <div class="flex items-center justify-center h-[200px] text-metallic-silver/60">
                   Failed to load contributions
                 </div>
               } @else {
-                <div class="calendar-scroll">
-                  <svg
-                    [attr.width]="leetcodeCalendarWidth()"
-                    height="137"
-                    [attr.viewBox]="'0 0 ' + leetcodeCalendarWidth() + ' 137'"
-                    class="contribution-calendar"
-                  >
-                    <g class="month-labels">
-                      @for (month of leetcodeMonthLabels(); track month.name + month.x) {
-                        <text [attr.x]="month.x" y="10" class="month-label">{{ month.name }}</text>
-                      }
-                    </g>
-                    @for (week of leetcodeWeeks(); track $index) {
-                      <g [attr.transform]="'translate(' + $index * 17 + ', 22)'">
-                        @for (day of week; track day.date) {
-                          <rect
-                            [attr.x]="0"
-                            [attr.y]="getDayY(day.date)"
-                            width="13"
-                            height="13"
-                            rx="2"
-                            ry="2"
-                            [attr.fill]="getLeetCodeLevelColor(day.level)"
-                            class="contribution-cell"
-                          >
-                            <title>{{ day.count }} submissions on {{ day.date }}</title>
-                          </rect>
-                        }
-                      </g>
+                <div class="graph-mobile">
+                  <div class="vertical-graph">
+                    @for (row of leetcodeVerticalRows(); track row.monthLabel + '-' + $index) {
+                      <div class="month-row">
+                        <span class="month-label-vertical">{{ row.monthLabel }}</span>
+                        <div class="month-weeks">
+                          <div class="week-row">
+                            @for (day of row.week; track $index) {
+                              @if (day) {
+                                <div
+                                  class="contribution-cell"
+                                  [style.background-color]="getLeetCodeLevelColor(day.level)"
+                                  [title]="day.count + ' submissions on ' + day.date"
+                                ></div>
+                              } @else {
+                                <div class="contribution-cell contribution-cell-empty"></div>
+                              }
+                            }
+                          </div>
+                        </div>
+                      </div>
                     }
-                  </svg>
+                  </div>
                 </div>
+
+                <div class="graph-desktop-layout">
+                  <div class="graph-horizontal">
+                    <div class="horizontal-grid">
+                      <div class="weeks-area">
+                        <div class="month-label-track">
+                          @for (week of leetcodeWeeks(); track $index) {
+                            @if (getMonthLabelForWeek(leetcodeWeeks(), $index)) {
+                              <span
+                                class="month-label-horizontal"
+                                [style.left]="'calc(' + $index + ' * (var(--h-cell-size) + var(--h-week-gap)))'"
+                              >
+                                {{ getMonthLabelForWeek(leetcodeWeeks(), $index) }}
+                              </span>
+                            }
+                          }
+                        </div>
+                        <div class="weeks-row">
+                          @for (week of leetcodeWeeks(); track $index) {
+                            <div class="week-column">
+                              @for (day of week; track day.date) {
+                                <div
+                                  class="contribution-cell horizontal-cell"
+                                  [style.background-color]="getLeetCodeLevelColor(day.level)"
+                                  [title]="day.count + ' submissions on ' + day.date"
+                                ></div>
+                              }
+                            </div>
+                          }
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Footer with legend -->
                 <footer
                   class="calendar-footer mt-4 flex flex-wrap justify-between items-center gap-4"
                 >
                   <div class="contribution-count text-metallic-silver/80 text-sm">
                     {{ leetcodeTotalContributions() }} submissions in {{ leetcodeViewModeLabel() }}
                   </div>
-                  <div class="legend-colors flex items-center gap-1">
-                    <span class="text-metallic-silver/60 text-sm mr-2">Less</span>
+                  <div class="legend-colors flex items-center gap-1.5">
+                    <span class="text-metallic-silver/60 text-xs mr-1">Less</span>
                     @for (level of [0, 1, 2, 3, 4]; track level) {
-                      <svg width="13" height="13">
-                        <rect
-                          width="13"
-                          height="13"
-                          [attr.fill]="getLeetCodeLevelColor(level)"
-                          rx="2"
-                          ry="2"
-                        ></rect>
-                      </svg>
+                      <div
+                        class="legend-cell"
+                        [style.background-color]="getLeetCodeLevelColor(level)"
+                      ></div>
                     }
-                    <span class="text-metallic-silver/60 text-sm ml-2">More</span>
+                    <span class="text-metallic-silver/60 text-xs ml-1">More</span>
                   </div>
                 </footer>
               }
+              </div>
+
+              <div class="year-buttons-side">
+                @for (year of leetcodeAvailableYears(); track year) {
+                  <button
+                    (click)="selectLeetCodeYear(year)"
+                    [class.active]="year === leetcodeSelectedYear()"
+                    class="year-button"
+                  >
+                    {{ year }}
+                  </button>
+                }
+              </div>
             </div>
-            <div class="year-buttons-side flex justify-start xl:flex-col flex-row flex-wrap gap-2">
+
+            <!-- Year buttons at the bottom -->
+            <div class="year-buttons-bottom-mobile flex justify-center flex-wrap gap-2 mt-4">
               @for (year of leetcodeAvailableYears(); track year) {
                 <button
                   (click)="selectLeetCodeYear(year)"
@@ -350,7 +434,7 @@ type Platform = 'github' | 'leetcode';
       color: var(--color-metallic-silver, #c0c0c0);
     }
 
-    /* Fix 6: Platform buttons wrap on small screens */
+    /* Platform buttons */
     .platform-button {
       background: linear-gradient(135deg, rgba(42, 42, 42, 0.8) 0%, rgba(26, 26, 26, 0.6) 100%);
       color: rgba(192, 192, 192, 0.8);
@@ -380,7 +464,7 @@ type Platform = 'github' | 'leetcode';
       color: rgba(26, 26, 26, 0.95);
     }
 
-    /* Fix 5: Stats cards wrap properly */
+    /* Stats cards */
     .stats-cards-container {
       display: flex;
       flex-wrap: wrap;
@@ -411,79 +495,173 @@ type Platform = 'github' | 'leetcode';
       color: rgba(192, 192, 192, 0.7);
     }
 
-    /* Calendar container - fits content on desktop, constrained on mobile */
+    /* Calendar wrapper */
+    .calendar-wrapper {
+      width: 100%;
+    }
+
     .calendar-container {
       background: linear-gradient(135deg, rgba(42, 42, 42, 0.8), rgba(26, 26, 26, 0.6));
       border: 1px solid rgba(192, 192, 192, 0.15);
       box-sizing: border-box;
-      overflow: visible;
-      /* Desktop: fit to content */
+      overflow: hidden;
       width: fit-content;
-      max-width: fit-content;
+      max-width: 100%;
     }
 
-    /* Mobile: constrain to viewport and allow scroll */
-    @media (max-width: 1024px) {
-      .calendar-container {
-        width: 100%;
-        max-width: 100%;
-      }
+    .graph-mobile {
+      display: none;
     }
 
-    /* Calendar scroll wrapper - enables horizontal scroll on mobile */
-    .calendar-scroll {
+    .graph-horizontal {
       display: block;
-      overflow-x: auto;
-      overflow-y: hidden;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: thin;
-      scrollbar-color: rgba(192, 192, 192, 0.3) transparent;
+      width: 100%;
+      max-width: 100%;
     }
 
-    .calendar-scroll::-webkit-scrollbar {
-      height: 6px;
-    }
-
-    .calendar-scroll::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    .calendar-scroll::-webkit-scrollbar-thumb {
-      background: rgba(192, 192, 192, 0.3);
-      border-radius: 3px;
-    }
-
-    /* SVG calendar - ensures proper sizing */
-    .contribution-calendar {
+    .graph-desktop-layout {
       display: block;
+    }
+
+    .calendar-with-years {
+      display: flex;
+      gap: clamp(10px, 1.4vw, 18px);
+      align-items: flex-start;
+      width: 100%;
+    }
+
+    .horizontal-grid {
+      --h-cell-size: clamp(10px, 0.52vw + 6px, 16px);
+      --h-cell-gap: clamp(2px, 0.15vw + 1px, 4px);
+      --h-week-gap: clamp(2px, 0.15vw + 1px, 4px);
+      display: flex;
+      gap: 0;
+      width: 100%;
+      align-items: flex-start;
+    }
+
+    .weeks-area {
+      display: block;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .month-label-track {
+      position: relative;
+      height: clamp(18px, 1.3vw, 24px);
+      margin-bottom: clamp(4px, 0.5vw, 8px);
+      width: 100%;
+    }
+
+    .month-label-horizontal {
+      position: absolute;
+      font-size: clamp(10px, 0.28vw + 8px, 12px);
+      color: rgba(192, 192, 192, 0.75);
+      white-space: nowrap;
       min-width: max-content;
     }
 
-    .month-label {
-      fill: rgba(192, 192, 192, 0.7);
-      font-size: 12px;
-      font-family: inherit;
+    .weeks-row {
+      display: flex;
+      gap: var(--h-week-gap);
+      width: 100%;
+    }
+
+    .week-column {
+      display: grid;
+      grid-template-rows: repeat(7, var(--h-cell-size));
+      gap: var(--h-cell-gap);
+      width: var(--h-cell-size);
+    }
+
+    .vertical-graph {
+      --cell-size: 12px;
+      --cell-gap: 4px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .month-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .month-label-vertical {
+      width: clamp(22px, 7vw, 30px);
+      font-size: 11px;
+      color: rgba(192, 192, 192, 0.8);
+      text-align: right;
+      line-height: var(--cell-size);
+      flex-shrink: 0;
+    }
+
+    .month-weeks {
+      display: block;
+    }
+
+    .week-row {
+      display: grid;
+      grid-template-columns: repeat(7, var(--cell-size));
+      gap: var(--cell-gap);
     }
 
     .contribution-cell {
-      transition: opacity 0.15s ease;
+      width: var(--cell-size);
+      height: var(--cell-size);
+      border-radius: 2px;
+      transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+      cursor: pointer;
+    }
+
+    .horizontal-cell {
+      width: var(--h-cell-size);
+      height: var(--h-cell-size);
     }
 
     .contribution-cell:hover {
-      opacity: 0.8;
-      stroke: rgba(192, 192, 192, 0.5);
-      stroke-width: 1;
+      transform: scale(1.15);
+      box-shadow: 0 0 8px rgba(192, 192, 192, 0.35);
     }
 
-    /* Fix 4: Year buttons side stays fixed width */
+    .contribution-cell-empty {
+      background: transparent;
+      cursor: default;
+    }
+
+    .contribution-cell-empty:hover {
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* Legend cells */
+    .legend-cell {
+      width: 11px;
+      height: 11px;
+      border-radius: 2px;
+    }
+
     .year-buttons-side {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      flex-shrink: 0;
+      padding-top: clamp(18px, 1.3vw, 24px);
+    }
+
+    .year-buttons-bottom-mobile {
+      display: none;
       flex-shrink: 0;
     }
 
     .year-button {
-      padding: 0.5rem 1rem;
+      min-width: clamp(54px, 4.6vw, 78px);
+      padding: clamp(0.42rem, 0.5vw, 0.55rem) clamp(0.9rem, 1vw, 1.25rem);
       border-radius: 0.5rem;
-      font-size: 0.875rem;
+      font-size: clamp(0.78rem, 0.22vw + 0.7rem, 0.9rem);
       font-weight: 500;
       background: linear-gradient(135deg, rgba(42, 42, 42, 0.8) 0%, rgba(26, 26, 26, 0.6) 100%);
       color: rgba(192, 192, 192, 0.9);
@@ -526,16 +704,103 @@ type Platform = 'github' | 'leetcode';
       padding-top: 1rem;
     }
 
-    /* Fix 7: Calendar footer stacks on mobile */
-    @media (max-width: 480px) {
+    @media (max-width: 1024px) {
+      .calendar-with-years {
+        display: block;
+      }
+
+      .horizontal-grid {
+        --h-cell-size: clamp(8px, 0.9vw + 1px, 12px);
+        --h-cell-gap: clamp(1px, 0.2vw, 3px);
+        --h-week-gap: clamp(1px, 0.2vw, 3px);
+      }
+
+      .month-label-horizontal {
+        font-size: clamp(9px, 0.25vw + 7px, 11px);
+      }
+
+      .year-buttons-side {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        padding-top: 0.75rem;
+      }
+
+      .year-button {
+        min-width: 52px;
+        padding: 0.38rem 0.72rem;
+        font-size: 0.78rem;
+      }
+
+      .contribution-count {
+        font-size: 0.76rem;
+      }
+    }
+
+    /* Mobile View Styles */
+    @media (max-width: 419px) {
+      .graph-mobile {
+        display: block;
+      }
+
+      .graph-horizontal {
+        display: none;
+      }
+
+      .year-buttons-side {
+        display: none;
+      }
+
+      .year-buttons-bottom-mobile {
+        display: flex;
+      }
+
+      .calendar-container {
+        width: calc(100% - 10px);
+        max-width: calc(100% - 10px);
+      }
+
+      .vertical-graph {
+        --cell-size: clamp(10px, calc((100vw - 84px) / 7), 15px);
+        --cell-gap: clamp(1px, 0.45vw, 3px);
+      }
+
       .calendar-footer {
         flex-direction: column;
         align-items: flex-start;
         gap: 0.75rem;
       }
+
+      .contribution-count {
+        max-width: 100%;
+        white-space: normal;
+      }
+
+      .legend-cell {
+        width: 9px;
+        height: 9px;
+      }
     }
 
-    /* Fix 5: Stats cards column on very small screens */
+    /* Small mobile adjustments */
+    @media (max-width: 480px) {
+      .vertical-graph {
+        --cell-size: clamp(9px, calc((100vw - 68px) / 7), 12px);
+        --cell-gap: clamp(1px, 0.35vw, 2px);
+      }
+
+      .month-label-vertical {
+        width: clamp(20px, 6.5vw, 24px);
+        font-size: 10px;
+      }
+
+      .legend-cell {
+        width: 8px;
+        height: 8px;
+      }
+    }
+
+    /* Stats cards on small screens */
     @media (max-width: 640px) {
       .stats-cards-container {
         flex-direction: column;
@@ -547,10 +812,6 @@ type Platform = 'github' | 'leetcode';
     }
 
     @media (max-width: 768px) {
-      .calendar-container {
-        padding: 1rem;
-      }
-
       .stats-card {
         padding: 0.65rem 0.85rem;
       }
@@ -577,6 +838,22 @@ export class ContributionsUnifiedComponent implements OnInit {
   private readonly http = inject(HttpClient);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly githubUsername = 'aditya-poojary';
+
+  // Month names
+  private readonly monthNames = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
 
   // Platform selection
   protected readonly activePlatform = signal<Platform>('github');
@@ -624,7 +901,7 @@ export class ContributionsUnifiedComponent implements OnInit {
 
   protected readonly githubViewModeLabel = computed(() => {
     if (this.isGitHubLastYearMode()) {
-      return 'the last year';
+      return 'last year';
     }
     return this.githubSelectedYear().toString();
   });
@@ -663,17 +940,9 @@ export class ContributionsUnifiedComponent implements OnInit {
     return this.githubTotalsByYear()[year] || 0;
   });
 
-  protected readonly githubWeeks = computed(() => {
-    return this.generateWeeks(this.githubFilteredContributions());
-  });
-
-  protected readonly githubCalendarWidth = computed(() => {
-    return this.githubWeeks().length * 17;
-  });
-
-  protected readonly githubMonthLabels = computed(() => {
-    return this.generateMonthLabels(this.githubWeeks());
-  });
+  protected readonly githubWeeks = computed(() =>
+    this.generateWeeks(this.githubFilteredContributions()),
+  );
 
   // LeetCode computed values
   protected readonly leetcodeStreak = computed(() => {
@@ -772,17 +1041,18 @@ export class ContributionsUnifiedComponent implements OnInit {
     return this.leetcodeFilteredContributions().reduce((sum, day) => sum + day.count, 0);
   });
 
-  protected readonly leetcodeWeeks = computed(() => {
-    return this.generateWeeks(this.leetcodeFilteredContributions());
-  });
+  protected readonly leetcodeWeeks = computed(() =>
+    this.generateWeeks(this.leetcodeFilteredContributions()),
+  );
 
-  protected readonly leetcodeCalendarWidth = computed(() => {
-    return this.leetcodeWeeks().length * 17;
-  });
+  // Vertical monthly rows (continuous puzzle flow on mobile)
+  protected readonly githubVerticalRows = computed(() =>
+    this.generateVerticalRows(this.githubFilteredContributions()),
+  );
 
-  protected readonly leetcodeMonthLabels = computed(() => {
-    return this.generateMonthLabels(this.leetcodeWeeks());
-  });
+  protected readonly leetcodeVerticalRows = computed(() =>
+    this.generateVerticalRows(this.leetcodeFilteredContributions()),
+  );
 
   ngOnInit(): void {
     this.fetchGitHubContributions();
@@ -891,47 +1161,67 @@ export class ContributionsUnifiedComponent implements OnInit {
     return weeks;
   }
 
-  private generateMonthLabels(weeks: ContributionDay[][]): { name: string; x: number }[] {
-    if (weeks.length === 0) return [];
+  protected getMonthLabelForWeek(weeks: ContributionDay[][], weekIndex: number): string {
+    const week = weeks[weekIndex];
+    if (!week || week.length === 0) return '';
 
-    const months: { name: string; x: number }[] = [];
-    const monthNames = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
-    ];
+    const currentMonth = new Date(week[0].date).getMonth();
+    const previousWeek = weekIndex > 0 ? weeks[weekIndex - 1] : null;
+    const previousMonth =
+      previousWeek && previousWeek.length > 0 ? new Date(previousWeek[0].date).getMonth() : -1;
 
-    let lastMonth = -1;
+    return currentMonth !== previousMonth ? this.monthNames[currentMonth] : '';
+  }
 
-    weeks.forEach((week, wIndex) => {
-      const firstDay = week[0];
-      if (firstDay) {
-        const month = new Date(firstDay.date).getMonth();
-        if (month !== lastMonth) {
-          months.push({
-            name: monthNames[month],
-            x: wIndex * 17,
+  private generateVerticalRows(days: ContributionDay[]): VerticalWeekRow[] {
+    if (days.length === 0) return [];
+
+    const sortedDays = [...days].sort(
+      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+    );
+    const rows: VerticalWeekRow[] = [];
+
+    let currentWeek: (ContributionDay | null)[] = new Array(7).fill(null);
+    let currentMonthLabel = '';
+    let isFirstRowOfMonth = true;
+
+    sortedDays.forEach((day, index) => {
+      const date = new Date(day.date);
+      const dow = date.getDay();
+      const dayMonthLabel = this.monthNames[date.getMonth()];
+
+      if (!currentMonthLabel) {
+        currentMonthLabel = dayMonthLabel;
+      }
+
+      if (dayMonthLabel !== currentMonthLabel && dow === 0) {
+        if (currentWeek.some((cell) => cell !== null)) {
+          rows.push({
+            monthLabel: isFirstRowOfMonth ? currentMonthLabel : '',
+            week: currentWeek,
           });
-          lastMonth = month;
         }
+        currentWeek = new Array(7).fill(null);
+        currentMonthLabel = dayMonthLabel;
+        isFirstRowOfMonth = true;
+      }
+
+      currentWeek[dow] = day;
+
+      const isWeekEnd = dow === 6;
+      const isLastItem = index === sortedDays.length - 1;
+
+      if (isWeekEnd || isLastItem) {
+        rows.push({
+          monthLabel: isFirstRowOfMonth ? currentMonthLabel : '',
+          week: currentWeek,
+        });
+        currentWeek = new Array(7).fill(null);
+        isFirstRowOfMonth = false;
       }
     });
 
-    return months;
-  }
-
-  protected getDayY(date: string): number {
-    const dayOfWeek = new Date(date).getDay();
-    return dayOfWeek * 17;
+    return rows;
   }
 
   private getLeetCodeLevel(count: number): number {
