@@ -25,6 +25,12 @@ import { isPlatformBrowser } from '@angular/common';
       z-index: 9999;
     }
 
+    @media (pointer: coarse) {
+      :host {
+        display: none;
+      }
+    }
+
     .cursor-dot,
     .cursor-blob {
       position: fixed;

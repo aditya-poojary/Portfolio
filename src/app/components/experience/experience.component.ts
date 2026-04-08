@@ -67,7 +67,7 @@ interface ExperienceEntry {
       }
 
       .project-card {
-        height: 34rem;
+        height: clamp(28rem, 31vw, 34rem);
         position: relative;
       }
 
