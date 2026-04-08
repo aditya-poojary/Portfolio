@@ -50,6 +50,11 @@ export class App implements OnInit, AfterViewInit {
 
     gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
+    // Suppress GSAP warnings in production
+    if (typeof window !== 'undefined' && !(window as any).ngDevMode) {
+      gsap.config({ nullTargetWarn: false, trialWarn: false });
+    }
+
     this.smoother = ScrollSmoother.create({
       wrapper: '#smooth-wrapper',
       content: '#smooth-content',
