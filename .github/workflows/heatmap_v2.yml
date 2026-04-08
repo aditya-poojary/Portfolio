@@ -2,8 +2,8 @@ name: Update LeetCode Data
 
 on:
   schedule:
-    - cron: "0 0 * * *"  # Runs daily at midnight UTC
-  workflow_dispatch:  # Allows manual trigger
+    - cron: '0 0 * * *' # Runs daily at midnight UTC
+  workflow_dispatch: # Allows manual trigger
 
 jobs:
   update-leetcode:
@@ -16,7 +16,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 'lts/*' # Always uses latest LTS - truly future-proof!
 
       - name: Fetch LeetCode Data
         run: node scripts/leetcode.js

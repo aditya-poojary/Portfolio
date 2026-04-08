@@ -124,12 +124,19 @@ interface ExperienceEntry {
       .project-title {
         text-shadow: 0 0 0 transparent;
         transition: text-shadow 0.6s ease;
+        margin-bottom: clamp(0.375rem, 0.5vw, 0.625rem);
       }
 
       .project-title.title-glowing {
         text-shadow:
           0 0 20px rgba(0, 110, 138, 0.3),
           0 0 40px rgba(0, 110, 138, 0.1);
+      }
+
+      .project-description {
+        line-height: clamp(1.5, 1.55vw, 1.65);
+        margin-bottom: clamp(0.875rem, 1.1vw, 1.125rem);
+        letter-spacing: 0.01em;
       }
 
       /* ─── GitHub Link (Black/Metallic Silver) ─────────────── */
