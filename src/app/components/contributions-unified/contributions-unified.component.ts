@@ -507,6 +507,7 @@ type Platform = 'github' | 'leetcode';
     /* Calendar wrapper */
     .calendar-wrapper {
       width: 100%;
+      overflow-x: clip;
     }
 
     .calendar-container {
@@ -516,6 +517,7 @@ type Platform = 'github' | 'leetcode';
       overflow: hidden;
       width: fit-content;
       max-width: 100%;
+      margin-inline: auto;
     }
 
     .graph-mobile {
@@ -553,6 +555,7 @@ type Platform = 'github' | 'leetcode';
       display: block;
       width: 100%;
       overflow: hidden;
+      min-width: 0;
     }
 
     .month-label-track {
@@ -574,6 +577,8 @@ type Platform = 'github' | 'leetcode';
       display: flex;
       gap: var(--h-week-gap);
       width: 100%;
+      justify-content: flex-start;
+      min-width: 0;
     }
 
     .week-column {
@@ -724,6 +729,16 @@ type Platform = 'github' | 'leetcode';
         --h-week-gap: clamp(1px, 0.2vw, 3px);
       }
 
+      .calendar-container {
+        width: 100%;
+      }
+
+      .month-label-horizontal {
+        max-width: calc(100% - 2px);
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
       .month-label-horizontal {
         font-size: clamp(9px, 0.25vw + 7px, 11px);
       }
@@ -765,12 +780,12 @@ type Platform = 'github' | 'leetcode';
       }
 
       .calendar-container {
-        width: calc(100% - 10px);
-        max-width: calc(100% - 10px);
+        width: 100%;
+        max-width: 100%;
       }
 
       .vertical-graph {
-        --cell-size: clamp(10px, calc((100vw - 84px) / 7), 15px);
+        --cell-size: clamp(10px, calc((100vw - 102px) / 7), 15px);
         --cell-gap: clamp(1px, 0.45vw, 3px);
       }
 
@@ -794,7 +809,7 @@ type Platform = 'github' | 'leetcode';
     /* Small mobile adjustments */
     @media (max-width: 480px) {
       .vertical-graph {
-        --cell-size: clamp(9px, calc((100vw - 68px) / 7), 12px);
+        --cell-size: clamp(9px, calc((100vw - 92px) / 7), 12px);
         --cell-gap: clamp(1px, 0.35vw, 2px);
       }
 

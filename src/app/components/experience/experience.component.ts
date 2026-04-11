@@ -270,7 +270,9 @@ interface ExperienceEntry {
         letter-spacing: 0.05em;
         text-transform: uppercase;
         text-decoration: none;
-        transition: color 200ms ease, border-color 200ms ease;
+        transition:
+          color 200ms ease,
+          border-color 200ms ease;
       }
 
       .mobile-link-btn:hover {

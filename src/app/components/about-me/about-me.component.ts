@@ -19,8 +19,9 @@ import { FloatingDockComponent, DockItem } from '../utilities/floating-dock.comp
     .name-reveal {
       position: relative;
       display: inline-block;
-      color: #1a1a1a;
-      -webkit-text-stroke: 1px #333333;
+      color: #141414;
+      -webkit-text-stroke: 1.2px #8f8f8f;
+      text-shadow: 0 0 12px rgba(192, 192, 192, 0.16);
       background: linear-gradient(135deg, #c0c0c0 0%, #e8e8e8 40%, #a8a8a8 60%, #d4d4d4 100%);
       background-clip: text;
       -webkit-background-clip: text;
@@ -36,9 +37,9 @@ import { FloatingDockComponent, DockItem } from '../utilities/floating-dock.comp
       position: absolute;
       top: 0;
       left: 0;
-      width: 2px;
+      width: 3px;
       height: 100%;
-      background: #888888;
+      background: linear-gradient(180deg, #dfdfdf 0%, #b5b5b5 100%);
       transition: left 0.6s cubic-bezier(0.77, 0, 0.175, 1);
       pointer-events: none;
     }
