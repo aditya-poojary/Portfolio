@@ -74,7 +74,7 @@ export class AboutMeComponent implements OnInit {
 
   protected readonly greeting = signal('Good evening');
   protected readonly resumeUrl =
-    'https://drive.google.com/file/d/1s4IEj6ESbdTdHfoJFiL8VRZEnKUnTtHK/view?usp=sharing';
+    'https://drive.google.com/file/d/1ktyZvX2yxP6acP1uydfve9NNp6K9g6RY/view?usp=sharing';
 
   protected readonly socialLinks = signal<DockItem[]>([
     {

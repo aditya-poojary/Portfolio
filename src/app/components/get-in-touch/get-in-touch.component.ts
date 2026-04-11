@@ -122,7 +122,7 @@ import { HttpClient } from '@angular/common/http';
             <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="space-y-6">
               <div class="grid md:grid-cols-2 gap-4">
                 <div>
-                  <label for="firstName" class="block text-sm font-medium mb-2 text-zinc-700">
+                  <label for="firstName" class="block text-sm font-medium mb-2 text-zinc-300">
                     First Name <span class="text-red-500">*</span>
                   </label>
                   <input
@@ -134,7 +134,7 @@ import { HttpClient } from '@angular/common/http';
                   />
                 </div>
                 <div>
-                  <label for="lastName" class="block text-sm font-medium mb-2 text-zinc-700">
+                  <label for="lastName" class="block text-sm font-medium mb-2 text-zinc-300">
                     Last Name <span class="text-red-500">*</span>
                   </label>
                   <input
@@ -148,7 +148,7 @@ import { HttpClient } from '@angular/common/http';
               </div>
 
               <div>
-                <label for="email" class="block text-sm font-medium mb-2 text-zinc-700">
+                <label for="email" class="block text-sm font-medium mb-2 text-zinc-300">
                   Email <span class="text-red-500">*</span>
                 </label>
                 <input
@@ -161,7 +161,7 @@ import { HttpClient } from '@angular/common/http';
               </div>
 
               <div>
-                <label for="subject" class="block text-sm font-medium mb-2 text-zinc-700">
+                <label for="subject" class="block text-sm font-medium mb-2 text-zinc-300">
                   Subject <span class="text-red-500">*</span>
                 </label>
                 <select id="subject" formControlName="subject" class="contact-input">
@@ -174,7 +174,7 @@ import { HttpClient } from '@angular/common/http';
               </div>
 
               <div>
-                <label for="message" class="block text-sm font-medium mb-2 text-zinc-700">
+                <label for="message" class="block text-sm font-medium mb-2 text-zinc-300">
                   Message <span class="text-red-500">*</span>
                 </label>
                 <textarea
@@ -184,7 +184,7 @@ import { HttpClient } from '@angular/common/http';
                   class="contact-input resize-none"
                   placeholder="Tell me about your project or how I can help you..."
                 ></textarea>
-                <p class="text-xs text-zinc-500 mt-1">
+                <p class="text-xs text-zinc-400 mt-1">
                   💡 Tip: Write a meaningful message with at least 3 words and 10 characters.
                 </p>
               </div>
@@ -253,28 +253,39 @@ import { HttpClient } from '@angular/common/http';
     }
 
     .contact-form-card {
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(245, 245, 245, 0.9));
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      background:
+        linear-gradient(145deg, rgba(42, 42, 42, 0.92), rgba(30, 30, 30, 0.9)),
+        repeating-linear-gradient(
+          -45deg,
+          rgba(205, 205, 205, 0.07) 0,
+          rgba(205, 205, 205, 0.07) 2px,
+          rgba(58, 58, 58, 0) 2px,
+          rgba(58, 58, 58, 0) 6px
+        );
+      border: 1px solid rgba(198, 198, 198, 0.24);
+      box-shadow:
+        0 24px 50px -14px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(255, 255, 255, 0.04) inset;
     }
 
     .contact-input {
       width: 100%;
       padding: 0.75rem 1rem;
-      border: 1px solid #d1d5db;
+      border: 1px solid rgba(205, 205, 205, 0.2);
       border-radius: 0.5rem;
       transition: all 0.2s ease;
-      background: white;
-      color: #1f2937;
+      background: linear-gradient(135deg, rgba(52, 52, 52, 0.9), rgba(36, 36, 36, 0.88));
+      color: rgba(236, 236, 236, 0.97);
     }
 
     .contact-input:focus {
       outline: none;
-      border-color: rgba(192, 192, 192, 0.8);
-      box-shadow: 0 0 0 3px rgba(192, 192, 192, 0.2);
+      border-color: rgba(214, 214, 214, 0.48);
+      box-shadow: 0 0 0 3px rgba(205, 205, 205, 0.12);
     }
 
     .contact-input::placeholder {
-      color: #9ca3af;
+      color: rgba(220, 220, 220, 0.5);
     }
 
     .submit-button {
