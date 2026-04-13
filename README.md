@@ -49,11 +49,7 @@ Built with tools that actually matter:
 
 ## Key Features
 
-### 1. **Smooth Scrolling with GSAP**
-
-I'm using GSAP's ScrollSmoother to make the whole page feel buttery smooth. It's not just a gimmick — it actually enhances the user experience. ScrollTrigger is used for section-based animations and active navbar highlighting.
-
-### 2. **GitHub & LeetCode Contribution Graphs**
+### 1. **GitHub & LeetCode Contribution Graphs**
 
 The "Problem Solving" section pulls real data from:
 
@@ -62,7 +58,7 @@ The "Problem Solving" section pulls real data from:
 
 The LeetCode data is stored in `public/data/leetcode.json` and gets updated every 24 hours without me having to lift a finger.
 
-### 3. **Responsive Everywhere**
+### 2. **Responsive Everywhere**
 
 I spent way too much time making sure this works perfectly on:
 
@@ -72,24 +68,13 @@ I spent way too much time making sure this works perfectly on:
 
 The contribution graph even switches from horizontal (desktop) to vertical (mobile) layouts to fit the screen properly.
 
-### 4. **Custom Branding**
-
-My personal logo (`assets/images/logo.png`) is used for:
-
-- Navbar branding
-- Favicon
-- Open Graph images (for social media previews)
-- Apple touch icons
-
-No more generic Angular logo showing up when someone shares my site.
-
-### 5. **Experience Section with Horizontal Scrolling**
+### 3. **Experience Section with Horizontal Scrolling**
 
 On desktop, the experience section uses GSAP to create a horizontal scrolling effect. It's like a timeline that moves sideways as you scroll down. Each company has its own "stripe" with project cards underneath.
 
 On mobile/tablet, it switches to a normal vertical layout because horizontal scrolling on small screens is annoying.
 
-### 6. **Splash Screen Loader**
+### 4. **Splash Screen Loader**
 
 When you first load the site, there's a quick splash screen with my initials "A D I" that:
 
@@ -99,9 +84,17 @@ When you first load the site, there's a quick splash screen with my initials "A 
 
 It's subtle but adds a nice touch.
 
-### 7. **Custom Cursor Follower**
+### 5. **Custom Cursor Follower**
 
 On devices with a mouse (desktop), there's a custom cursor effect that follows your pointer. It's automatically hidden on touch devices so it doesn't show up in the corner on mobile.
+
+### 6. **Featured in Developer Portfolios List**
+
+I added my website to the community showcase at:
+
+- https://github.com/emmabostian/developer-portfolios
+
+It's a nice milestone and a good public reference for the portfolio.
 
 ---
 
