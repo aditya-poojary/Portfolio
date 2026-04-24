@@ -164,7 +164,7 @@ import { HttpClient } from '@angular/common/http';
                 <label for="subject" class="block text-sm font-medium mb-2 text-zinc-300">
                   Subject <span class="text-red-500">*</span>
                 </label>
-                <select id="subject" formControlName="subject" class="contact-input">
+                <select id="subject" formControlName="subject" class="contact-input contact-select">
                   <option value="">Select a subject</option>
                   <option value="project-inquiry">Project Inquiry</option>
                   <option value="job-opportunity">Job Opportunity</option>
@@ -286,6 +286,26 @@ import { HttpClient } from '@angular/common/http';
 
     .contact-input::placeholder {
       color: rgba(220, 220, 220, 0.5);
+    }
+
+    .contact-select {
+      appearance: none;
+      background:
+        linear-gradient(135deg, rgba(52, 52, 52, 0.9), rgba(36, 36, 36, 0.88)),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%23c0c0c0' d='M1 1l4 4 4-4'/%3E%3C/svg%3E");
+      background-repeat: no-repeat, no-repeat;
+      background-position:
+        0 0,
+        right 0.9rem center;
+      background-size:
+        100% 100%,
+        10px 6px;
+      padding-right: 2.5rem;
+    }
+
+    .contact-select option {
+      background: #252525;
+      color: rgba(236, 236, 236, 0.97);
     }
 
     .submit-button {

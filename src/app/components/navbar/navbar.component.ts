@@ -10,8 +10,10 @@ import {
   signal,
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { NavigationEnd, Router } from '@angular/router';
 import { ScrollSmoother } from 'gsap/ScrollSmoother';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { filter } from 'rxjs';
 
 type SectionId =
   | 'about'
@@ -341,6 +343,7 @@ export class NavbarComponent implements AfterViewInit {
 
   private readonly platformId = inject(PLATFORM_ID);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly router = inject(Router);
   private readonly sectionIds: SectionId[] = [
     'about',
     'experience',
@@ -356,6 +359,7 @@ export class NavbarComponent implements AfterViewInit {
   protected readonly isScrolled = signal(false);
   protected readonly isMobileMenuOpen = signal(false);
   protected readonly mobileMenuVisible = signal(false);
+  private sectionTriggers: ScrollTrigger[] = [];
 
   ngAfterViewInit(): void {
     if (!isPlatformBrowser(this.platformId)) return;
@@ -365,23 +369,25 @@ export class NavbarComponent implements AfterViewInit {
     window.addEventListener('scroll', onScroll, { passive: true });
     this.destroyRef.onDestroy(() => window.removeEventListener('scroll', onScroll));
 
-    // Use ScrollTrigger for active section detection (works with ScrollSmoother)
-    const triggers: ScrollTrigger[] = [];
-    this.sectionIds.forEach((id) => {
-      const section = document.getElementById(id);
-      if (!section) return;
-      const trigger = ScrollTrigger.create({
-        trigger: section,
-        start: 'top center',
-        end: 'bottom center',
-        onToggle: (self) => {
-          if (self.isActive) this.activeSection.set(id);
-        },
-      });
-      triggers.push(trigger);
-    });
+    const initializeTracking = () => {
+      this.setupSectionTriggers();
+      ScrollTrigger.refresh();
+      this.updateActiveSectionFromViewport();
+    };
 
-    this.destroyRef.onDestroy(() => triggers.forEach((t) => t.kill()));
+    requestAnimationFrame(() => requestAnimationFrame(initializeTracking));
+
+    const navigationSubscription = this.router.events
+      .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
+      .subscribe(() => {
+        requestAnimationFrame(() => requestAnimationFrame(initializeTracking));
+      });
+
+    this.destroyRef.onDestroy(() => {
+      navigationSubscription.unsubscribe();
+      this.sectionTriggers.forEach((trigger) => trigger.kill());
+      this.sectionTriggers = [];
+    });
   }
 
   protected scrollToSection(id: SectionId): void {
@@ -409,5 +415,47 @@ export class NavbarComponent implements AfterViewInit {
   protected closeMenu(): void {
     if (!this.isMobileMenuOpen()) return;
     this.toggleMenu();
+  }
+
+  private setupSectionTriggers(): void {
+    this.sectionTriggers.forEach((trigger) => trigger.kill());
+    this.sectionTriggers = [];
+
+    this.sectionIds.forEach((id) => {
+      const section = document.getElementById(id);
+      if (!section) return;
+
+      const trigger = ScrollTrigger.create({
+        trigger: section,
+        start: 'top center',
+        end: 'bottom center',
+        onEnter: () => this.activeSection.set(id),
+        onEnterBack: () => this.activeSection.set(id),
+      });
+
+      this.sectionTriggers.push(trigger);
+    });
+  }
+
+  private updateActiveSectionFromViewport(): void {
+    const viewportMidpoint = window.innerHeight / 2;
+    let fallbackSection: SectionId = this.sectionIds[0];
+
+    for (const id of this.sectionIds) {
+      const section = document.getElementById(id);
+      if (!section) continue;
+
+      const rect = section.getBoundingClientRect();
+      if (rect.top <= viewportMidpoint) {
+        fallbackSection = id;
+      }
+
+      if (rect.top <= viewportMidpoint && rect.bottom >= viewportMidpoint) {
+        this.activeSection.set(id);
+        return;
+      }
+    }
+
+    this.activeSection.set(fallbackSection);
   }
 }
