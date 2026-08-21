@@ -1,16 +1,16 @@
 {
   "username": "adityapoojary07",
-  "ranking": 62027,
+  "ranking": 61851,
   "streak": 69,
   "totalActiveDays": 333,
   "submissions": [
     {
       "difficulty": "All",
-      "count": 817
+      "count": 818
     },
     {
       "difficulty": "Easy",
-      "count": 227
+      "count": 228
     },
     {
       "difficulty": "Medium",
@@ -699,7 +699,8 @@
     "1786838400": 1,
     "1786924800": 1,
     "1787011200": 1,
-    "1787097600": 1
+    "1787097600": 1,
+    "1787184000": 1
   },
-  "lastUpdated": "2026-08-20T01:38:30.889Z"
+  "lastUpdated": "2026-08-21T01:43:36.615Z"
 }
